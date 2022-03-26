@@ -1,0 +1,64 @@
+.App {
+  text-align: center;
+  margin: 10px;
+}
+
+.Title {
+  text-align: left;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 18px;
+  color: #696969;
+}
+
+.nav-link.active {
+  font-weight: bold;
+}
+
+.nav-link.active#tabs-tab-Characters {
+  color: #a87eb3 !important;
+}
+
+.nav-link.active#tabs-tab-Fleet {
+  color: #32b2c0 !important;
+}
+
+.nav-link.active#tabs-tab-Artifacts {
+  color: #d48b38 !important;
+}
+
+.nav-link.active#tabs-tab-Plots {
+  color: #4584e9 !important;
+}
+
+.nav-link.active#tabs-tab-Events {
+  color: #3f860f !important;
+}
+
+.nav-link {
+  color: rgb(166, 167, 168) !important;
+  font-size: 18px;
+}
+
+.title-tab {
+  font-weight: 600;
+}
+.title-tab.Characters {
+  color: #a87eb3;
+}
+
+.title-tab.Fleet {
+  color: #32b2c0;
+}
+
+.title-tab.Artifacts {
+  color: #d48b38;
+}
+
+.title-tab.Plots {
+  color: #4584e9;
+}
+
+.title-tab.Events {
+  color: #3f860f;
+}
