@@ -1,43 +1,86 @@
-import './App.css';
+import "./App.css";
 import { Tabs, Tab } from "react-bootstrap";
 import Characters from "./components/Characters";
 import Artifacts from "./components/Artifacts";
 import Fleet from "./components/Fleet";
 import Plots from "./components/Plots";
 import Events from "./components/Events";
+import Ship from "./components/Ship";
 import React from "react";
 
-function App() {
-  const [key, setKey] = React.useState('Characters');
+import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
 
+const TabKeys = {
+  Characters: "Characters",
+  Fleet: "Fleet",
+  Artifacts: "Artifacts",
+  Plots: "Plots",
+  Events: "Events",
+};
+
+const tableRoutes = Object.keys(TabKeys).map((k) => "/" + k.toLowerCase());
+
+function App() {
+  const [key, setKey] = React.useState("Characters");
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const shouldRenderTable =
+    tableRoutes.includes(location.pathname) || location.pathname === "/";
+
+  const onSelectTab = (k) => {
+    setKey(k);
+
+    const path = k.toLowerCase();
+    navigate(path);
+  };
+
+  const renderTable = () => {
+    const style = shouldRenderTable ? {} : { display: "none" };
+
+    return (
+      <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
+        <Tab eventKey="Characters" title="Characters">
+          <div style={style}>
+            <Characters />
+          </div>
+        </Tab>
+        <Tab eventKey="Fleet" title="Fleet">
+          <div style={style}>
+            <Fleet />
+          </div>
+        </Tab>
+        <Tab eventKey="Artifacts" title="Artifacts">
+          <div style={style}>
+            <Artifacts />
+          </div>
+        </Tab>
+        <Tab eventKey="Plots" title="Plots">
+          <div style={style}>
+            <Plots />
+          </div>
+        </Tab>
+        <Tab eventKey="Events" title="Events">
+          <div style={style}>
+            <Events />
+          </div>
+        </Tab>
+      </Tabs>
+    );
+  };
 
   return (
     <div className="App">
       <h1 className="Title">
-        <span>Admin Story DB: </span><span className={`title-tab ${key}`}>{key}</span>
+        <span>Admin Story DB: </span>
+        <span className={`title-tab ${key}`}>{key}</span>
       </h1>
-      <Tabs 
-        id="tabs" 
-        activeKey={key}
-        onSelect={(k) => setKey(k)}
-        className="mb-3"
-      >
-        <Tab eventKey="Characters" title="Characters">
-          <Characters/>
-        </Tab>
-        <Tab eventKey="Fleet" title="Fleet">
-          <Fleet/>
-        </Tab>
-        <Tab eventKey="Artifacts" title="Artifacts">
-          <Artifacts/>
-        </Tab>
-        <Tab eventKey="Plots" title="Plots">
-          <Plots/>
-        </Tab>
-        <Tab eventKey="Events" title="Events">
-          <Events/>
-        </Tab>
-      </Tabs>
+      {renderTable()}
+      <Routes>
+        <Route path="/fleet/:id" element={<Ship />} />
+        <Route path="*" element={<></>} />
+      </Routes>
     </div>
   );
 }
