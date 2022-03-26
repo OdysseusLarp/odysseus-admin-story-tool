@@ -2,6 +2,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import React from "react";
+import { Link } from "react-router-dom";
 
 import './Fleet.css';
 
@@ -21,7 +22,10 @@ const columns = [{
     dataField: 'name',
     text: 'Name',
     sort: true,
-    filter: textFilter()
+    filter: textFilter(),
+    formatter: (cell, row) => {
+      return <Link to={`/fleet/${row.id}`}>{cell}</Link>
+    }
   }, {
     dataField: 'description',
     text: 'Description',
