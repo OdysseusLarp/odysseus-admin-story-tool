@@ -69,7 +69,7 @@ export default function Characters(props) {
       filter: textFilter(),
       formatter: (cell, row) => {
         console.log(row.ship);
-        return <span className='fleet'> <Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${row.ship.id}`}>{cell}</Link></span>
+        return row.ship == null ? "" : <span className='fleet'><Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${row.ship.id}`}>{cell}</Link></span>
       }
   }];
 
