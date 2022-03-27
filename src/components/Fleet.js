@@ -8,7 +8,7 @@ import './Fleet.css';
 
 
 function getRowIndex(cell, row, rowIndex) {
-  return rowIndex;
+  return rowIndex + 1;
 }
 
 const columns = [{
@@ -26,6 +26,11 @@ const columns = [{
     formatter: (cell, row) => {
       return <Link to={`/fleet/${row.id}`}>{cell}</Link>
     }
+  }, {
+    dataField: 'id',
+    text: 'ID',
+    sort: true,
+    filter: textFilter()
   }, {
     dataField: 'description',
     text: 'Description',
@@ -106,7 +111,7 @@ export default function Fleet() {
 
   const options = {
     paginationSize: 4,
-    pageStartIndex: 0,
+    pageStartIndex: 1,
     alwaysShowAllBtns: true, // Always show next and previous button
     firstPageText: 'First',
     prePageText: 'Back',
@@ -140,8 +145,8 @@ export default function Fleet() {
   }
 
   return (
-    <div>
-      <BootstrapTable classes="info"
+    <div className='fleet'>
+      <BootstrapTable
         bootstrap4
         striped
         hover
