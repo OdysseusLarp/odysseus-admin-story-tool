@@ -1,0 +1,26 @@
+.character {
+    text-align: left;
+    margin-left: 18px;
+}
+
+h1.character {
+    color: #a87eb3;
+}
+
+.character .caption{
+    font-weight: bold;
+}
+
+.character .row-mini-header {
+    margin-top: 15px;
+}
+
+.character .mini-header {
+    font-weight: 600;
+    color: #a87eb3;
+    font-size: 20px;
+}
+
+.character a {
+    color: #a87eb3 !important;
+}
