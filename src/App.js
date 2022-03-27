@@ -6,6 +6,7 @@ import Fleet from "./components/Fleet";
 import Plots from "./components/Plots";
 import Events from "./components/Events";
 import Ship from "./components/Ship";
+import Character from "./components/Character";
 import React from "react";
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
@@ -43,7 +44,7 @@ function App() {
       <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
         <Tab eventKey="Characters" title="Characters">
           <div style={style}>
-            <Characters />
+            <Characters changeTab={onSelectTab}></Characters>
           </div>
         </Tab>
         <Tab eventKey="Fleet" title="Fleet">
@@ -79,6 +80,7 @@ function App() {
       {renderTable()}
       <Routes>
         <Route path="/fleet/:id" element={<Ship />} />
+        <Route path="/characters/:id" element={<Character />} />
         <Route path="*" element={<></>} />
       </Routes>
     </div>
