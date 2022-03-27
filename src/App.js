@@ -21,12 +21,20 @@ const TabKeys = {
 
 const tableRoutes = Object.keys(TabKeys).map((k) => "/" + k.toLowerCase());
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function App() {
-  const [key, setKey] = React.useState("Characters");
+  const [key, setKey] = React.useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
 
+  React.useEffect(() => {
+    setKey(capitalizeFirstLetter(location.pathname.split('/')[1]));
+  }, []);
+  
   const shouldRenderTable =
     tableRoutes.includes(location.pathname) || location.pathname === "/";
 
@@ -39,12 +47,11 @@ function App() {
 
   const renderTable = () => {
     const style = shouldRenderTable ? {} : { display: "none" };
-
     return (
       <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
         <Tab eventKey="Characters" title="Characters">
           <div style={style}>
-            <Characters changeTab={onSelectTab}></Characters>
+            <Characters changeTab={onSelectTab} />
           </div>
         </Tab>
         <Tab eventKey="Fleet" title="Fleet">
@@ -79,7 +86,7 @@ function App() {
       </h1>
       {renderTable()}
       <Routes>
-        <Route path="/fleet/:id" element={<Ship />} />
+        <Route path="/fleet/:id" element={<Ship changeTab={onSelectTab} />} />
         <Route path="/characters/:id" element={<Character />} />
         <Route path="*" element={<></>} />
       </Routes>
