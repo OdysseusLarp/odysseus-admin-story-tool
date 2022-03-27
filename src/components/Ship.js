@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import './Ship.css';
 
@@ -10,8 +11,20 @@ const getShip = async (id) => {
     return ship;
   }
 
-export default function Ship() {
+const getCaptain = async (id) => {
+  const response = await fetch(`http://localhost:8888/person?show_hidden=true&ship_id=${id}&title=Star%20Captain`);
+  let captain = await response.json();
+  captain = captain.persons;
+  // On Odysseus there are two Star Captains. We want Zeya Cook id 20112.
+  if (id == 'odysseus') {
+    captain = captain.filter(cap => cap.id == "20112");
+  }
+  return captain[0];
+}
+
+export default function Ship(props) {
   const [ship, setShip] = React.useState(null);
+  const [captain, setCaptain] = React.useState(null);
   const params = useParams();
 
   React.useEffect(() => {
@@ -20,11 +33,22 @@ export default function Ship() {
     getShip(params.id).then((s) => setShip(s));
   }, [params.id, setShip]);
 
+  React.useEffect(() => {
+    if (!params.id) return;
+    getCaptain(params.id).then((s) => setCaptain(s));
+  }, [params.id, setCaptain]);
+
   const renderShip = () => {
     if (!ship) return null;
     return (
       <div className='fleet'>
         <Container fluid className='ship'>
+          <Row>
+            {captain?.id && <Col sm><span className='mini-header'>Star Captain: </span><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${captain.id}`}>{captain.full_name}</Link></span></Col>}
+          </Row>
+          <Row>
+            <Col sm>&nbsp;</Col>
+          </Row>
           <Row>
             <Col sm><span className='mini-header'>Basic Info</span></Col>
           </Row>
@@ -35,7 +59,6 @@ export default function Ship() {
           <Row>
             <Col sm={4}><span className='caption'>Class: </span>{ship.class}</Col>
             <Col sm={8}><span className='caption'>Type: </span>{ship.type}</Col>
-            
           </Row>
           <Row>
             <Col sm><span className='caption'>Description: </span>{ship.description}</Col>
