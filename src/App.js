@@ -7,6 +7,7 @@ import Plots from "./components/Plots";
 import Events from "./components/Events";
 import Ship from "./components/Ship";
 import Character from "./components/Character";
+import FloatingButtons from "./components/FloatingButtons";
 import React from "react";
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
@@ -45,13 +46,17 @@ function App() {
     navigate(path);
   };
 
+  const changeTab = (k) => {
+    setKey(k);
+  };
+
   const renderTable = () => {
     const style = shouldRenderTable ? {} : { display: "none" };
     return (
       <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
         <Tab eventKey="Characters" title="Characters">
           <div style={style}>
-            <Characters changeTab={onSelectTab} />
+            <Characters changeTab={changeTab} />
           </div>
         </Tab>
         <Tab eventKey="Fleet" title="Fleet">
@@ -80,16 +85,17 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="Title">
+      <h1 className="Title" id="app-title">
         <span>Admin Story DB: </span>
         <span className={`title-tab ${key}`}>{key}</span>
       </h1>
       {renderTable()}
       <Routes>
-        <Route path="/fleet/:id" element={<Ship changeTab={onSelectTab} />} />
-        <Route path="/characters/:id" element={<Character />} />
+        <Route path="/fleet/:id" element={<Ship changeTab={changeTab} />} />
+        <Route path="/characters/:id" element={<Character changeTab={changeTab} />} />
         <Route path="*" element={<></>} />
       </Routes>
+      <FloatingButtons />
     </div>
   );
 }
