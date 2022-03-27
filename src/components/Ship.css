@@ -1,21 +1,18 @@
-.fleet {
+.ship {
     text-align: left;
+    margin-left: 18px;
 }
 
-h1.fleet {
+h1.ship {
     color: #32b2c0;
 }
 
-.fleet .caption {
+.ship .caption {
     font-weight: bold;
 }
 
-.fleet .mini-header {
+.ship .mini-header {
     font-weight: 600;
     color: #32b2c0;
     font-size: 20px;
-}
-
-.characters a {
-    color: #a87eb3 !important;
 }

@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 import './Ship.css';
 
 const getShip = async (id) => {
-    const response = await fetch(`http://localhost:8888/fleet/${id}`);
-    const ship = await response.json();
-    return ship;
-  }
+  const response = await fetch(`http://localhost:8888/fleet/${id}`);
+  const ship = await response.json();
+  return ship;
+}
 
 const getCaptain = async (id) => {
   const response = await fetch(`http://localhost:8888/person?show_hidden=true&ship_id=${id}&title=Star%20Captain`);
@@ -38,10 +38,14 @@ export default function Ship(props) {
     getCaptain(params.id).then((s) => setCaptain(s));
   }, [params.id, setCaptain]);
 
+  React.useEffect(() => {
+    props.changeTab('Fleet');
+  }, []);
+
   const renderShip = () => {
     if (!ship) return null;
     return (
-      <div className='fleet'>
+      <div className='ship'>
         <Container fluid className='ship'>
           <Row>
             {captain?.id && <Col sm><span className='mini-header'>Star Captain: </span><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${captain.id}`}>{captain.full_name}</Link></span></Col>}
@@ -111,6 +115,9 @@ export default function Ship(props) {
             {ship.metadata?.object_scan_duration.max_seconds && <Col sm={4}><span className='caption'>Object Scan Duration Max: </span>{ship.metadata?.object_scan_duration.max_seconds}s</Col>}
             {ship.metadata?.grid_scan_duration.max_seconds && <Col sm={8}><span className='caption'>Grid Scan Duration Max: </span>{ship.metadata?.grid_scan_duration.max_seconds}s</Col>}
           </Row>
+          <Row>
+            <Col sm>&nbsp;</Col>
+          </Row>
         </Container>
       </div>
     )
@@ -118,7 +125,7 @@ export default function Ship(props) {
 
   return (
     <div>
-      <h1 className='fleet'>{ship?.name}</h1>
+      <h1 className='ship'>{ship?.name}</h1>
       {renderShip()}
     </div>
   );
