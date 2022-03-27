@@ -11,7 +11,6 @@ import './Characters.css';
 const getCharacters = async () => {
   const response = await fetch("http://localhost:8888/person?show_hidden=false");
   const characters = await response.json();
-  console.log(characters);
   return characters.persons;
 }
 
@@ -39,7 +38,6 @@ export default function Characters(props) {
       sort: true,
       filter: textFilter(),
       formatter: (cell, row) => {
-        console.log(row);
         return <Link to={`/characters/${row.id}`}>{cell}</Link>
       }
     }, {
@@ -68,7 +66,6 @@ export default function Characters(props) {
       sort: true,
       filter: textFilter(),
       formatter: (cell, row) => {
-        console.log(row.ship);
         return row.ship == null ? "" : <span className='fleet'><Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${row.ship.id}`}>{cell}</Link></span>
       }
   }];
