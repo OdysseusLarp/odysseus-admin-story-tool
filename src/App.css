@@ -62,3 +62,30 @@
 .title-tab.Events {
   color: #3f860f;
 }
+
+.floating-button-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+
+}
+
+.floating-button-container > *:not(:last-child) {
+  margin-right: 10px;
+}
+
+.characters a {
+  color: #a87eb3 !important;
+}
+
+.fleet a {
+  color: #329ba7 !important;
+}
+
+span.characters a {
+  color: #a87eb3 !important;
+}
+
+span.fleet a {
+  color: #329ba7 !important;
+}
