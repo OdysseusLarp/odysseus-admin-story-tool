@@ -1,0 +1,17 @@
+.fleet {
+    text-align: left;
+}
+
+h1.fleet {
+    color: #32b2c0;
+}
+
+.fleet .caption {
+    font-weight: bold;
+}
+
+.fleet .mini-header {
+    font-weight: 600;
+    color: #32b2c0;
+    font-size: 20px;
+}
