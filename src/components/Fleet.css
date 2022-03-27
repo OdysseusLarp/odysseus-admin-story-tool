@@ -1,29 +1,33 @@
-.react-bootstrap-table-pagination-total {
+.fleet .react-bootstrap-table-pagination-total {
     margin-left: 10px;
 }
 
-.col-md-6 {
+.fleet .col-md-6 {
     text-align: left;
 }
 
-#pageDropDown {
+.fleet #pageDropDown {
     background-color:#31bac9;
 }
 
-li.page-item.active > a {
+.fleet li.page-item.active > a {
     background-color:#31bac9 !important;
     border-color:#31bac9 !important;
     color: white !important;
 }
 
-li.page-item.disabled > a {
+.fleet li.page-item.disabled > a {
     color: rgb(166, 167, 168) !important;
 }
 
-.page-link {
-    color: #32b2c0 !important;
+.fleet .page-link {
+    color: #329ba7 !important;
 }
 
-table {
+.fleet table {
     text-align: left;
+}
+
+.fleet a {
+    color: #329ba7 !important;
 }
