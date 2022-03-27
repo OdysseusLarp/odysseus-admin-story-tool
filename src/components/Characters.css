@@ -1,0 +1,33 @@
+.characters .react-bootstrap-table-pagination-total {
+    margin-left: 10px;
+}
+
+.characters .col-md-6 {
+    text-align: left;
+}
+
+.characters #pageDropDown {
+    background-color:#a87eb3;
+}
+
+.characters li.page-item.active > a {
+    background-color:#a87eb3 !important;
+    border-color:#a87eb3 !important;
+    color: white !important;
+}
+
+.characters li.page-item.disabled > a {
+    color: rgb(166, 167, 168) !important;
+}
+
+.characters .page-link {
+    color: #a87eb3 !important;
+}
+
+.characters table {
+    text-align: left;
+}
+
+.characters a {
+    color: #a87eb3 !important;
+}
