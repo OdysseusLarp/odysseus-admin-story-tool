@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import FloatingButtons from "./FloatingButtons";
 
 import './Character.css';
 
@@ -82,7 +83,7 @@ export default function Character(props) {
           <Col sm={8}><span className='caption'>Ship: </span>{character.ship ? <span className='fleet'><Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${character.ship.id}`}>{character.ship.name}</Link></span> : "None"}</Col>
         </Row>
         <Row className='row-mini-header'>
-          <Col sm><span className='mini-header' id='char-personal'>Personal</span></Col>
+          <Col sm><span className='mini-header' id='personal'>Personal</span></Col>
         </Row>
         <Row>
           <Col sm><span className='caption'>Personal History:</span>{personal_history.length === 0 && " None"}</Col>
@@ -93,7 +94,7 @@ export default function Character(props) {
         </Row>
         {<ul>{character.family.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation})</Col></Row></li>)}</ul>}
         <Row className='row-mini-header'>
-          <Col sm><span className='mini-header' id='char-military'>Military</span></Col>
+          <Col sm><span className='mini-header' id='military'>Military</span></Col>
         </Row>
         <Row>
           <Col sm><span className='caption'>Military Rank: </span>{character.military_rank}</Col>
@@ -107,7 +108,7 @@ export default function Character(props) {
         </Row>
         {<ul>{military_history.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}</ul>}
         <Row className='row-mini-header'>
-          <Col sm><span className='mini-header' id='char-medical'>Medical</span></Col>
+          <Col sm><span className='mini-header' id='medical'>Medical</span></Col>
         </Row>
         <Row>
           <Col sm={4}><span className='caption'>Fitness Level: </span>{character.medical_fitness_level}</Col>
@@ -155,8 +156,9 @@ export default function Character(props) {
 
   return (
     <div>
-      <h1 className='character'>{character?.full_name}</h1>
+      <h1 className='character' id="app-title">{character?.full_name}</h1>
       {renderCharacter()}
+      <FloatingButtons />
     </div>
   );
 }

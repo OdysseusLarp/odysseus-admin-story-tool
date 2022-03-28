@@ -7,7 +7,6 @@ import Plots from "./components/Plots";
 import Events from "./components/Events";
 import Ship from "./components/Ship";
 import Character from "./components/Character";
-import FloatingButtons from "./components/FloatingButtons";
 import React from "react";
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
@@ -85,7 +84,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="Title" id="app-title">
+      <h1 className="Title">
         <span>Admin Story DB: </span>
         <span className={`title-tab ${key}`}>{key}</span>
       </h1>
@@ -95,7 +94,6 @@ function App() {
         <Route path="/characters/:id" element={<Character changeTab={changeTab} />} />
         <Route path="*" element={<></>} />
       </Routes>
-      <FloatingButtons />
     </div>
   );
 }

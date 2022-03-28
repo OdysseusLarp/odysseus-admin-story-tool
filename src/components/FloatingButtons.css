@@ -1,0 +1,14 @@
+.float-char-btn {
+    color:#a87eb3 !important;
+    border-color: #a87eb3 !important;
+}
+
+.float-char-btn:hover {
+    background-color:#a87eb3 !important;
+    border-color: #a87eb3 !important;
+    color:white !important;
+}
+
+.float-char-btn:focus {
+    box-shadow: 0 0 0 .2rem rgba(223, 180, 240, 0.5) !important;
+}
