@@ -1,0 +1,22 @@
+.artifact {
+    text-align: left;
+    margin-left: 18px;
+}
+
+h1.artifact {
+    color: #d48b38;
+}
+
+.artifact .caption{
+    font-weight: bold;
+}
+
+.artifact .row-mini-header {
+    margin-top: 15px;
+}
+
+.artifact .mini-header {
+    font-weight: 600;
+    color: #d48b38;
+    font-size: 20px;
+}

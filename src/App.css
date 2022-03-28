@@ -82,10 +82,18 @@
   color: #329ba7 !important;
 }
 
+.artifacts a {
+  color: #d48b38 !important;
+}
+
 span.characters a {
   color: #a87eb3 !important;
 }
 
 span.fleet a {
   color: #329ba7 !important;
+}
+
+span.artifacts a {
+  color: #d48b38 !important;
 }

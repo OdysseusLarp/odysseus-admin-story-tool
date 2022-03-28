@@ -7,6 +7,7 @@ import Plots from "./components/Plots";
 import Events from "./components/Events";
 import Ship from "./components/Ship";
 import Character from "./components/Character";
+import Artifact from "./components/Artifact";
 import React from "react";
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
@@ -92,6 +93,7 @@ function App() {
       <Routes>
         <Route path="/fleet/:id" element={<Ship changeTab={changeTab} />} />
         <Route path="/characters/:id" element={<Character changeTab={changeTab} />} />
+        <Route path="/artifacts/:id" element={<Artifact changeTab={changeTab} />} />
         <Route path="*" element={<></>} />
       </Routes>
     </div>
