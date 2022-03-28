@@ -16,19 +16,22 @@ const getCharacters = async () => {
 
 export default function Characters(props) {
   const [characters, setCharacters] = React.useState([]);
+  const [page, setPage] = React.useState(1);
+  const [sizePerPage, setSizePerPage] = React.useState(15);
 
   React.useEffect(() => {
     getCharacters().then(data => setCharacters(data));
   }, []);
 
   function getRowIndex(cell, row, rowIndex) {
-    return rowIndex + 1;
+    return (page-1) * sizePerPage + rowIndex + 1;
   }
   
   const columns = [{
+      dataField: '_row_index_placeholder',
       text: 'Row',
       formatter: getRowIndex,
-      headerStyle: (colum, colIndex) => {
+      headerStyle: () => {
         return { width: '50px', textAlign: 'center' };
       },
       align: 'center'
@@ -77,6 +80,8 @@ export default function Characters(props) {
   );
 
   const options = {
+    page: page,
+    sizePerPage: sizePerPage,
     paginationSize: 4,
     pageStartIndex: 1,
     alwaysShowAllBtns: true, // Always show next and previous button
@@ -91,8 +96,18 @@ export default function Characters(props) {
     showTotal: true,
     paginationTotalRenderer: customTotal,
     disablePageTitle: true,
+    onPageChange: (page, sizePerPage) => { 
+      setPage(page); 
+      setSizePerPage(sizePerPage);
+    },
+    onSizePerPageChange: (sizePerPage, page) => { 
+      setPage(page); 
+      setSizePerPage(sizePerPage);
+    },
     sizePerPageList: [{
       text: '10', value: 10
+    }, {
+      text: '15', value: 15
     }, {
       text: '20', value: 20
     }, {
@@ -110,7 +125,7 @@ export default function Characters(props) {
         bootstrap4
         striped
         hover
-        keyField="full_name"
+        keyField="id"
         bordered={ false }
         data={ characters }
         columns={ columns }
