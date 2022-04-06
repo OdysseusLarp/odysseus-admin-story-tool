@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import FloatingButtons from "./FloatingButtons";
+import { apiUrl } from "../api";
 
 import './Character.css';
 
 const getCharacter = async (id) => {
-    const response = await fetch(`http://localhost:8888/person/${id}`);
+    const response = await fetch(apiUrl(`/person/${id}`));
     const character = await response.json();
     return character;
   }

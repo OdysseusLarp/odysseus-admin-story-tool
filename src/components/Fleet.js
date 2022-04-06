@@ -3,12 +3,13 @@ import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import React from "react";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../api";
 
 import './Fleet.css';
 
 
 const getFleet = async () => {
-  const response = await fetch("http://localhost:8888/fleet?show_hidden=true");
+  const response = await fetch(apiUrl("/fleet?show_hidden=true"));
   const fleet = await response.json();
   return fleet;
 }

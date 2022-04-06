@@ -3,11 +3,12 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
+import { apiUrl } from "../api";
 
 import './Artifacts.css';
 
 const getArtifacts = async () => {
-  const response = await fetch("http://localhost:8888/science/artifact");
+  const response = await fetch(apiUrl("/science/artifact"));
   const artifacts = await response.json();
   return artifacts;
 }

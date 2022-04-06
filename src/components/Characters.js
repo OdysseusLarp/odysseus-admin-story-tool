@@ -2,6 +2,7 @@ import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import { apiUrl } from "../api";
 
 import { Link } from "react-router-dom";
 
@@ -9,7 +10,7 @@ import './Characters.css';
 
 // TODO: Add to backend possibility to query is_character=true
 const getCharacters = async () => {
-  const response = await fetch("http://localhost:8888/person?show_hidden=false");
+  const response = await fetch(apiUrl("/person?show_hidden=false"));
   const characters = await response.json();
   return characters.persons;
 }

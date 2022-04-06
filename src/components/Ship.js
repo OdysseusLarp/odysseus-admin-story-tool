@@ -2,17 +2,18 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../api";
 
 import './Ship.css';
 
 const getShip = async (id) => {
-  const response = await fetch(`http://localhost:8888/fleet/${id}`);
+  const response = await fetch(apiUrl(`/fleet/${id}`));
   const ship = await response.json();
   return ship;
 }
 
 const getCaptain = async (id) => {
-  const response = await fetch(`http://localhost:8888/person?show_hidden=true&ship_id=${id}&title=Star%20Captain`);
+  const response = await fetch(apiUrl(`/person?show_hidden=true&ship_id=${id}&title=Star%20Captain`));
   let captain = await response.json();
   captain = captain.persons;
   // On Odysseus there are two Star Captains. We want Zeya Cook id 20112.
