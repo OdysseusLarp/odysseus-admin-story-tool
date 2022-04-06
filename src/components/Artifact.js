@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../api";
 
 import './Artifact.css';
 
@@ -9,13 +10,13 @@ import './Artifact.css';
 // TODO: Who the hell is Vic Ramirez, Pat Montoya, Tilly Fjord, Nana Ishimoto, Bob Walker, Xian Xou, Reloz Duran
 
 const getArtifact = async (id) => {
-  const response = await fetch(`http://localhost:8888/science/artifact/${id}`);
+  const response = await fetch(apiUrl(`/science/artifact/${id}`));
   const artifact = await response.json();
   return artifact;
 }
 
 const getDiscoveredById = async (name) => {
-  const response = await fetch(`http://localhost:8888/person/search/${name}`);
+  const response = await fetch(apiUrl(`/person/search/${name}`));
   const discoveredBy = await response.json();
   console.log(discoveredBy);
   const discoveredById = discoveredBy.find(person => person.full_name == name)?.id;
