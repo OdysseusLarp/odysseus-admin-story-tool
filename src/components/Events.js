@@ -6,8 +6,17 @@ import moment from 'moment';
 
 import './Events.css';
 
-export default function Events() {
+export default function Events({ isActive }) {
   const [eventInfo, setEventInfo] = React.useState(null);
+
+  React.useEffect(() => {
+    if (!isActive) return;
+
+    // Workaround hack for https://github.com/namespace-ee/react-calendar-timeline/issues/744
+    console.log("Events rendered");
+    // setTimeout(() => window.dispatchEvent(new Event('resize')), 200)
+    window.dispatchEvent(new Event('resize'));
+  }, [isActive]);
 
   const groups = [{ id: 1, title: 'Shifts' }, { id: 2, title: 'Jumps' }, { id: 3, title: 'Land Missions' }, { id: 4, title: 'Random Events' }];
 

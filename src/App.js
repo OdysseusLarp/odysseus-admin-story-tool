@@ -76,7 +76,7 @@ function App() {
         </Tab>
         <Tab eventKey="Events" title="Events">
           <div style={style}>
-            <Events />
+            <Events isActive={key === "Events"} />
           </div>
         </Tab>
       </Tabs>
