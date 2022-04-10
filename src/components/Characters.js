@@ -8,9 +8,8 @@ import { Link } from "react-router-dom";
 
 import './Characters.css';
 
-// TODO: Add to backend possibility to query is_character=true
 const getCharacters = async () => {
-  const response = await fetch(apiUrl("/person?show_hidden=false"));
+  const response = await fetch(apiUrl("/person?show_hidden=true&is_character=true"));
   const characters = await response.json();
   return characters.persons;
 }
