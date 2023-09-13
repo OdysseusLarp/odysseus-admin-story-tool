@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm install react-bootstrap-table-next --legacy-peer-deps`
+
+At least one of the dependencies does not support React 17 officially.
+
 ### `npm start`
 
 Runs the app in the development mode.\
