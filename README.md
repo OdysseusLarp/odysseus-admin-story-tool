@@ -1,12 +1,16 @@
-# Getting Started with Create React App
+# Odysseus Admin Story Tool
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Requirements
+* Node v18.14.0
+* [Odysseus Backend](https://github.com/OdysseusLarp/odysseus-backend)
 
-## Available Scripts
+## Local Setup
+
+**`NOTE!`** Make sure you are running `Odysseus Backend`!
 
 In the project directory, you can run:
 
-### `npm install react-bootstrap-table-next --legacy-peer-deps`
+### `npm install --legacy-peer-deps`
 
 At least one of the dependencies does not support React 17 officially.
 
@@ -17,6 +21,32 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
+
+## Local setup in VSCode dev container
+
+You can also run the app using [VSCode dev containers](https://code.visualstudio.com/docs/devcontainers/containers). Create/update your .env file like in the local setup instructions.
+
+### Requirements
+
+- [Docker](https://www.docker.com/)
+- [VSCode](https://code.visualstudio.com/) with [Dev Containers](https://code.visualstudio.com/docs/devcontainers/tutorial#_install-the-extension) extension
+- [Odysseus Backend](https://github.com/OdysseusLarp/odysseus-backend)
+
+### Setup
+
+* **`NOTE!`** Make sure you are running `Odysseus Backend`!
+* Open new window in VSCode
+* File --> Open Folder... --> `odysseus-admin-story-tool`
+* VSCode will ask do you want to `Reopen in Container` --> Click it
+    * If you are too slow --> Click the button in left bottom corner (looks like two L:s or disjointed ><) and choose `Reopen in Container` from the menu.
+* VSCode will then build and start up the dev container, installs npm packages and starts the service.
+
+### Problems?
+
+* Try to rebuild the container: Click the button in left bottom corner (looks like two L:s or disjointed >< with the container name) and choose `Rebuild Container` from the menu.
+* You might run into [this issue](https://github.com/microsoft/vscode-remote-release/issues/7305) on ARM processors, see the issue for potential workarounds.
+
+## Other Available Scripts
 
 ### `npm test`
 
