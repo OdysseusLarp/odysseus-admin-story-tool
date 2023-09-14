@@ -5,4 +5,4 @@ sudo chown -R $USER: node_modules
 
 # Install dependencies
 npm install --legacy-peer-deps
-npm run start-dev-container
+npm start
