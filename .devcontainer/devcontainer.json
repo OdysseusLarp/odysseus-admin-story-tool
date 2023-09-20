@@ -32,6 +32,7 @@
 	"runArgs": [
 		// Turn off user namespace within the container (SELINUX)
 		"--security-opt",
-		"label:disable"
+		"label:disable",
+		"--name", "odysseus-admin-story-ui"
 	]
 }
