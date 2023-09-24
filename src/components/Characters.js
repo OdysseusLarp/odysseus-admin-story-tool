@@ -26,7 +26,7 @@ export default function Characters(props) {
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
-  
+
   const columns = [{
       dataField: '_row_index_placeholder',
       text: 'Row',
@@ -70,8 +70,14 @@ export default function Characters(props) {
       filter: textFilter(),
       formatter: (cell, row) => {
         return row.ship == null ? "" : <span className='fleet'><Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${row.ship.id}`}>{cell}</Link></span>
-      }
-  }];
+      },
+    }, {
+      dataField: 'card_id',
+      text: 'Card ID',
+      sort: true,
+      filter: textFilter()
+    },
+  ];
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
@@ -96,12 +102,12 @@ export default function Characters(props) {
     showTotal: true,
     paginationTotalRenderer: customTotal,
     disablePageTitle: true,
-    onPageChange: (page, sizePerPage) => { 
-      setPage(page); 
+    onPageChange: (page, sizePerPage) => {
+      setPage(page);
       setSizePerPage(sizePerPage);
     },
-    onSizePerPageChange: (sizePerPage, page) => { 
-      setPage(page); 
+    onSizePerPageChange: (sizePerPage, page) => {
+      setPage(page);
       setSizePerPage(sizePerPage);
     },
     sizePerPageList: [{
@@ -121,7 +127,7 @@ export default function Characters(props) {
 
   return (
     <div className="characters">
-      <BootstrapTable 
+      <BootstrapTable
         bootstrap4
         striped
         hover
