@@ -10,9 +10,9 @@
 
 In the project directory, you can run:
 
-### `npm install --legacy-peer-deps`
+### `npm install`
 
-At least one of the dependencies does not support React 17 officially.
+Installs all the required dependencies.
 
 ### `npm start`
 
