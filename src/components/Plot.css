@@ -1,0 +1,30 @@
+.plot {
+    text-align: left;
+    margin-left: 18px;
+}
+
+h1.plot {
+    color: #4584e9;
+}
+
+.plot .caption{
+    font-weight: bold;
+}
+
+.plot .row-mini-header {
+    margin-top: 15px;
+}
+
+.plot .mini-header {
+    font-weight: 600;
+    color: #4584e9;
+    font-size: 20px;
+}
+
+.plot a {
+    color: #4584e9 !important;
+}
+
+.plot .new {
+    color: #da3e00;
+}

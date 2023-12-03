@@ -13,6 +13,17 @@ const getCharacter = async (id) => {
     return character;
   }
 
+const is_npc = (character) => {
+  if (!character)
+    return null
+  if (character.is_character === true)
+    return 'Character'
+  else if (character.is_character === false)
+    return 'NPC'
+  else
+    return 'Random Generated Character'
+}
+
 export default function Character(props) {
   const [character, setCharacter] = React.useState(null);
   const params = useParams();
@@ -25,17 +36,56 @@ export default function Character(props) {
 
   React.useEffect(() => {
     props.changeTab('Characters');
-  }, []);
+  }, [props]);
 
   const renderCharacter = () => {
     if (!character) return null;
     const military_history = character.entries.filter((e) => e.type === "MILITARY").map((e) => e.entry.split('\n\n')).flat();
     const medical_history = character.entries.filter((e) => e.type === "MEDICAL").map((e) => e.entry.split('\n\n')).flat();
     const personal_history = character.entries.filter((e) => e.type === "PERSONAL").map((e) => e.entry.split('\n\n')).flat();
+    console.log(character);
 
     return (
       <div className='character'>
       <Container fluid className='character'>
+        <Row>
+          <Col sm><span className='mini-header new'>Short description</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+        </Row>
+        <Row>
+          <Col sm>&nbsp;</Col>
+        </Row>
+        <Row>
+          <Col sm><span className='mini-header new'>Summary / Cheat sheet</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'><ul>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
+            </ul></span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='mini-header new'>Plots</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'><ul>
+            <li>Plot name 1 (links to plot)</li>
+            <li>Plot name 2 (links to plot)</li>
+            <li>Plot name 3 (links to plot)</li>
+            </ul></span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='mini-header new'>GM Notes</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></Col>
+        </Row>
+        <Row>
+          <Col sm>&nbsp;</Col>
+        </Row>
         <Row>
           <Col sm><span className='mini-header'>Basic Info</span></Col>
         </Row>
@@ -93,7 +143,11 @@ export default function Character(props) {
         <Row className='row-mini-header'>
           <Col sm><span className='mini-header'>Family</span></Col>
         </Row>
-        {<ul>{character.family.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation})</Col></Row></li>)}</ul>}
+        {<ul>{character.family.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation}, <span className='data-found'>{person.status}, {person.ship_id}, {is_npc(person)}</span>)</Col></Row></li>)}</ul>}
+        <Row className='row-mini-header'>
+          <Col sm><span className='mini-header new'>Other known relations</span></Col>
+        </Row>
+        {<span className='new'><ul><li>Name Surname (relation, <span className='data-found'>status, ship, is_character</span>)</li><li>Name Surname2 (relation, <span className='data-found'>status, ship, is_character</span>)</li></ul></span>}
         <Row className='row-mini-header'>
           <Col sm><span className='mini-header' id='military'>Military</span></Col>
         </Row>
@@ -144,7 +198,7 @@ export default function Character(props) {
           <Col sm><span className='mini-header'>Metadata</span></Col>
         </Row>
         <Row>
-          <Col sm={4}><span className='caption'>Is Character: </span>{character.is_character ? "Yes" : "No"}</Col>
+          <Col sm={4}><span className='caption'>Is Character: </span>{is_npc(character)}</Col>
           <Col sm={8}><span className='caption'>Is Visible: </span>{character.is_visible ? "Yes" : "No"}</Col>
         </Row>
         <Row>
@@ -157,7 +211,7 @@ export default function Character(props) {
 
   return (
     <div>
-      <h1 className='character' id="app-title">{character?.full_name}</h1>
+      <h1 className='character' id="app-title">{character?.full_name} ({is_npc(character)})</h1>
       {renderCharacter()}
       <FloatingButtons />
     </div>

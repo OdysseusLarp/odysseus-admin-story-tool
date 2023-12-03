@@ -20,3 +20,7 @@ h1.artifact {
     color: #d48b38;
     font-size: 20px;
 }
+
+.artifact .new {
+    color: #da3e00;
+}

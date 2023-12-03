@@ -16,3 +16,11 @@ h1.ship {
     color: #32b2c0;
     font-size: 20px;
 }
+
+.ship .new {
+    color: #da3e00;
+}
+
+.ship .data-found {
+    color: #f26bf7;
+}

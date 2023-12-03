@@ -17,8 +17,8 @@ const getCaptain = async (id) => {
   let captain = await response.json();
   captain = captain.persons;
   // On Odysseus there are two Star Captains. We want Zeya Cook id 20112.
-  if (id == 'odysseus') {
-    captain = captain.filter(cap => cap.id == "20112");
+  if (id === 'odysseus') {
+    captain = captain.filter(cap => cap.id === "20112");
   }
   return captain[0];
 }
@@ -41,10 +41,11 @@ export default function Ship(props) {
 
   React.useEffect(() => {
     props.changeTab('Fleet');
-  }, []);
+  }, [props]);
 
   const renderShip = () => {
     if (!ship) return null;
+    console.log(ship)
     return (
       <div className='ship'>
         <Container fluid className='ship'>
@@ -119,6 +120,10 @@ export default function Ship(props) {
           <Row>
             <Col sm>&nbsp;</Col>
           </Row>
+          <Row>
+            <Col sm><span className='mini-header new'>Persons on Ship (Characters / NPCs)</span></Col>
+          </Row>
+          {<ul><li><span className='data-found'>Link to Character name</span></li><li><span className='data-found'>Link to NPC 1 </span><span className='new'>(Knows: Character Name 1, Character Name 2)</span></li><li><span className='data-found'>Link to NPC 2 </span><span className='new'>(Knows: Character Name 1, Character Name 2)</span></li></ul>}
         </Container>
       </div>
     )
