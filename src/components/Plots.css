@@ -1,0 +1,29 @@
+.plots .react-bootstrap-table-pagination-total {
+    margin-left: 10px;
+}
+
+.plots .col-md-6 {
+    text-align: left;
+}
+
+.plots #pageDropDown {
+    background-color:#31bac9;
+}
+
+.plots li.page-item.active > a {
+    background-color:#31bac9 !important;
+    border-color:#31bac9 !important;
+    color: white !important;
+}
+
+.plots li.page-item.disabled > a {
+    color: rgb(166, 167, 168) !important;
+}
+
+.plots .page-link {
+    color: #329ba7 !important;
+}
+
+.plots table {
+    text-align: left;
+}

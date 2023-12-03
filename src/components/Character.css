@@ -24,3 +24,12 @@ h1.character {
 .character a {
     color: #a87eb3 !important;
 }
+
+.character .new {
+    color: #da3e00;
+}
+
+.character .data-found {
+    color: #f26bf7;
+}
+

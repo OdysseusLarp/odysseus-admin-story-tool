@@ -1,0 +1,30 @@
+.event {
+    text-align: left;
+    margin-left: 18px;
+}
+
+h1.event {
+    color: #a52626;
+}
+
+.event .caption{
+    font-weight: bold;
+}
+
+.event .row-mini-header {
+    margin-top: 15px;
+}
+
+.event .mini-header {
+    font-weight: 600;
+    color: #a52626;
+    font-size: 20px;
+}
+
+.event a {
+    color: #a52626 !important;
+}
+
+.event .new {
+    color: #da3e00;
+}

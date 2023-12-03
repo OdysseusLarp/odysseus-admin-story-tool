@@ -1,104 +1,63 @@
-import React from "react";
-import Timeline from 'react-calendar-timeline';
-// make sure you include the timeline stylesheet or the timeline will not be styled
-import 'react-calendar-timeline/lib/Timeline.css';
-import moment from 'moment';
-
+import { Container, Row, Col } from "react-bootstrap";
 import './Events.css';
+import './Event.css';
 
-export default function Events({ isActive }) {
-  const [eventInfo, setEventInfo] = React.useState(null);
-
-  React.useEffect(() => {
-    if (!isActive) return;
-
-    // Workaround hack for https://github.com/namespace-ee/react-calendar-timeline/issues/744
-    console.log("Events rendered");
-    // setTimeout(() => window.dispatchEvent(new Event('resize')), 200)
-    window.dispatchEvent(new Event('resize'));
-  }, [isActive]);
-
-  const groups = [{ id: 1, title: 'Shifts' }, { id: 2, title: 'Jumps' }, { id: 3, title: 'Land Missions' }, { id: 4, title: 'Random Events' }];
-
-  const items = [
-    {
-      id: 1,
-      group: 2,
-      title: 'Jump 1',
-      start_time: moment(),
-      end_time: moment().add(1, 'hour')
-    },
-    {
-      id: 2,
-      group: 3,
-      title: 'Land Mission 1',
-      start_time: moment().add(1, 'hour'),
-      end_time: moment().add(2, 'hour')
-    },
-    {
-      id: 3,
-      group: 2,
-      title: 'Jump 2',
-      start_time: moment().add(3, 'hour'),
-      end_time: moment().add(4, 'hour')
-    },
-    {
-      id: 4,
-      group: 4,
-      title: 'Gas Leak',
-      start_time: moment().add(3, 'hour'),
-      end_time: moment().add(4, 'hour')
-    },
-    {
-      id: 5,
-      group: 1,
-      title: 'Solar',
-      start_time: moment(),
-      end_time: moment().add(4, 'hour'),
-      itemProps: {
-        test: "Testing testing",
-        onDoubleClick: () => { console.log("test") },
-        style: {
-          background: 'orange'
-        }
-      }
-    },
-    {
-      id: 6,
-      group: 1,
-      title: 'Lunar',
-      start_time: moment().add(4, 'hour'),
-      end_time: moment().add(8, 'hour')
-    }
-  ];
-  console.log(items);
-
-  return (
-    <div>
-      <Timeline
-        timeSteps={{
-          second: 1,
-          minute: 1,
-          hour: 1,
-          day: 1,
-          month: 1,
-          year: 1
-        }}
-        onItemSelect={(itemId, e, time) => {setEventInfo(items.find(item => item.id == itemId))}}
-        maxZoom={5 * 86400 * 1000}
-        groups={groups}
-        items={items}
-        defaultTimeStart={moment().add(-12, 'hour')}
-        defaultTimeEnd={moment().add(12, 'hour')}
-      />
-      {(eventInfo === null) ? <div></div> :
-        <div className='events'>
-          <h1>{eventInfo.title}</h1>
-          <div>{eventInfo.itemProps?.test}</div>
+export default function Events() {
+    return (
+      <div>
+        <h1 className='event' id="app-title">Event Name</h1>
+        <div className='event'>
+          <Container fluid className='event'>
+            <Row>
+              <Col sm><span className='mini-header'>Characters Involved</span></Col>
+            </Row>
+            {<span><ul><li>Name Surname (Main character, Character)</li><li>Name Surname2 (Side character, NPC)</li><li>Name Surname2 (Knows random info, Character)</li></ul></span>}
+            <Row>
+              <Col sm><span className='mini-header'>Character Groups Involved</span></Col>
+            </Row>
+            {<span><ul><li>Engineers</li><li>Scientists</li><li>All</li></ul></span>}
+            <Row>
+              <Col sm><span className='mini-header'>Basic Info</span></Col>
+            </Row>
+            <Row>
+              <Col sm={6}><span className='caption'>GM Actions: </span>No need / Empty Epsilon / Text NPC / Briefing character</Col>
+              <Col sm={4}><span className='caption'>Event size: </span>Small / Medium / Large</Col>
+            </Row>
+            <Row>
+              <Col sm={6}><span className='caption'>Happens after jump: </span>- / 3 / 13</Col>
+              <Col sm={4}><span className='caption'>Event type: </span>Jump / Land Mission / Empty Epsilon / Political / Machine / Gas Leak / Bomb / Character</Col>
+            </Row>
+            <Row>
+              <Col sm={6}><span className='caption'>Info 1: </span>Lorem ipsum</Col>
+              <Col sm={4}><span className='caption'>Event theme: </span>Love / Beatrayal / Political / Machine</Col>
+            </Row>
+            <Row>
+              <Col sm>&nbsp;</Col>
+            </Row>
+            <Row>
+              <Col sm><span className='mini-header'>Links to Plots</span></Col>
+            </Row>
+            {<span><ul><li>Not part of a plot</li><li>Link to plot 1</li><li>Link to plot 2</li></ul></span>}
+            <Row>
+              <Col sm><span className='mini-header'>Short Description</span></Col>
+            </Row>
+            <Row>
+              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+            </Row>
+            <Row>
+              <Col sm>&nbsp;</Col>
+            </Row>
+            <Row>
+              <Col sm><span className='mini-header'>GM Notes</span></Col>
+            </Row>
+            <Row>
+              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+            </Row>
+            <Row>
+              <Col sm>&nbsp;</Col>
+            </Row>
+          </Container>
         </div>
-      }
-    </div>
-  )
-}
-
-
+      </div>
+    )
+  }

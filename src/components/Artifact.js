@@ -86,6 +86,12 @@ export default function Artifact(props) {
             <li><Row><Col sm>{artifact.text.split('![]')[0]}</Col></Row></li>
             {artifact_entries.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}
           </ul>}
+          <Row>
+            <Col sm><span className='mini-header new'>GM Notes</span></Col>
+          </Row>
+          <Row>
+            <Col sm><span className='new'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+          </Row>
         </Container>
       </div>
     )
