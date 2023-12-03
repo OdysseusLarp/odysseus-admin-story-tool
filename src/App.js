@@ -34,7 +34,10 @@ function App() {
 
   React.useEffect(() => {
     setKey(capitalizeFirstLetter(location.pathname.split('/')[1]));
-  }, []);
+    if (location.pathname === '/') {
+      navigate("/characters")
+    }
+  }, [location.pathname, navigate]);
   
   const shouldRenderTable =
     tableRoutes.includes(location.pathname) || location.pathname === "/";
