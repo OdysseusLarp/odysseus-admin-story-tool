@@ -35,6 +35,10 @@
   color: #a52626 !important;
 }
 
+.nav-link.active#tabs-tab-Messages {
+  color: #4fa129 !important;
+}
+
 .nav-link {
   color: rgb(166, 167, 168) !important;
   font-size: 18px;
@@ -61,6 +65,10 @@
 
 .title-tab.Events {
   color: #a52626;
+}
+
+.title-tab.Messages {
+  color: #4fa129;
 }
 
 .floating-button-container {

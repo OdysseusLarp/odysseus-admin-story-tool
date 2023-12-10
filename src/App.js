@@ -8,6 +8,7 @@ import Events from "./components/Events";
 import Ship from "./components/Ship";
 import Character from "./components/Character";
 import Artifact from "./components/Artifact";
+import Messages from "./components/Messages";
 import React from "react";
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
@@ -18,6 +19,7 @@ const TabKeys = {
   Artifacts: "Artifacts",
   Plots: "Plots",
   Events: "Events",
+  Messages: "Messages",
 };
 
 const tableRoutes = Object.keys(TabKeys).map((k) => "/" + k.toLowerCase());
@@ -82,6 +84,11 @@ function App() {
             <Events isActive={key === "Events"} />
           </div>
         </Tab>
+        <Tab eventKey="Messages" title="Messages">
+          <div style={style}>
+            <Messages isActive={key === "Messages"} />
+          </div>
+        </Tab>
       </Tabs>
     );
   };
@@ -97,6 +104,9 @@ function App() {
         <Route path="/fleet/:id" element={<Ship changeTab={changeTab} />} />
         <Route path="/characters/:id" element={<Character changeTab={changeTab} />} />
         <Route path="/artifacts/:id" element={<Artifact changeTab={changeTab} />} />
+        <Route path="/plots/:id" element={<Plots changeTab={changeTab} />} />
+        <Route path="/events/:id" element={<Events changeTab={changeTab} />} />
+        <Route path="/messages/:id" element={<Messages changeTab={changeTab} />} />
         <Route path="*" element={<></>} />
       </Routes>
     </div>
