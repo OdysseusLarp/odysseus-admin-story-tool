@@ -5,7 +5,7 @@ import './Plot.css';
 export default function Plots() {
     return (
       <div>
-        <h1 className='plot' id="app-title">Plot Name</h1>
+        <h1 className='plot' id="app-title">Plot Name (MAIN PLOTS)</h1>
         <div className='plot'>
           <Container fluid className='plot'>
             <Row>
@@ -29,7 +29,7 @@ export default function Plots() {
             </Row>
             <Row>
               <Col sm={6}><span className='caption'>Happens after jump: </span>- / 3 / 13</Col>
-              <Col sm={4}><span className='caption'>Info3: </span>Lorem Ipsum</Col>
+              <Col sm={4}><span className='caption'>Plot Importance: </span>Not necessary / something / Mandatory</Col>
             </Row>
             <Row>
               <Col sm>&nbsp;</Col>
@@ -57,7 +57,7 @@ export default function Plots() {
               <Col sm>&nbsp;</Col>
             </Row>
             <Row>
-              <Col sm><span className='mini-header'>Copied from characters</span></Col>
+              <Col sm><span className='mini-header'>Copied from characters (optional)</span></Col>
             </Row>
             <Row>
               <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>

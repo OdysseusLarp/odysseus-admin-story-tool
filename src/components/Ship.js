@@ -67,7 +67,7 @@ export default function Ship(props) {
             <Col sm={8}><span className='caption'>Type: </span>{ship.type}</Col>
           </Row>
           <Row>
-            <Col sm><span className='caption'>Description: </span>{ship.description}</Col>
+            <Col sm><span className='caption'>Description <span className="new">(check this and add the full description)</span>: </span>{ship.description}</Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>

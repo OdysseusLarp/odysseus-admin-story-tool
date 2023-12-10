@@ -58,6 +58,15 @@ export default function Character(props) {
           <Col sm>&nbsp;</Col>
         </Row>
         <Row>
+          <Col sm><span className='mini-header new'>Link to character</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>link</span></Col>
+        </Row>
+        <Row>
+          <Col sm>&nbsp;</Col>
+        </Row>
+        <Row>
           <Col sm><span className='mini-header new'>Summary / Cheat sheet</span></Col>
         </Row>
         <Row>
@@ -82,6 +91,33 @@ export default function Character(props) {
         </Row>
         <Row>
           <Col sm><span className='new'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></Col>
+        </Row>
+        <Row>
+          <Col sm>&nbsp;</Col>
+        </Row>
+        <Row>
+          <Col sm><span className='mini-header new'>GM Notes during the game (editable) [EDIT FIELD BUTTON] [CREATE EVENT BUTTON]</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Run 2: Note 1</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Run 2: Note 2</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Run 2: Note 3</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Run 1: Note 1</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Run 1: Note 2</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Run 1: Note 3</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'>Save the notes between games but not here? Or the old ones are hideable </span></Col>
         </Row>
         <Row>
           <Col sm>&nbsp;</Col>
