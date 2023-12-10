@@ -19,7 +19,7 @@ const getDiscoveredById = async (name) => {
   const response = await fetch(apiUrl(`/person/search/${name}`));
   const discoveredBy = await response.json();
   console.log(discoveredBy);
-  const discoveredById = discoveredBy.find(person => person.full_name == name)?.id;
+  const discoveredById = discoveredBy.find(person => person.full_name === name)?.id;
   return discoveredById;
 }
 
@@ -40,7 +40,7 @@ export default function Artifact(props) {
 
   React.useEffect(() => {
     props.changeTab('Artifacts');
-  }, []);
+  }, [props]);
 
   const renderArtifact = () => {
     if (!artifact) return null;

@@ -49,6 +49,26 @@ export default function Characters(props) {
       sort: true,
       filter: textFilter()
     }, {
+      dataField: 'card_id',
+      text: 'Card ID',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'is_character',
+      text: 'Character/NPC',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'character_group',
+      text: 'Character Group',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'last_message_recieved',
+      text: 'Last Message Recieved',
+      sort: true,
+      filter: textFilter()
+    }, {
       dataField: 'status',
       text: 'Status',
       sort: true,
@@ -71,11 +91,6 @@ export default function Characters(props) {
       formatter: (cell, row) => {
         return row.ship == null ? "" : <span className='fleet'><Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${row.ship.id}`}>{cell}</Link></span>
       },
-    }, {
-      dataField: 'card_id',
-      text: 'Card ID',
-      sort: true,
-      filter: textFilter()
     },
   ];
 

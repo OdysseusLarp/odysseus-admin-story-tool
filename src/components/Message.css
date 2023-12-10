@@ -1,0 +1,30 @@
+.message {
+    text-align: left;
+    margin-left: 18px;
+}
+
+h1.message {
+    color: #4fa129;
+}
+
+.message .caption{
+    font-weight: bold;
+}
+
+.message .row-mini-header {
+    margin-top: 15px;
+}
+
+.message .mini-header {
+    font-weight: 600;
+    color: #4fa129;
+    font-size: 20px;
+}
+
+.message a {
+    color: #4fa129 !important;
+}
+
+.message .new {
+    color: #da3e00;
+}

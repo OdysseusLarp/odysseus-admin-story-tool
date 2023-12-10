@@ -5,7 +5,7 @@ import './Event.css';
 export default function Events() {
     return (
       <div>
-        <h1 className='event' id="app-title">Event Name</h1>
+        <h1 className='event' id="app-title">Event Name [CREATE EVENT BUTTON]</h1>
         <div className='event'>
           <Container fluid className='event'>
             <Row>
@@ -24,12 +24,20 @@ export default function Events() {
               <Col sm={4}><span className='caption'>Event size: </span>Small / Medium / Large</Col>
             </Row>
             <Row>
-              <Col sm={6}><span className='caption'>Happens after jump: </span>- / 3 / 13</Col>
+              <Col sm={6}><span className='caption'>Happens after jump: </span>- / 3 / 13 (Editable unless event is locked)</Col>
               <Col sm={4}><span className='caption'>Event type: </span>Jump / Land Mission / Empty Epsilon / Political / Machine / Gas Leak / Bomb / Character</Col>
             </Row>
             <Row>
-              <Col sm={6}><span className='caption'>Info 1: </span>Lorem ipsum</Col>
+              <Col sm={6}><span className='caption'>Locked event: </span>Yes / No</Col>
               <Col sm={4}><span className='caption'>Event theme: </span>Love / Beatrayal / Political / Machine</Col>
+            </Row>
+            <Row>
+              <Col sm={6}><span className='caption'>Status: </span>Done / Not Done / Editable</Col>
+              <Col sm={4}><span className='caption'>Requires NPC: </span>Yes / No</Col>
+            </Row>
+            <Row>
+              <Col sm={6}><span className='caption'>NPC Location: </span>Odysseus / Text NPC / Mission</Col>
+              <Col sm={4}><span className='caption'>NPC Count: </span>- / 13 / 50</Col>
             </Row>
             <Row>
               <Col sm>&nbsp;</Col>
@@ -40,6 +48,15 @@ export default function Events() {
             {<span><ul><li>Not part of a plot</li><li>Link to plot 1</li><li>Link to plot 2</li></ul></span>}
             <Row>
               <Col sm><span className='mini-header'>Short Description</span></Col>
+            </Row>
+            <Row>
+              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+            </Row>
+            <Row>
+              <Col sm>&nbsp;</Col>
+            </Row>
+            <Row>
+              <Col sm><span className='mini-header'>What is required from NPCs?</span></Col>
             </Row>
             <Row>
               <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
