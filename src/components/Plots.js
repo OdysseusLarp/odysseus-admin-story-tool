@@ -28,16 +28,23 @@ export default function Plots() {
               <Col sm={4}><span className='caption'>Plot themes: </span>Love / Beatrayal / Political / Machine</Col>
             </Row>
             <Row>
-              <Col sm={6}><span className='caption'>Happens after jump: </span>- / 3 / 13</Col>
+              <Col sm={6}><span className='caption'>Happens after jump: </span>- / 3 / 13 (Editable unless plot is locked)</Col>
               <Col sm={4}><span className='caption'>Plot Importance: </span>Not necessary / something / Mandatory</Col>
+            </Row>
+            <Row>
+              <Col sm={6}><span className='caption'>Locked plot: </span>Yes / No</Col>
             </Row>
             <Row>
               <Col sm>&nbsp;</Col>
             </Row>
             <Row>
-              <Col sm><span className='mini-header'>Links to Events</span></Col>
+              <Col sm><span className='mini-header'>Events [CREATE EVENT BUTTON]</span></Col>
             </Row>
             {<span><ul><li>Not part of an event</li><li>Link to event</li></ul></span>}
+            <Row>
+              <Col sm><span className='mini-header'>Messages [CREATE MESSAGE BUTTON]</span></Col>
+            </Row>
+            {<span><ul><li>No messages</li><li>Link to message 1 [sent / not sent]</li></ul></span>}
             <Row>
               <Col sm><span className='mini-header'>Short Description</span></Col>
             </Row>
@@ -52,6 +59,34 @@ export default function Plots() {
             </Row>
             <Row>
               <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+            </Row>
+            <Row>
+              <Col sm>&nbsp;</Col>
+            </Row>
+            <Row>
+              <Col sm><span className='mini-header'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS BUTTON]</span></Col>
+            </Row>
+            <ul><li><Row>
+              <Col sm><span>Run 2: Note 1</span></Col>
+            </Row></li>
+            <li><Row>
+              <Col sm><span>Run 2: Note 2</span></Col>
+            </Row></li>
+            <li><Row>
+              <Col sm><span>Run 2: Note 3</span></Col>
+            </Row></li>
+            <li><Row>
+              <Col sm><span>Run 1: Note 1</span></Col>
+            </Row></li>
+            <li><Row>
+              <Col sm><span>Run 1: Note 2</span></Col>
+            </Row></li>
+            <li><Row>
+              <Col sm><span>Run 1: Note 3</span></Col>
+            </Row></li>
+            </ul>
+            <Row>
+              <Col sm><span>Save the notes between games!</span></Col>
             </Row>
             <Row>
               <Col sm>&nbsp;</Col>

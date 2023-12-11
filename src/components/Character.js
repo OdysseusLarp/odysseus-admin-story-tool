@@ -58,16 +58,13 @@ export default function Character(props) {
           <Col sm>&nbsp;</Col>
         </Row>
         <Row>
-          <Col sm><span className='mini-header new'>Link to character</span></Col>
-        </Row>
-        <Row>
-          <Col sm><span className='new'>link</span></Col>
+          <Col sm><span className='caption new'>Link to Character document: </span><span className='new'>link</span></Col>
         </Row>
         <Row>
           <Col sm>&nbsp;</Col>
         </Row>
         <Row>
-          <Col sm><span className='mini-header new'>Summary / Cheat sheet</span></Col>
+          <Col sm><span className='mini-header new'>Summary / Cheat Sheet</span></Col>
         </Row>
         <Row>
           <Col sm><span className='new'><ul>
@@ -87,6 +84,20 @@ export default function Character(props) {
             </ul></span></Col>
         </Row>
         <Row>
+          <Col sm><span className='mini-header new'>Events [CREATE EVENT BUTTON]</span></Col>
+        </Row>
+        <Row>
+          <Col sm><span className='new'><ul>
+            <li>Event name 1 (links to event)</li>
+            <li>Event name 2 (links to event)</li>
+            <li>Event name 3 (links to event)</li>
+            </ul></span></Col>
+        </Row>
+        <Row>
+              <Col sm><span className='mini-header new'>Messages [CREATE MESSAGE BUTTON]</span></Col>
+            </Row>
+            {<span className='new'><ul><li>No messages</li><li>Link to message 1 [sent / not sent]</li></ul></span>}
+        <Row>
           <Col sm><span className='mini-header new'>GM Notes</span></Col>
         </Row>
         <Row>
@@ -96,28 +107,29 @@ export default function Character(props) {
           <Col sm>&nbsp;</Col>
         </Row>
         <Row>
-          <Col sm><span className='mini-header new'>GM Notes during the game (editable) [EDIT FIELD BUTTON] [CREATE EVENT BUTTON]</span></Col>
+          <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS BUTTON]</span></Col>
         </Row>
-        <Row>
+        <ul><li><Row>
           <Col sm><span className='new'>Run 2: Note 1</span></Col>
-        </Row>
-        <Row>
+        </Row></li>
+        <li><Row>
           <Col sm><span className='new'>Run 2: Note 2</span></Col>
-        </Row>
-        <Row>
+        </Row></li>
+        <li><Row>
           <Col sm><span className='new'>Run 2: Note 3</span></Col>
-        </Row>
-        <Row>
+        </Row></li>
+        <li><Row>
           <Col sm><span className='new'>Run 1: Note 1</span></Col>
-        </Row>
-        <Row>
+        </Row></li>
+        <li><Row>
           <Col sm><span className='new'>Run 1: Note 2</span></Col>
-        </Row>
-        <Row>
+        </Row></li>
+        <li><Row>
           <Col sm><span className='new'>Run 1: Note 3</span></Col>
-        </Row>
+        </Row></li>
+        </ul>
         <Row>
-          <Col sm><span className='new'>Save the notes between games but not here? Or the old ones are hideable </span></Col>
+          <Col sm><span className='new'>Save the notes between games!</span></Col>
         </Row>
         <Row>
           <Col sm>&nbsp;</Col>

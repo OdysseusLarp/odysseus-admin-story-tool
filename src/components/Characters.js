@@ -65,7 +65,7 @@ export default function Characters(props) {
       filter: textFilter()
     }, {
       dataField: 'last_message_recieved',
-      text: 'Last Message Recieved',
+      text: 'Last Message From NPC',
       sort: true,
       filter: textFilter()
     }, {
