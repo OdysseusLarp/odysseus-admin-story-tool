@@ -16,7 +16,7 @@
 }
 
 .nav-link.active#tabs-tab-Characters {
-  color: #a87eb3 !important;
+  color: #aa6cb9 !important;
 }
 
 .nav-link.active#tabs-tab-Fleet {
@@ -48,7 +48,7 @@
   font-weight: 600;
 }
 .title-tab.Characters {
-  color: #a87eb3;
+  color: #aa6cb9;
 }
 
 .title-tab.Fleet {
@@ -83,7 +83,7 @@
 }
 
 .characters a {
-  color: #a87eb3 !important;
+  color: #9340a8 !important;
 }
 
 .fleet a {
@@ -95,7 +95,7 @@
 }
 
 span.characters a {
-  color: #a87eb3 !important;
+  color: #9340a8 !important;
 }
 
 span.fleet a {

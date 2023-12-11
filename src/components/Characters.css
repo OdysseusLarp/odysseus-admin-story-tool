@@ -7,12 +7,12 @@
 }
 
 .characters #pageDropDown {
-    background-color:#a87eb3;
+    background-color:#aa6cb9;
 }
 
 .characters li.page-item.active > a {
-    background-color:#a87eb3 !important;
-    border-color:#a87eb3 !important;
+    background-color:#aa6cb9 !important;
+    border-color:#aa6cb9 !important;
     color: white !important;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .characters .page-link {
-    color: #a87eb3 !important;
+    color: #9340a8 !important;
 }
 
 .characters table {

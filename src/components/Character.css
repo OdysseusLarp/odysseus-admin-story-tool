@@ -4,7 +4,7 @@
 }
 
 h1.character {
-    color: #a87eb3;
+    color: #aa6cb9;
 }
 
 .character .caption{
@@ -17,12 +17,12 @@ h1.character {
 
 .character .mini-header {
     font-weight: 600;
-    color: #a87eb3;
+    color: #aa6cb9;
     font-size: 20px;
 }
 
 .character a {
-    color: #a87eb3 !important;
+    color: #9340a8 !important;
 }
 
 .character .new {
