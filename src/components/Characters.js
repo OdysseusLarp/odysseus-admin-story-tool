@@ -1,6 +1,6 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { apiUrl } from "../api";
 
@@ -14,18 +14,41 @@ const getCharacters = async () => {
   return characters.persons;
 }
 
+const getNpcs = async () => {
+    const response = await fetch(apiUrl("/person?show_hidden=true&is_character=false"));
+    const npcs = await response.json();
+    return npcs.persons;
+  }
+
 export default function Characters(props) {
   const [characters, setCharacters] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
   React.useEffect(() => {
-    getCharacters().then(data => setCharacters(data));
+    const fetchData = async () => {
+      try {
+        const charactersData = await getCharacters();
+        const npcsData = await getNpcs();
+
+        const allCharacters = [...charactersData, ...npcsData];
+        setCharacters(allCharacters);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
+
+  const selectOptions = {
+    true: 'Character',
+    false: 'NPC'
+  };
 
   const columns = [{
       dataField: '_row_index_placeholder',
@@ -57,7 +80,10 @@ export default function Characters(props) {
       dataField: 'is_character',
       text: 'Character/NPC',
       sort: true,
-      filter: textFilter()
+      formatter: cell => selectOptions[cell],
+      filter: selectFilter({
+        options: selectOptions
+      })
     }, {
       dataField: 'character_group',
       text: 'Character Group',
