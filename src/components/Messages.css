@@ -1,8 +1,29 @@
-.messages {
-    text-align: left;
-    margin-top: 20px;
-    margin-left: 18px;
+.messages .react-bootstrap-table-pagination-total {
+    margin-left: 10px;
 }
-.messages h1 {
-    color: #4fa129;
+
+.messages .col-md-6 {
+    text-align: left;
+}
+
+.messages #pageDropDown {
+    background-color:#4fa129;
+}
+
+.messages li.page-item.active > a {
+    background-color:#4fa129 !important;
+    border-color:#4fa129 !important;
+    color: white !important;
+}
+
+.messages li.page-item.disabled > a {
+    color: rgb(166, 167, 168) !important;
+}
+
+.messages .page-link {
+    color: #4fa129 !important;
+}
+
+.messages table {
+    text-align: left;
 }

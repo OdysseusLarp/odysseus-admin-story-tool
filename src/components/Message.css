@@ -24,7 +24,3 @@ h1.message {
 .message a {
     color: #4fa129 !important;
 }
-
-.message .new {
-    color: #da3e00;
-}

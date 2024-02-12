@@ -1,65 +1,128 @@
-import { Container, Row, Col } from "react-bootstrap";
+import React from "react";
+import BootstrapTable from 'react-bootstrap-table-next';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import { Link } from "react-router-dom";
+import { apiUrl } from "../api";
+
 import './Messages.css';
-import './Message.css';
+
+const getMessages = async () => {
+  const response = await fetch(apiUrl("/story/messages"));
+  const messages = await response.json();
+  return messages;
+}
 
 export default function Messages() {
-    return (
-      <div>
-        <h1 className='message' id="app-title">Messages [CREATE MESSAGE BUTTON]</h1>
-        <div className='message'>
-          <Container fluid className='message'>
-            <Row className='row-mini-header'>
-              <Col sm><span className='mini-header'>Basic Info</span></Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>Message type: </span> Text NPC / Event / Plot / EVA / Hints for Scientists / Jump / Warning / Fleet Comms / Fleet Secretary / News</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>Happens after jump: </span>- / 3 / 13 (Editable unless message send time is locked)</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>Message send time locked: </span>Yes / No </Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>To whom: </span>Character name / Character group</Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>Sent: </span>Yes / No (editable checkbox?)</Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>Message (editable)</span></Col>
-            </Row>
-            <Row>
-              <Col sm><span> Copy pasted stuff which we don't need to write many times. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>Plots</span></Col>
-            </Row>
-            {<span><ul><li>Not part of a plot</li><li>Link to plot 1</li><li>Link to plot 2</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>Events</span></Col>
-            </Row>
-            {<span><ul><li>Not part of an event</li><li>Link to event</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>GM Notes</span></Col>
-            </Row>
-            <Row>
-              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-          </Container>
-        </div>
-      </div>
-    )
+  const [messages, setMessages] = React.useState([]);
+  const [page, setPage] = React.useState(1);
+  const [sizePerPage, setSizePerPage] = React.useState(15);
+
+  React.useEffect(() => {
+    getMessages().then(data => setMessages(data));
+  }, []);
+
+  function getRowIndex(cell, row, rowIndex) {
+    return (page-1) * sizePerPage + rowIndex + 1;
   }
+  
+  const columns = [{
+      dataField: '_row_index_placeholder',
+      text: 'Row',
+      formatter: getRowIndex,
+      headerStyle: () => {
+        return { width: '50px', textAlign: 'center' };
+      },
+      align: 'center'
+    }, {
+      dataField: 'name',
+      text: 'Name',
+      sort: true,
+      filter: textFilter(),
+      formatter: (cell, row) => {
+        return <Link to={`/messages/${row.id}`}>{cell}</Link>
+      }
+    }, {
+      dataField: 'sender_person_id',
+      text: 'Sender ID',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'type',
+      text: 'Type',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'after_jump',
+      text: 'After Jump',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'sent',
+      text: 'Sent',
+      sort: true,
+      filter: textFilter()
+  }];
+
+  const customTotal = (from, to, size) => (
+    <span className="react-bootstrap-table-pagination-total">
+      Showing { from } to { to } of { size } Results
+    </span>
+  );
+
+  const options = {
+    page: page,
+    sizePerPage: sizePerPage,
+    paginationSize: 4,
+    pageStartIndex: 1,
+    alwaysShowAllBtns: true, // Always show next and previous button
+    firstPageText: 'First',
+    prePageText: 'Back',
+    nextPageText: 'Next',
+    lastPageText: 'Last',
+    nextPageTitle: 'First page',
+    prePageTitle: 'Pre page',
+    firstPageTitle: 'Next page',
+    lastPageTitle: 'Last page',
+    showTotal: true,
+    paginationTotalRenderer: customTotal,
+    onPageChange: (page, sizePerPage) => { 
+      setPage(page); 
+      setSizePerPage(sizePerPage);
+    },
+    onSizePerPageChange: (sizePerPage, page) => { 
+      setPage(page); 
+      setSizePerPage(sizePerPage);
+    },
+    disablePageTitle: true,
+    sizePerPageList: [{
+      text: '10', value: 10
+    }, {
+      text: '15', value: 15
+    }, {
+      text: '20', value: 20
+    }, {
+      text: '25', value: 25
+    }, {
+      text: '50', value: 50
+    }, {
+      text: 'All', value: messages.length
+    }] // A numeric array is also available. the purpose of above example is custom the text
+  };
+
+  return (
+    <div className='messages'>
+      <BootstrapTable
+        bootstrap4
+        striped
+        hover
+        keyField="id"
+        bordered={ false }
+        data={ messages }
+        columns={ columns }
+        filter={ filterFactory() }
+        pagination={ paginationFactory(options) }
+      />
+    </div>
+  )
+}
