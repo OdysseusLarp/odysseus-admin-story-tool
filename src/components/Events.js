@@ -1,122 +1,158 @@
-import { Container, Row, Col } from "react-bootstrap";
+import React from "react";
+import BootstrapTable from 'react-bootstrap-table-next';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import { Link } from "react-router-dom";
+import { apiUrl } from "../api";
+
 import './Events.css';
-import './Event.css';
+
+const getEvents = async () => {
+  const response = await fetch(apiUrl("/story/events"));
+  const events = await response.json();
+  return events;
+}
 
 export default function Events() {
-    return (
-      <div>
-        <h1 className='event' id="app-title">Event Name [CREATE EVENT BUTTON]</h1>
-        <div className='event'>
-          <Container fluid className='event'>
-            <Row>
-              <Col sm><span className='mini-header'>Characters Involved</span></Col>
-            </Row>
-            {<span><ul><li>Name Surname (Main character, Character)</li><li>Name Surname2 (Side character, NPC)</li><li>Name Surname2 (Knows random info, Character)</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>Character Groups Involved</span></Col>
-            </Row>
-            {<span><ul><li>Engineers</li><li>Scientists</li><li>All</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>Basic Info</span></Col>
-            </Row>
-            <Row>
-              <Col sm={4}><span className='caption'>GM Actions: </span>No need / Empty Epsilon / Text NPC / Briefing character</Col>
-              <Col sm={6}><span className='caption'>Event size: </span>Small / Medium / Large</Col>
-            </Row>
-            <Row>
-              <Col sm={4}><span className='caption'>Happens after jump: </span>- / 3 / 13 (Editable unless event is locked or status done)</Col>
-              <Col sm={6}><span className='caption'>Event type: </span>Jump / Land Mission / Empty Epsilon / Political / Machine / Gas Leak / Bomb / Character</Col>
-            </Row>
-            <Row>
-              <Col sm={4}><span className='caption'>Locked event: </span>Yes / No</Col>
-              <Col sm={6}><span className='caption'>Event theme: </span>Love / Beatrayal / Political / Machine</Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm={4}><span className='caption'>Status: </span>Done / Not Done (editable checkbox?)</Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>Requires NPC: </span>Yes / No</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>NPC Location: </span>Odysseus / Text NPC / Mission</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>NPC Count: </span>- / 13 / 50</Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>Plots</span></Col>
-            </Row>
-            {<span><ul><li>Not part of a plot</li><li>Link to plot 1</li><li>Link to plot 2</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>Messages [CREATE MESSAGE BUTTON]</span></Col>
-            </Row>
-            {<span><ul><li>No messages</li><li>Link to message 1 [sent / not sent]</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>Short Description</span></Col>
-            </Row>
-            <Row>
-              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>What is required from NPCs?</span></Col>
-            </Row>
-            <Row>
-              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>GM Notes</span></Col>
-            </Row>
-            <Row>
-              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS BUTTON]</span></Col>
-            </Row>
-            <ul><li><Row>
-              <Col sm><span>Run 2: Note 1</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Run 2: Note 2</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Run 2: Note 3</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Run 1: Note 1</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Run 1: Note 2</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Run 1: Note 3</span></Col>
-            </Row></li>
-            </ul>
-            <Row>
-              <Col sm><span>Save the notes between games!</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-          </Container>
-        </div>
-      </div>
-    )
+  const [events, setEvents] = React.useState([]);
+  const [page, setPage] = React.useState(1);
+  const [sizePerPage, setSizePerPage] = React.useState(15);
+
+  React.useEffect(() => {
+    getEvents().then(data => setEvents(data));
+  }, []);
+
+  function getRowIndex(cell, row, rowIndex) {
+    return (page-1) * sizePerPage + rowIndex + 1;
   }
+  
+  const columns = [{
+      dataField: '_row_index_placeholder',
+      text: 'Row',
+      formatter: getRowIndex,
+      headerStyle: () => {
+        return { width: '50px', textAlign: 'center' };
+      },
+      align: 'center'
+    }, {
+      dataField: 'name',
+      text: 'Name',
+      sort: true,
+      filter: textFilter(),
+      formatter: (cell, row) => {
+        return <Link to={`/events/${row.id}`}>{cell}</Link>
+      }
+    }, {
+      dataField: 'type',
+      text: 'Type',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'character_groups',
+      text: 'Character groups',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'type',
+      text: 'Type',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'size',
+      text: 'Size',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'importance',
+      text: 'Importance',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'after_jump',
+      text: 'After Jump',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'status',
+      text: 'Status',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'gm_actions',
+      text: 'GM Actions',
+      sort: true,
+      filter: textFilter(),
+    }, {
+      dataField: 'npc_count',
+      text: 'NPC Count',
+      sort: true,
+      filter: textFilter(),
+    }, {
+      dataField: 'npc_location',
+      text: 'NPC Location',
+      sort: true,
+      filter: textFilter()
+  }];
+
+  const customTotal = (from, to, size) => (
+    <span className="react-bootstrap-table-pagination-total">
+      Showing { from } to { to } of { size } Results
+    </span>
+  );
+
+  const options = {
+    page: page,
+    sizePerPage: sizePerPage,
+    paginationSize: 4,
+    pageStartIndex: 1,
+    alwaysShowAllBtns: true, // Always show next and previous button
+    firstPageText: 'First',
+    prePageText: 'Back',
+    nextPageText: 'Next',
+    lastPageText: 'Last',
+    nextPageTitle: 'First page',
+    prePageTitle: 'Pre page',
+    firstPageTitle: 'Next page',
+    lastPageTitle: 'Last page',
+    showTotal: true,
+    paginationTotalRenderer: customTotal,
+    onPageChange: (page, sizePerPage) => { 
+      setPage(page); 
+      setSizePerPage(sizePerPage);
+    },
+    onSizePerPageChange: (sizePerPage, page) => { 
+      setPage(page); 
+      setSizePerPage(sizePerPage);
+    },
+    disablePageTitle: true,
+    sizePerPageList: [{
+      text: '10', value: 10
+    }, {
+      text: '15', value: 15
+    }, {
+      text: '20', value: 20
+    }, {
+      text: '25', value: 25
+    }, {
+      text: '50', value: 50
+    }, {
+      text: 'All', value: events.length
+    }] // A numeric array is also available. the purpose of above example is custom the text
+  };
+
+  return (
+    <div className='events'>
+      <BootstrapTable
+        bootstrap4
+        striped
+        hover
+        keyField="id"
+        bordered={ false }
+        data={ events }
+        columns={ columns }
+        filter={ filterFactory() }
+        pagination={ paginationFactory(options) }
+      />
+    </div>
+  )
+}
