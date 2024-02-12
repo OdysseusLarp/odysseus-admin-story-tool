@@ -12,6 +12,12 @@ const getShip = async (id) => {
   return ship;
 }
 
+const getArtifacts = async (id) => {
+  const response = await fetch(apiUrl(`/science/artifact`));
+  const artifact = await response.json();
+  return artifact;
+}
+
 const getCaptain = async (id) => {
   const response = await fetch(apiUrl(`/person?show_hidden=true&ship_id=${id}&title=Star%20Captain`));
   let captain = await response.json();
@@ -26,13 +32,18 @@ const getCaptain = async (id) => {
 export default function Ship(props) {
   const [ship, setShip] = React.useState(null);
   const [captain, setCaptain] = React.useState(null);
+  const [artifacts, setArtifacts] = React.useState(null);
   const params = useParams();
 
   React.useEffect(() => {
     if (!params.id) return;
-
     getShip(params.id).then((s) => setShip(s));
   }, [params.id, setShip]);
+
+  React.useEffect(() => {
+    if (!params.id) return;
+    getArtifacts().then((s) => setArtifacts(s));
+  }, [params.id, setArtifacts]);
 
   React.useEffect(() => {
     if (!params.id) return;
@@ -45,7 +56,8 @@ export default function Ship(props) {
 
   const renderShip = () => {
     if (!ship) return null;
-    console.log(ship)
+    if (!artifacts) return null;
+    if (!captain) return null;
     return (
       <div className='ship'>
         <Container fluid className='ship'>
@@ -76,7 +88,7 @@ export default function Ship(props) {
             <Col sm><span className='mini-header'>Description</span></Col>
           </Row>
           <Row>
-            <Col sm>Description (text column) from Artifact db</Col>
+            <Col sm><span>{artifacts.filter(artifact => artifact.name === ship.class)[0].text}</span></Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>
