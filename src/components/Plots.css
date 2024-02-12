@@ -7,12 +7,12 @@
 }
 
 .plots #pageDropDown {
-    background-color:#31bac9;
+    background-color:#4584e9;
 }
 
 .plots li.page-item.active > a {
-    background-color:#31bac9 !important;
-    border-color:#31bac9 !important;
+    background-color:#4584e9 !important;
+    border-color:#4584e9 !important;
     color: white !important;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .plots .page-link {
-    color: #329ba7 !important;
+    color: #4584e9 !important;
 }
 
 .plots table {
