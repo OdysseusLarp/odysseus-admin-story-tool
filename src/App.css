@@ -94,6 +94,18 @@
   color: #d48b38 !important;
 }
 
+.plots a {
+  color: #4584e9 !important;
+}
+
+.events a {
+  color: #a52626 !important;
+}
+
+.messages a {
+  color: #4fa129 !important;
+}
+
 span.characters a {
   color: #9340a8 !important;
 }
@@ -104,4 +116,16 @@ span.fleet a {
 
 span.artifacts a {
   color: #d48b38 !important;
+}
+
+span.plots a {
+  color: #4584e9 !important;
+}
+
+span.events a {
+  color: #a52626 !important;
+}
+
+span.messages a {
+  color: #4fa129 !important;
 }
