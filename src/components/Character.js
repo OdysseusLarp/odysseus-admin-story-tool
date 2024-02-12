@@ -30,7 +30,6 @@ export default function Character(props) {
 
   React.useEffect(() => {
     if (!params.id) return;
-
     getCharacter(params.id).then((s) => setCharacter(s));
   }, [params.id, setCharacter]);
 
@@ -48,15 +47,6 @@ export default function Character(props) {
     return (
       <div className='character'>
       <Container fluid className='character'>
-        <Row>
-          <Col sm><span className='mini-header new'>Short description</span></Col>
-        </Row>
-        <Row>
-          <Col sm><span className='new'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-        </Row>
-        <Row>
-          <Col sm>&nbsp;</Col>
-        </Row>
         <Row>
           <Col sm><span className='caption new'>Link to Character document: </span><span className='new'>link</span></Col>
         </Row>
@@ -107,25 +97,25 @@ export default function Character(props) {
           <Col sm>&nbsp;</Col>
         </Row>
         <Row>
-          <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS BUTTON]</span></Col>
+          <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
         </Row>
         <ul><li><Row>
-          <Col sm><span className='new'>Run 2: Note 1</span></Col>
+          <Col sm><span>Timestamp: Note 6</span></Col>
         </Row></li>
         <li><Row>
-          <Col sm><span className='new'>Run 2: Note 2</span></Col>
+          <Col sm><span>Timestamp: Note 5</span></Col>
         </Row></li>
         <li><Row>
-          <Col sm><span className='new'>Run 2: Note 3</span></Col>
+          <Col sm><span>Timestamp: Note 4</span></Col>
         </Row></li>
         <li><Row>
-          <Col sm><span className='new'>Run 1: Note 1</span></Col>
+          <Col sm><span>Timestamp: Note 3</span></Col>
         </Row></li>
         <li><Row>
-          <Col sm><span className='new'>Run 1: Note 2</span></Col>
+          <Col sm><span>Timestamp: Note 2</span></Col>
         </Row></li>
         <li><Row>
-          <Col sm><span className='new'>Run 1: Note 3</span></Col>
+          <Col sm><span>Timestamp: Note 1</span></Col>
         </Row></li>
         </ul>
         <Row>
@@ -191,11 +181,11 @@ export default function Character(props) {
         <Row className='row-mini-header'>
           <Col sm><span className='mini-header'>Family</span></Col>
         </Row>
-        {<ul>{character.family.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation}, <span className='data-found'>{person.status}, {person.ship_id}, {is_npc(person)}</span>)</Col></Row></li>)}</ul>}
+        {<ul>{character.family.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation}, <span>{person.status}, {is_npc(person)}, {person.ship_id}</span>)</Col></Row></li>)}</ul>}
         <Row className='row-mini-header'>
           <Col sm><span className='mini-header new'>Other known relations</span></Col>
         </Row>
-        {<span className='new'><ul><li>Name Surname (relation, <span className='data-found'>status, ship, is_character</span>)</li><li>Name Surname2 (relation, <span className='data-found'>status, ship, is_character</span>)</li></ul></span>}
+        {<span className='new'><ul><li>Name Surname (<span className='data-found'>status, ship, is_character</span>): relation text</li><li>Name Surname2 (<span className='data-found'>status, ship, is_character</span>): relation text</li></ul></span>}
         <Row className='row-mini-header'>
           <Col sm><span className='mini-header' id='military'>Military</span></Col>
         </Row>
