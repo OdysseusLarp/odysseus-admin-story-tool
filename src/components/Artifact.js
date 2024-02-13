@@ -6,9 +6,6 @@ import { apiUrl } from "../api";
 
 import './Artifact.css';
 
-// TODO: Change Artifact name to type, type to origin, text to entry and Catalog ID to name (and Catalog ID)
-// TODO: Who the hell is Vic Ramirez, Pat Montoya, Tilly Fjord, Nana Ishimoto, Bob Walker, Xian Xou, Reloz Duran
-
 const getArtifact = async (id) => {
   const response = await fetch(apiUrl(`/science/artifact/${id}`));
   const artifact = await response.json();
@@ -45,7 +42,7 @@ export default function Artifact(props) {
   const renderArtifact = () => {
     if (!artifact) return null;
 
-    const artifact_entries = artifact.entries.filter((e) => e.type === "ARTIFACT").map((e) => e.entry.split('\n\n')).flat();
+    const artifact_entries = artifact.entries.map((e) => e.entry.split('\n\n')).flat();
 
     return (
       <div className='artifact'>
@@ -57,12 +54,13 @@ export default function Artifact(props) {
             <Col sm><span className='mini-header'>Basic Info</span></Col>
           </Row>
           <Row>
-            <Col sm><span className='caption'>Name: </span>{artifact.catalog_id}</Col>
-            <Col sm><span className='caption'>Catalog ID: </span>{artifact.catalog_id}</Col>
-            <Col sm><span className='caption'>ID: </span>{artifact.id}</Col>
+            <Col sm={4}><span className='caption'>Name: </span>{artifact.catalog_id}</Col>
+            <Col sm={4}><span className='caption'>Catalog ID: </span>{artifact.catalog_id}</Col>
+            <Col sm={4}><span className='caption'>ID: </span>{artifact.id}</Col>
           </Row>
           <Row>
-            <Col sm><span className='caption'>Type: </span>{artifact.name}</Col>
+            <Col sm={4}><span className='caption'>Type: </span>{artifact.name}</Col>
+            <Col sm={8} className='new'><span className='caption'>Visible on DataHub: </span>True/False</Col>
           </Row>
           <Row>
             <Col sm><span className='caption'>Origin: </span>{artifact.type}</Col>
@@ -80,17 +78,56 @@ export default function Artifact(props) {
             <Col sm><span className='caption'>Discovered From: </span>{artifact.discovered_from}</Col>
           </Row>
           <Row className='row-mini-header'>
+            <Col sm><span className='mini-header'>Artifact Description</span></Col>
+          </Row>
+          <Row><Col sm>{artifact.text.split('![]')[0]}</Col></Row>
+          <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Artifact Entries</span></Col>
           </Row>
           {<ul>
-            <li><Row><Col sm>{artifact.text.split('![]')[0]}</Col></Row></li>
             {artifact_entries.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}
           </ul>}
+          <Row>
+            <Col sm><span className='mini-header new'>Plots</span></Col>
+          </Row>
+          {<span className="new"><ul><li>Not part of a plot</li><li>Link to plot 1</li><li>Link to plot 2</li></ul></span>}
+          <Row>
+              <Col sm><span className='mini-header new'>Events [CREATE EVENT BUTTON]</span></Col>
+            </Row>
+            {<span className="new"><ul><li>Not part of an event</li><li>Link to event</li></ul></span>}
           <Row>
             <Col sm><span className='mini-header new'>GM Notes</span></Col>
           </Row>
           <Row>
             <Col sm><span className='new'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+          </Row>
+          <Row>
+            <Col sm>&nbsp;</Col>
+          </Row>  
+          <Row>
+          <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
+          </Row>
+          <ul><li><Row>
+            <Col sm><span>Timestamp: Note 6</span></Col>
+          </Row></li>
+          <li><Row>
+            <Col sm><span>Timestamp: Note 5</span></Col>
+          </Row></li>
+          <li><Row>
+            <Col sm><span>Timestamp: Note 4</span></Col>
+          </Row></li>
+          <li><Row>
+            <Col sm><span>Timestamp: Note 3</span></Col>
+          </Row></li>
+          <li><Row>
+            <Col sm><span>Timestamp: Note 2</span></Col>
+          </Row></li>
+          <li><Row>
+            <Col sm><span>Timestamp: Note 1</span></Col>
+          </Row></li>
+          </ul>
+          <Row>
+            <Col sm><span className='new'>Save the notes between games!</span></Col>
           </Row>
         </Container>
       </div>

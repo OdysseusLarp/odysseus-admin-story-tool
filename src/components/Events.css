@@ -1,8 +1,29 @@
-.events {
-    text-align: left;
-    margin-top: 20px;
-    margin-left: 18px;
+.events .react-bootstrap-table-pagination-total {
+    margin-left: 10px;
 }
-.events h1 {
-    color: #a52626;
+
+.events .col-md-6 {
+    text-align: left;
+}
+
+.events #pageDropDown {
+    background-color:#a52626;
+}
+
+.events li.page-item.active > a {
+    background-color:#a52626 !important;
+    border-color:#a52626 !important;
+    color: white !important;
+}
+
+.events li.page-item.disabled > a {
+    color: rgb(166, 167, 168) !important;
+}
+
+.events .page-link {
+    color: #a52626 !important;
+}
+
+.events table {
+    text-align: left;
 }

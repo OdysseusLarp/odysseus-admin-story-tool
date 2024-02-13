@@ -28,8 +28,10 @@ export default function Characters(props) {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const charactersData = await getCharacters();
-        const npcsData = await getNpcs();
+        const [charactersData, npcsData] = await Promise.all([
+          getCharacters(),
+          getNpcs(),
+        ]);
 
         const allCharacters = [...charactersData, ...npcsData];
         setCharacters(allCharacters);
