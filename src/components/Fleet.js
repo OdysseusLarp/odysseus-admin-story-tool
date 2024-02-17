@@ -17,7 +17,7 @@ const getFleet = async () => {
 export default function Fleet() {
   const [fleet, setFleet] = React.useState([]);
   const [page, setPage] = React.useState(1);
-  const [sizePerPage, setSizePerPage] = React.useState(10);
+  const [sizePerPage, setSizePerPage] = React.useState(15);
 
   React.useEffect(() => {
     getFleet().then(data => setFleet(data));
@@ -32,7 +32,7 @@ export default function Fleet() {
       text: 'Row',
       formatter: getRowIndex,
       headerStyle: () => {
-        return { width: '50px', textAlign: 'center' };
+        return { width: '2%', textAlign: 'center' };
       },
       align: 'center'
     }, {
@@ -40,6 +40,9 @@ export default function Fleet() {
       text: 'Name',
       sort: true,
       filter: textFilter(),
+      headerStyle: () => {
+        return { width: '10%', textAlign: 'left' };
+      },
       formatter: (cell, row) => {
         return <Link to={`/fleet/${row.id}`}>{cell}</Link>
       }
@@ -47,6 +50,9 @@ export default function Fleet() {
       dataField: 'id',
       text: 'ID',
       sort: true,
+      headerStyle: () => {
+        return { width: '10%', textAlign: 'left' };
+      },
       filter: textFilter()
     }, {
       dataField: 'description',
@@ -67,18 +73,24 @@ export default function Fleet() {
       dataField: 'type',
       text: 'Type',
       sort: true,
+      headerStyle: () => {
+        return { width: '10%', textAlign: 'left' };
+      },
       filter: textFilter()
     }, {
       dataField: 'position.name',
       text: 'Position',
       sort: true,
+      headerStyle: () => {
+        return { width: '10%', textAlign: 'left' };
+      },
       filter: textFilter()
     }, {
       dataField: 'fighter_count',
       text: 'Fighter Count',
       sort: true,
       headerStyle: () => {
-        return { width: '100px', textAlign: 'center' };
+        return { width: '5%', textAlign: 'center' };
       },
       align: 'center'
     }, {
@@ -86,7 +98,7 @@ export default function Fleet() {
       text: 'Transporter Count',
       sort: true,
       headerStyle: () => {
-        return { width: '100px', textAlign: 'center' };
+        return { width: '5%', textAlign: 'center' };
       },
       align: 'center'
     }, {
@@ -94,15 +106,7 @@ export default function Fleet() {
       text: 'Person Count',
       sort: true,
       headerStyle: () => {
-        return { width: '100px', textAlign: 'center' };
-      },
-      align: 'center'
-    }, {
-      dataField: 'is_visible',
-      text: 'Is Visible',
-      sort: true,
-      headerStyle: () => {
-        return { width: '100px', textAlign: 'center' };
+        return { width: '5%', textAlign: 'center' };
       },
       align: 'center'
   }];

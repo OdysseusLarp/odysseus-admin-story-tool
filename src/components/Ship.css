@@ -24,3 +24,7 @@ h1.ship {
 .ship .data-found {
     color: #f26bf7;
 }
+
+.ship span {
+    white-space: pre-line;
+  }
