@@ -40,8 +40,6 @@ const CreateNewMessageModal = (props) => {
     fetchData();
   }, []);
 
-  console.log("newMessage", newMessage);
-
   const characterOptions = characters.map(character => {
     return {
       value: character.id,
@@ -62,8 +60,6 @@ const CreateNewMessageModal = (props) => {
     {value: 'News', label: 'News'},
     {value: 'Gray Radio', label: 'Gray Radio'}
   ]
-
-  console.log("senderOptions", characterOptions);
 
   return (
     <Modal
@@ -184,11 +180,9 @@ const CreateNewMessageModal = (props) => {
         </Button>
         <Button variant="primary" onClick={() => {
             handleClose(false);
-            console.log("Should be saved to DB");
             setNewMessage({type: 'Text NPC', locked: false, sent: 'Not yet'});
             // Send New Message to database
             // Move to that Message page
-            // Empty 
           }}>
           Save Changes
         </Button>

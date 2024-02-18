@@ -42,8 +42,6 @@ export default function Messages(props) {
 
     let editMessage = cloneDeep(message);
 
-    console.log("message", message);
-
     return (
       <div>
         <div className='message'>
@@ -113,6 +111,7 @@ export default function Messages(props) {
           handleEditSave={() => {
             setShowMessageEdit(false);
             setMessage(editMessage);
+            // Add saving to DB
           }}
           editMessage={editMessage}
         />
