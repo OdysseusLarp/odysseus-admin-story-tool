@@ -24,3 +24,32 @@ h1.message {
 .message a {
     color: #4fa129 !important;
 }
+
+.message span {
+    white-space: pre-line;
+}
+
+.float-char-btn {
+    color:#4fa129 !important;
+    border-color: #4fa129 !important;
+}
+
+.float-char-btn:hover {
+    background-color:#4fa129 !important;
+    border-color: #4fa129 !important;
+    color:white !important;
+}
+
+.float-char-btn:focus {
+    box-shadow: 0 0 0 .2rem #4fa129 !important;
+}
+
+.btn-group {
+    margin-left: 15px;
+    margin-right: 15px;
+    float: right;
+}
+
+.modal .caption{
+    font-weight: bold;
+}
