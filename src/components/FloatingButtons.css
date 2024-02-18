@@ -1,14 +1,22 @@
-.float-char-btn {
+.floating-button-container {
+    margin-top: 60px;
+}
+
+.character .float-char-btn {
     color:#a87eb3 !important;
-    border-color: #a87eb3 !important;
+    border-color: #696969 !important;
 }
 
-.float-char-btn:hover {
-    background-color:#a87eb3 !important;
-    border-color: #a87eb3 !important;
-    color:white !important;
+.character .float-char-btn:hover {
+    background-color:#dcdbdb !important;
+    border-color: #696969 !important;
+    color:#a87eb3 !important;
 }
 
-.float-char-btn:focus {
-    box-shadow: 0 0 0 .2rem rgba(223, 180, 240, 0.5) !important;
+.character .float-char-btn:focus {
+    box-shadow: 0 0 0 .2rem #a87eb3 !important;
 }
+
+.character .btn-group {
+    margin-right: 20px;
+  }

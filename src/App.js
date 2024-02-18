@@ -13,6 +13,10 @@ import Event from "./components/Event";
 import Messages from "./components/Messages";
 import Message from "./components/Message";
 import React from "react";
+import { Button, ButtonGroup } from "react-bootstrap";
+import { LuMailPlus, LuCalendarPlus } from "react-icons/lu";
+import { TbMessagePlus } from "react-icons/tb";
+import CreateNewMessageModal from "./components/modals/CreateNewMessageModal";
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
 
@@ -33,6 +37,7 @@ function capitalizeFirstLetter(string) {
 
 function App() {
   const [key, setKey] = React.useState(null);
+  const [showMessageNew, setShowMessageNew] = React.useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -101,7 +106,16 @@ function App() {
       <h1 className="Title">
         <span>Admin Story DB: </span>
         <span className={`title-tab ${key}`}>{key}</span>
+        <ButtonGroup>
+          <Button className="float-char-btn" title="Create New Plot" variant="outline-secondary" onClick={null}><TbMessagePlus className="plot-button" size="35px"/></Button>
+          <Button className="float-char-btn" title="Create New Event" variant="outline-secondary" onClick={null}><LuCalendarPlus className="event-button" size="35px"/></Button>
+          <Button className="float-char-btn" title="Create New Message" variant="outline-secondary" onClick={() => setShowMessageNew(true)}><LuMailPlus className="message-button" size="35px"/></Button>
+        </ButtonGroup>
       </h1>
+      <CreateNewMessageModal
+          showMessageNew={showMessageNew}
+          handleClose={() => setShowMessageNew(false)}
+        />
       {renderTable()}
       <Routes>
         <Route path="/fleet/:id" element={<Ship changeTab={changeTab} />} />
