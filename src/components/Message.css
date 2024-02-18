@@ -29,19 +29,19 @@ h1.message {
     white-space: pre-line;
 }
 
-.float-char-btn {
+.message .float-char-btn {
     color:#4fa129 !important;
-    border-color: #4fa129 !important;
+    border-color: #696969 !important;
 }
 
-.float-char-btn:hover {
-    background-color:#4fa129 !important;
-    border-color: #4fa129 !important;
-    color:white !important;
+.message .float-char-btn:hover {
+    background-color:#dcdbdb !important;
+    border-color: #696969 !important;
+    color:#4fa129 !important;
 }
 
-.float-char-btn:focus {
-    box-shadow: 0 0 0 .2rem #4fa129 !important;
+.message .float-char-btn:focus {
+    box-shadow: 0 0 0 .2rem #696969 !important;
 }
 
 .btn-group {

@@ -4,8 +4,10 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
 import { Button, ButtonGroup } from "react-bootstrap";
-import { BiMailSend, BiPencil, BiPlus } from "react-icons/bi";
+import { BiMailSend, BiPencil } from "react-icons/bi";
+import { LuMailPlus } from "react-icons/lu";
 import EditMessageModal from "./modals/EditMessageModal";
+import CreateNewMessageModal from "./modals/CreateNewMessageModal";
 import './Message.css';
 
 // TODO: Use lodash instead
@@ -20,6 +22,7 @@ const getMessage = async (id) => {
 export default function Messages(props) {
   const [message, setMessage] = React.useState(null);
   const [showMessageEdit, setShowMessageEdit] = React.useState(false);
+  const [showMessageNew, setShowMessageNew] = React.useState(false);
   const params = useParams();
 
   React.useEffect(() => {
@@ -31,8 +34,6 @@ export default function Messages(props) {
     props.changeTab('Messages');
   }, [props]);
 
-  console.log(message);
-
   const renderMessage = () => {
     if (!message) return null;
 
@@ -40,6 +41,8 @@ export default function Messages(props) {
     const booleanToString = (value) => value ? 'Yes' : 'No';
 
     let editMessage = cloneDeep(message);
+
+    console.log("message", message);
 
     return (
       <div>
@@ -52,7 +55,7 @@ export default function Messages(props) {
               <Col sm><ul>{message.sender?.id && <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> (Card ID: {message.sender?.card_id}) </span></li>}</ul></Col>
             </Row>
             <Row className='row-mini-header'>
-              <Col sm><span className='mini-header'>Reciever(s)</span></Col>
+              <Col sm><span className='mini-header'>Receiver(s)</span></Col>
             </Row>
             <Row>
               <Col sm><span><ul>{message.receivers?.map(receiver => <li key={receiver?.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> (Card ID: {receiver?.card_id})</span></li>)}</ul></span></Col>
@@ -114,6 +117,11 @@ export default function Messages(props) {
           editMessage={editMessage}
         />
 
+        <CreateNewMessageModal
+          showMessageNew={showMessageNew}
+          handleClose={() => setShowMessageNew(false)}
+        />
+
       </div>
     )
   }
@@ -122,9 +130,9 @@ export default function Messages(props) {
     <div>
       <h1 className='message' id="app-title"> {message?.name}
         <ButtonGroup>
-          <Button className="float-char-btn" title="Edit" variant="outline-secondary" onClick={() => setShowMessageEdit(true)} disabled={message?.sent === 'Yes'}><BiPencil size="35px"/></Button>
-          <Button className="float-char-btn" title="Send" variant="outline-secondary" onClick={null} disabled={message?.sent === 'Yes'}><BiMailSend size="35px"/></Button>
-          <Button className="float-char-btn" title="Create New" variant="outline-secondary" onClick={null}><BiPlus size="35px"/></Button>
+          <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)} disabled={message?.sent === 'Yes'}><BiPencil size="35px"/></Button>
+          <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={null} disabled={message?.sent === 'Yes'}><BiMailSend size="35px"/></Button>
+          <Button className="float-char-btn" title="Create New Message" variant="outline-secondary" onClick={() => setShowMessageNew(true)}><LuMailPlus size="35px"/></Button>
         </ButtonGroup>
       </h1>
       {renderMessage()}
