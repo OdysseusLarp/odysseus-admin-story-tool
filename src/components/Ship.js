@@ -19,7 +19,11 @@ const getArtifacts = async (id) => {
 }
 
 const getCaptain = async (id) => {
-  const response = await fetch(apiUrl(`/person?show_hidden=true&ship_id=${id}&title=Star%20Captain`));
+  let title = encodeURI('Star Captain')
+  if (id === 'aurora') {
+    title = encodeURI('Grand Admiral of the EOC starfleet')
+  }
+  const response = await fetch(apiUrl(`/person?show_hidden=true&ship_id=${id}&title=${title}`));
   let captain = await response.json();
   captain = captain.persons;
   // On Odysseus there are two Star Captains. We want Zeya Cook id 20112.
@@ -29,10 +33,17 @@ const getCaptain = async (id) => {
   return captain[0];
 }
 
+const getPassangers = async (id) => {
+  const response = await fetch(apiUrl(`/person?show_hidden=true&is_character=false&ship_id=${id}`));
+  const passangers = await response.json();
+  return passangers;
+}
+
 export default function Ship(props) {
   const [ship, setShip] = React.useState(null);
   const [captain, setCaptain] = React.useState(null);
   const [artifacts, setArtifacts] = React.useState(null);
+  const [passangers, setPassangers] = React.useState(null);
   const params = useParams();
 
   React.useEffect(() => {
@@ -51,6 +62,11 @@ export default function Ship(props) {
   }, [params.id, setCaptain]);
 
   React.useEffect(() => {
+    if (!params.id) return;
+    getPassangers(params.id).then((s) => setPassangers(s));
+  }, [params.id, setPassangers]);
+
+  React.useEffect(() => {
     props.changeTab('Fleet');
   }, [props]);
 
@@ -58,6 +74,7 @@ export default function Ship(props) {
     if (!ship) return null;
     if (!artifacts) return null;
     if (!captain) return null;
+    if (!passangers) return null;
     return (
       <div className='ship'>
         <Container fluid className='ship'>
@@ -88,7 +105,7 @@ export default function Ship(props) {
             <Col sm><span className='mini-header'>Description</span></Col>
           </Row>
           <Row>
-            <Col sm><span>{artifacts.filter(artifact => artifact.name === ship.class)[0].text}</span></Col>
+            <Col sm><span>{artifacts.filter(artifact => artifact.name === ship.class)[0].text.split('![]')[0].trim()}</span></Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>
@@ -142,9 +159,9 @@ export default function Ship(props) {
             <Col sm>&nbsp;</Col>
           </Row>
           <Row>
-            <Col sm><span className='mini-header new'>Persons on Ship (Characters / NPCs)</span></Col>
+            <Col sm><span className='mini-header'>NPCs on Ship ({passangers.persons.length})</span></Col>
           </Row>
-          {<ul><li><span className='data-found'>Link to Character name</span></li><li><span className='data-found'>Link to NPC 1 </span><span className='new'>(Knows: Character Name 1, Character Name 2)</span></li><li><span className='data-found'>Link to NPC 2 </span><span className='new'>(Knows: Character Name 1, Character Name 2)</span></li></ul>}
+          {<ul>{passangers.persons?.map(person => <li key={person.id}><Row><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span></Col></Row></li>)}</ul>}
         </Container>
       </div>
     )
