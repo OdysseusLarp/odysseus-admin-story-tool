@@ -248,7 +248,7 @@ export default function Character(props) {
   }
 
   return (
-    <div>
+    <div className='character'>
       <h1 className='character' id="app-title">{character?.full_name} ({is_npc(character)})</h1>
       {renderCharacter()}
       <FloatingButtons />

@@ -1,6 +1,6 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, selectFilter, Comparator } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
@@ -13,7 +13,7 @@ const getMessages = async () => {
   return messages;
 }
 
-export default function Messages() {
+export default function Messages(props) {
   const [messages, setMessages] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
@@ -26,6 +26,13 @@ export default function Messages() {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
   
+  const sentSelectOptions = {
+    "Yes": 'Yes',
+    "No need": 'No Need',
+    "Repeatable": 'Repeatable',
+    "Not yet": 'Not yet'
+  };
+
   const columns = [{
       dataField: '_row_index_placeholder',
       text: 'Row',
@@ -39,14 +46,40 @@ export default function Messages() {
       text: 'Name',
       sort: true,
       filter: textFilter(),
+      headerStyle: () => {
+        return { width: '30%', textAlign: 'left' };
+      },
       formatter: (cell, row) => {
         return <Link to={`/messages/${row.id}`}>{cell}</Link>
       }
     }, {
-      dataField: 'sender_person_id',
-      text: 'Sender ID',
+      dataField: 'sender.name',
+      text: 'Sender',
       sort: true,
-      filter: textFilter()
+      filter: textFilter(),
+      formatter: (cell, row) => {
+        return <span className='characters'><Link to={`/characters/${row.sender_person_id}` } onClick={() => props.changeTab('Characters')}>{cell}</Link></span>
+      }
+    }, {
+      dataField: 'receivers',
+      text: 'Receiver(s)',
+      sort: true,
+      filter: textFilter({
+        onFilter: (filterValue, cell) => {
+          if (!filterValue) return cell;
+          const filtered = cell.filter((row) => {
+            if (row.receivers.length === 0) {
+              return false;
+            }
+            const hasValue = row.receivers.map(receiver => receiver.name.toLowerCase()).toString().includes(filterValue.toLowerCase());
+            return hasValue;
+            });
+          return filtered;
+        }
+      }),
+      formatter: (cell, row) => {
+        return cell.map(person => <div key={person.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>)
+      }
     }, {
       dataField: 'type',
       text: 'Type',
@@ -56,12 +89,25 @@ export default function Messages() {
       dataField: 'after_jump',
       text: 'After Jump',
       sort: true,
-      filter: textFilter()
+      filter: textFilter({comparator: Comparator.EQ}),
+      headerStyle: () => {
+        return { width: '10%', textAlign: 'left' };
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        const aValue = a === "" ? -1 : a;
+        const bValue = b === "" ? -1 : b;
+        if (order === 'asc') {
+          return bValue - aValue;
+        }
+        return aValue - bValue;
+      }
     }, {
       dataField: 'sent',
       text: 'Sent',
       sort: true,
-      filter: textFilter()
+      filter: selectFilter({
+        options: sentSelectOptions
+      }),
   }];
 
   const customTotal = (from, to, size) => (

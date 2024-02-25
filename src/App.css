@@ -129,3 +129,32 @@ span.events a {
 span.messages a {
   color: #4fa129 !important;
 }
+
+.App .btn-group {
+  margin-right: 30px;
+}
+
+.App .float-char-btn .plot-button {
+  color:#4584e9 !important;
+  border-color: #696969 !important;
+}
+
+.App .float-char-btn .event-button {
+  color:#a52626 !important;
+  border-color: #696969 !important;
+}
+
+.App .float-char-btn .message-button {
+  color:#4fa129 !important;
+  border-color: #696969 !important;
+}
+
+.App .float-char-btn:hover {
+  background-color:#dcdbdb !important;
+  border-color: #696969 !important;
+  color:white !important;
+}
+
+.App .float-char-btn:focus {
+  box-shadow: 0 0 0 .2rem #696969 !important;
+}
