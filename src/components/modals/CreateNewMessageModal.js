@@ -4,6 +4,8 @@ import Form from 'react-bootstrap/Form';
 import Select from 'react-select'
 import { Button } from "react-bootstrap";
 import { apiUrl } from "../../api";
+import { useNavigate } from "react-router-dom";
+import { errorToast, successToast } from "../../utils/toaster";
 
 const getCharacters = async () => {
   const response = await fetch(apiUrl("/person?show_hidden=true&is_character=true"));
@@ -17,10 +19,14 @@ const getNpcs = async () => {
   return npcs.persons;
 }
 
+const DEFAULT_MESSAGE_STATE = {type: 'Text NPC', locked: false, sent: 'Not yet' };
+
 const CreateNewMessageModal = (props) => {
   const { showMessageNew, handleClose } = props;
   const [characters, setCharacters] = React.useState([]);
-  const [newMessage, setNewMessage] = React.useState({type: 'Text NPC', locked: false, sent: 'Not yet'});
+  const [newMessage, setNewMessage] = React.useState(DEFAULT_MESSAGE_STATE);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -59,7 +65,47 @@ const CreateNewMessageModal = (props) => {
     {value: 'Ship Log - Error', label: 'Ship Log - Error'},
     {value: 'News', label: 'News'},
     {value: 'Gray Radio', label: 'Gray Radio'}
-  ]
+  ];
+
+  const afterSubmit = (messageId) => {
+    handleClose(false);
+    setNewMessage(DEFAULT_MESSAGE_STATE);
+    setIsSubmitting(false);
+    navigate(`/messages/${messageId}`);
+  };
+
+  const handleSubmit = async () => {
+    if (isSubmitting) {
+      return;
+    }
+    setIsSubmitting(true);
+
+    const requestBody = {
+      ...newMessage,
+      name: newMessage.name?.trim(),
+      message: newMessage.message?.trim(),
+      after_jump: newMessage.after_jump ?? null,
+      gm_notes: newMessage.gm_notes?.trim() ?? null,
+    };
+
+    const response = await fetch(apiUrl("/story/messages"), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      successToast("Message created successfully");
+      afterSubmit(data.id);
+    } else {
+      console.error(`Got HTTP ${response.status} response:`, await response.text());
+      setIsSubmitting(false);
+      errorToast("Failed to create message");
+    }
+  };
 
   return (
     <Modal
@@ -74,6 +120,17 @@ const CreateNewMessageModal = (props) => {
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Label>Name:</Form.Label>
+          <Form.Control
+            type="text"
+            autoComplete="off"
+            value={newMessage?.name}
+            onChange={(event) => {
+              setNewMessage({ ...newMessage, name: event.target.value });
+            }}
+            autoFocus
+            required
+          />
           <Form.Label>Sender:</Form.Label>
           <Select
             value={characterOptions[characterOptions.findIndex(option => option.value === newMessage?.sender_person_id)]}
@@ -169,22 +226,26 @@ const CreateNewMessageModal = (props) => {
               rows={10}
               value={newMessage?.message}
               onChange={(event) => {
-                setNewMessage({...newMessage, sent: event.target.value.trim()});
+                setNewMessage({...newMessage, message: event.target.value});
               }} />
+            <Form.Label>GM Notes:</Form.Label>
+            <Form.Control
+              type="text"
+              autoComplete="off"
+              value={newMessage?.gm_notes}
+              onChange={(event) => {
+                setNewMessage({ ...newMessage, gm_notes: event.target.value });
+              }}
+            />
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose} type="button">
           Close
         </Button>
-        <Button variant="primary" onClick={() => {
-            handleClose(false);
-            setNewMessage({type: 'Text NPC', locked: false, sent: 'Not yet'});
-            // Send New Message to database
-            // Move to that Message page
-          }}>
-          Save Changes
+        <Button variant="primary" onClick={handleSubmit} type="button">
+          Create message
         </Button>
       </Modal.Footer>
     </Modal>
