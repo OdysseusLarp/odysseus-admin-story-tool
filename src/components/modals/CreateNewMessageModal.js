@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import { apiUrl } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { errorToast, successToast } from "../../utils/toaster";
+import { upsertMessage } from "../../api/messages";
 
 const getCharacters = async () => {
   const response = await fetch(apiUrl("/person?show_hidden=true&is_character=true"));
@@ -80,21 +81,7 @@ const CreateNewMessageModal = (props) => {
     }
     setIsSubmitting(true);
 
-    const requestBody = {
-      ...newMessage,
-      name: newMessage.name?.trim(),
-      message: newMessage.message?.trim(),
-      after_jump: newMessage.after_jump ?? null,
-      gm_notes: newMessage.gm_notes?.trim() ?? null,
-    };
-
-    const response = await fetch(apiUrl("/story/messages"), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestBody)
-    });
+    const response = await upsertMessage(newMessage);
 
     if (response.ok) {
       const data = await response.json();
