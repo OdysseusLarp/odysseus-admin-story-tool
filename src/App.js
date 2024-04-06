@@ -17,6 +17,7 @@ import { Button, ButtonGroup } from "react-bootstrap";
 import { LuMailPlus, LuCalendarPlus } from "react-icons/lu";
 import { TbMessagePlus } from "react-icons/tb";
 import CreateNewMessageModal from "./components/modals/CreateNewMessageModal";
+import { Toaster } from 'react-hot-toast';
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
 
@@ -126,6 +127,7 @@ function App() {
         <Route path="/messages/:id" element={<Message changeTab={changeTab} />} />
         <Route path="*" element={<></>} />
       </Routes>
+      <Toaster />
     </div>
   );
 }

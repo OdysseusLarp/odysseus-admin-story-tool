@@ -10,9 +10,6 @@ import EditMessageModal from "./modals/EditMessageModal";
 import CreateNewMessageModal from "./modals/CreateNewMessageModal";
 import './Message.css';
 
-// TODO: Use lodash instead
-const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj));
-
 const getMessage = async (id) => {
   const response = await fetch(apiUrl(`/story/messages/${id}`));
   const message = await response.json();
@@ -39,8 +36,6 @@ export default function Messages(props) {
 
     const afterJumpEmpty = (value) => value ? value : 'Not defined';
     const booleanToString = (value) => value ? 'Yes' : 'No';
-
-    let editMessage = cloneDeep(message);
 
     return (
       <div>
@@ -108,12 +103,11 @@ export default function Messages(props) {
         <EditMessageModal
           showMessageEdit={showMessageEdit}
           handleClose={() => setShowMessageEdit(false)}
-          handleEditSave={() => {
+          handleSave={() => {
             setShowMessageEdit(false);
-            setMessage(editMessage);
-            // Add saving to DB
+            getMessage(params.id).then((s) => setMessage(s))
           }}
-          editMessage={editMessage}
+          message={message}
         />
 
         <CreateNewMessageModal
