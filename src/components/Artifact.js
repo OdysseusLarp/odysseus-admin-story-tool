@@ -12,6 +12,12 @@ const getArtifact = async (id) => {
   return artifact;
 }
 
+const getArtifactDetails = async (id) => {
+  const response = await fetch(apiUrl(`/story/artifact/${id}`));
+  const artifactDetails = await response.json();
+  return artifactDetails;
+}
+
 const getDiscoveredById = async (name) => {
   const response = await fetch(apiUrl(`/person/search/${name}`));
   const discoveredBy = await response.json();
@@ -22,6 +28,7 @@ const getDiscoveredById = async (name) => {
 
 export default function Artifact(props) {
   const [artifact, setArtifact] = React.useState(null);
+  const [artifactDetails, setArtifactDetails] = React.useState(null);
   const [discoveredById, setDiscoveredById] = React.useState(null);
   const params = useParams();
 
@@ -36,11 +43,16 @@ export default function Artifact(props) {
   }, [artifact?.discovered_by, setDiscoveredById]);
 
   React.useEffect(() => {
+    if (!params.id) return;
+    getArtifactDetails(params.id).then((s) => setArtifactDetails(s));
+  }, [params.id]);
+
+  React.useEffect(() => {
     props.changeTab('Artifacts');
   }, [props]);
 
   const renderArtifact = () => {
-    if (!artifact) return null;
+    if (!artifact || !artifactDetails) return null;
 
     const artifact_entries = artifact.entries.map((e) => e.entry.split('\n\n')).flat();
 
@@ -60,7 +72,7 @@ export default function Artifact(props) {
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Type: </span>{artifact.name}</Col>
-            <Col sm={8} className='new'><span className='caption'>Visible on DataHub: </span>True/False</Col>
+            <Col sm={8}><span className='caption'>Visible on DataHub: </span>{artifact.is_visible ? "Yes" : "No"}</Col>
           </Row>
           <Row>
             <Col sm><span className='caption'>Origin: </span>{artifact.type}</Col>
@@ -84,17 +96,23 @@ export default function Artifact(props) {
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Artifact Entries</span></Col>
           </Row>
-          {<ul>
-            {artifact_entries.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}
-          </ul>}
+            {artifact_entries.length <1 ? <p>No entries</p> : <ul>
+              {artifact_entries.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}
+            </ul>}
           <Row>
-            <Col sm><span className='mini-header new'>Plots</span></Col>
+            <Col sm><span className='mini-header'>Plots</span></Col>
           </Row>
-          {<span className="new"><ul><li>Not part of a plot</li><li>Link to plot 1</li><li>Link to plot 2</li></ul></span>}
+            {artifactDetails.plots.length<1 ? <p>No linked plots</p> : <ul> {artifactDetails.plots.map(p => <li>
+                  <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
+                  </ul>
+            }
           <Row>
-              <Col sm><span className='mini-header new'>Events [CREATE EVENT BUTTON]</span></Col>
+              <Col sm><span className='mini-header'>Events <span className='new'>[CREATE EVENT BUTTON]</span></span></Col>
             </Row>
-            {<span className="new"><ul><li>Not part of an event</li><li>Link to event</li></ul></span>}
+            {artifactDetails.events.length<1 ? <p>No linked events</p> : <ul> {artifactDetails.events.map(e => <li>
+                  <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
+                  </ul>
+            }
           <Row>
             <Col sm><span className='mini-header new'>GM Notes</span></Col>
           </Row>
