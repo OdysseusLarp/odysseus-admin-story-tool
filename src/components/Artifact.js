@@ -54,7 +54,8 @@ export default function Artifact(props) {
   const renderArtifact = () => {
     if (!artifact || !artifactDetails) return null;
 
-    const artifact_entries = artifact.entries.map((e) => e.entry.split('\n\n')).flat();
+    const artifact_entries = artifact.entries.map((e) => e.entry.split('\r\n\r\n')).flat();
+    const artifact_notes = artifact.gm_notes ? artifact.gm_notes.split('\r\n\r\n').flat() : [];
 
     return (
       <div className='artifact'>
@@ -114,10 +115,14 @@ export default function Artifact(props) {
                   </ul>
             }
           <Row>
-            <Col sm><span className='mini-header new'>GM Notes</span></Col>
+            <Col sm><span className='mini-header'>GM Notes</span></Col>
           </Row>
           <Row>
-            <Col sm><span className='new'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+            <Col sm>
+            {artifact_notes.length <1 ? <p>No notes</p> : <ul>
+              {artifact_notes.map(n => <li><Row key={n}><Col sm>{n}</Col></Row></li>)}
+            </ul>}
+            </Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>
