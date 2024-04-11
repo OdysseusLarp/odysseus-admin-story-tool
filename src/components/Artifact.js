@@ -12,6 +12,12 @@ const getArtifact = async (id) => {
   return artifact;
 }
 
+const getArtifactDetails = async (id) => {
+  const response = await fetch(apiUrl(`/story/artifact/${id}`));
+  const artifactDetails = await response.json();
+  return artifactDetails;
+}
+
 const getDiscoveredById = async (name) => {
   const response = await fetch(apiUrl(`/person/search/${name}`));
   const discoveredBy = await response.json();
@@ -22,6 +28,7 @@ const getDiscoveredById = async (name) => {
 
 export default function Artifact(props) {
   const [artifact, setArtifact] = React.useState(null);
+  const [artifactDetails, setArtifactDetails] = React.useState(null);
   const [discoveredById, setDiscoveredById] = React.useState(null);
   const params = useParams();
 
@@ -36,13 +43,19 @@ export default function Artifact(props) {
   }, [artifact?.discovered_by, setDiscoveredById]);
 
   React.useEffect(() => {
+    if (!params.id) return;
+    getArtifactDetails(params.id).then((s) => setArtifactDetails(s));
+  }, [params.id]);
+
+  React.useEffect(() => {
     props.changeTab('Artifacts');
   }, [props]);
 
   const renderArtifact = () => {
-    if (!artifact) return null;
+    if (!artifact || !artifactDetails) return null;
 
-    const artifact_entries = artifact.entries.map((e) => e.entry.split('\n\n')).flat();
+    const artifact_entries = artifact.entries.map((e) => e.entry.split('\r\n\r\n')).flat();
+    const artifact_notes = artifact.gm_notes ? artifact.gm_notes.split('\r\n\r\n') : [];
 
     return (
       <div className='artifact'>
@@ -60,7 +73,7 @@ export default function Artifact(props) {
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Type: </span>{artifact.name}</Col>
-            <Col sm={8} className='new'><span className='caption'>Visible on DataHub: </span>True/False</Col>
+            <Col sm={8}><span className='caption'>Visible on DataHub: </span>{artifact.is_visible ? "Yes" : "No"}</Col>
           </Row>
           <Row>
             <Col sm><span className='caption'>Origin: </span>{artifact.type}</Col>
@@ -84,22 +97,32 @@ export default function Artifact(props) {
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Artifact Entries</span></Col>
           </Row>
-          {<ul>
-            {artifact_entries.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}
-          </ul>}
+            {artifact_entries.length <1 ? <p>No entries</p> : <ul>
+              {artifact_entries.map(e => <li key={e}><Row><Col sm>{e}</Col></Row></li>)}
+            </ul>}
           <Row>
-            <Col sm><span className='mini-header new'>Plots</span></Col>
+            <Col sm><span className='mini-header'>Plots</span></Col>
           </Row>
-          {<span className="new"><ul><li>Not part of a plot</li><li>Link to plot 1</li><li>Link to plot 2</li></ul></span>}
+            {artifactDetails.plots.length<1 ? <p>No linked plots</p> : <ul> {artifactDetails.plots.map(p => <li key={p.id}>
+                  <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
+                  </ul>
+            }
           <Row>
-              <Col sm><span className='mini-header new'>Events [CREATE EVENT BUTTON]</span></Col>
+              <Col sm><span className='mini-header'>Events <span className='new'>[CREATE EVENT BUTTON]</span></span></Col>
             </Row>
-            {<span className="new"><ul><li>Not part of an event</li><li>Link to event</li></ul></span>}
+            {artifactDetails.events.length<1 ? <p>No linked events</p> : <ul> {artifactDetails.events.map(e => <li key={e.id}>
+                  <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
+                  </ul>
+            }
           <Row>
-            <Col sm><span className='mini-header new'>GM Notes</span></Col>
+            <Col sm><span className='mini-header'>GM Notes</span></Col>
           </Row>
           <Row>
-            <Col sm><span className='new'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
+            <Col sm>
+            {artifact_notes.length <1 ? <p>No notes</p> : <ul>
+              {artifact_notes.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
+            </ul>}
+            </Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>
