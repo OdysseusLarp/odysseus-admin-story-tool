@@ -5,9 +5,7 @@ import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { BiMailSend, BiPencil } from "react-icons/bi";
-import { LuMailPlus } from "react-icons/lu";
 import EditMessageModal from "./modals/EditMessageModal";
-import CreateNewMessageModal from "./modals/CreateNewMessageModal";
 import './Message.css';
 
 const getMessage = async (id) => {
@@ -19,7 +17,6 @@ const getMessage = async (id) => {
 export default function Messages(props) {
   const [message, setMessage] = React.useState(null);
   const [showMessageEdit, setShowMessageEdit] = React.useState(false);
-  const [showMessageNew, setShowMessageNew] = React.useState(false);
   const params = useParams();
 
   React.useEffect(() => {
@@ -110,11 +107,6 @@ export default function Messages(props) {
           message={message}
         />
 
-        <CreateNewMessageModal
-          showMessageNew={showMessageNew}
-          handleClose={() => setShowMessageNew(false)}
-        />
-
       </div>
     )
   }
@@ -123,9 +115,8 @@ export default function Messages(props) {
     <div>
       <h1 className='message' id="app-title"> {message?.name}
         <ButtonGroup>
-          <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)} disabled={message?.sent === 'Yes'}><BiPencil size="35px"/></Button>
-          <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={null} disabled={message?.sent === 'Yes'}><BiMailSend size="35px"/></Button>
-          <Button className="float-char-btn" title="Create New Message" variant="outline-secondary" onClick={() => setShowMessageNew(true)}><LuMailPlus size="35px"/></Button>
+          <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)} disabled={message?.sent === 'Yes'}><BiPencil size="24px"/><span>Edit</span></Button>
+          <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={null} disabled={message?.sent === 'Yes'}><BiMailSend size="24px"/><span>Send</span></Button>
         </ButtonGroup>
       </h1>
       {renderMessage()}
