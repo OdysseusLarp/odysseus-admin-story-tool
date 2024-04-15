@@ -30,14 +30,16 @@ h1.message {
 }
 
 .message .float-char-btn {
-    color:#4fa129 !important;
     border-color: #696969 !important;
+}
+
+.message .float-char-btn > svg {
+    color:#4fa129 !important;
 }
 
 .message .float-char-btn:hover {
     background-color:#dcdbdb !important;
     border-color: #696969 !important;
-    color:#4fa129 !important;
 }
 
 .message .float-char-btn:focus {
