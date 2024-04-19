@@ -75,7 +75,6 @@ export default function Ship(props) {
     if (!artifacts) return null;
     if (!captain) return null;
     if (!passangers) return null;
-    console.log(artifacts)
     return (
       <div className='ship'>
         <Container fluid className='ship'>

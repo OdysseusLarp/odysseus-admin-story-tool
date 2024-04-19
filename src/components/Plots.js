@@ -1,6 +1,6 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
@@ -26,6 +26,12 @@ export default function Plots() {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
   
+
+  const selectOptions = {
+    true: 'Yes',
+    false: 'No'
+  };
+
   const columns = [{
       dataField: '_row_index_placeholder',
       text: 'Row',
@@ -71,7 +77,10 @@ export default function Plots() {
       dataField: 'text_npc_first_message',
       text: 'Text NPC Message First?',
       sort: true,
-      filter: textFilter()
+      formatter: cell => selectOptions[cell],
+      filter: selectFilter({
+        options: selectOptions
+      })
   }];
 
   const customTotal = (from, to, size) => (
