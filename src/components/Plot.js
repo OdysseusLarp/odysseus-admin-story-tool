@@ -130,7 +130,7 @@ export default function Plot(props) {
                 <Col sm><span className='mini-header'>Messages <span className='new'>[CREATE MESSAGE BUTTON]</span></span></Col>
               </Row>
               {relatedMessages.length<1 ? <p>No messages</p> : <ul> {relatedMessages.map(m => <li key={m.id}>
-                  <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> {m.sent ? "[Already sent]" : "[Not send yet"}</li>)}
+                  <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</li>)}
                   </ul>
               }
               <Row>
@@ -217,5 +217,3 @@ export default function Plot(props) {
       </div>
     )
   }
-
-   
