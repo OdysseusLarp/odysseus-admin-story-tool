@@ -24,3 +24,7 @@ h1.plot {
 .plot a {
     color: #4584e9 !important;
 }
+
+.plot .new {
+    color: #da3e00 !important; 
+}
