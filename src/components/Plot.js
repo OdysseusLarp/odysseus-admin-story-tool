@@ -74,8 +74,8 @@ export default function Plot(props) {
     const relatedMessages = messages.filter(m => relatedMessageIds.includes(m.id))
     const relatedCharacterIds = plot.persons.map(p => p.id)
     const relatedCharacters = characters.filter(c => relatedCharacterIds.includes(c.id))
-    const plot_notes = plot.gm_notes ? plot.gm_notes.split('\r\n') : [];
-    const copiedFromCharacter = plot.copy_from_characters ? plot.copy_from_characters.split('\r\n\r\n') : [];
+    const plot_notes = plot.gm_notes ? plot.gm_notes.split('\n') : [];
+    const copiedFromCharacter = plot.copy_from_characters ? plot.copy_from_characters.split('\n') : [];
     const characterGroups = plot.character_groups ? plot.character_groups.split(', ') : [];
 
     return (
@@ -85,7 +85,7 @@ export default function Plot(props) {
               <Row>
                 <Col sm><span className='mini-header'>Characters Involved</span>
                   {plot.persons.length<1 ? <p>No linked characters</p> : <ul> {relatedCharacters.map(p => <li key={p.id}>
-                    <Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link>
+                    <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link></span>
                     <span> - {p.is_character ? "Character" : "NPC"}</span></li>)}
                     </ul>
                   }</Col>
@@ -99,35 +99,35 @@ export default function Plot(props) {
                 <Col sm><span className='mini-header'>Basic Info</span></Col>
               </Row>
               <Row>
-                <Col sm={6}><span className='caption'>GM Actions: </span>{plot.gm_actions}</Col>
+                <Col sm={4}><span className='caption'>GM Actions: </span>{plot.gm_actions}</Col>
                 <Col sm={4}><span className='caption'>Plot size: </span>{plot.size}</Col>
               </Row>
               <Row>
-                <Col sm={6}><span className='caption'>Text NPC should send first message: </span>{plot.text_npc_first_message ? "Yes" : "No"}</Col>
+                <Col sm={4}><span className='caption'>Text NPC should send first message: </span>{plot.text_npc_first_message ? "Yes" : "No"}</Col>
                 <Col sm={4}><span className='caption'>Plot themes: </span>
                 {plot.themes.length<1 ? <span>No themes defined</span> : plot.themes}</Col>
               </Row>
               <Row>
-                <Col sm={6}><span className='caption'>Happens after jump: </span>
+                <Col sm={4}><span className='caption'>Happens after jump: </span>
                 {plot.after_jump ? plot.after_jump : <span>No jump defined</span>}
                 <span className='new'> (Editable unless plot is locked)</span></Col>
                 <Col sm={4}><span className='caption'>Plot Importance: </span> {plot.importance}</Col>
               </Row>
               <Row>
-                <Col sm={6}><span className='caption'>Locked plot: </span>{plot.locked ? "Yes" : "No"}</Col>
+                <Col sm={4}><span className='caption'>Locked plot: </span>{plot.locked ? "Yes" : "No"}</Col>
               </Row>
               <Row>
                 <Col sm>&nbsp;</Col>
               </Row>
               <Row>
-                <Col sm><span className='mini-header'>Events <span className='new'>[CREATE EVENT BUTTON]</span></span></Col>
+                <Col sm><span className='mini-header'>Events</span></Col>
               </Row>
               {plot.events.length<1 ? <p>No linked events</p> : <ul> {plot.events.map(e => <li key={e.id}>
                   <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
                   </ul>
               }
               <Row>
-                <Col sm><span className='mini-header'>Messages <span className='new'>[CREATE MESSAGE BUTTON]</span></span></Col>
+                <Col sm><span className='mini-header'>Messages</span></Col>
               </Row>
               {relatedMessages.length<1 ? <p>No messages</p> : <ul> {relatedMessages.map(m => <li key={m.id}>
                   <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</li>)}
@@ -146,7 +146,7 @@ export default function Plot(props) {
               <Row>
                 <Col sm>
                   {plot.description}
-                  </Col>
+                </Col>
               </Row>
               <Row>
                 <Col sm>&nbsp;</Col>
@@ -154,16 +154,9 @@ export default function Plot(props) {
               <Row>
                 <Col sm><span className='mini-header'>GM Notes</span></Col>
               </Row>
-              <Row>
-                <Col sm>
-                  {plot_notes.length <1 ? <p>No notes</p> : <ul>
-                  {plot_notes.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
-                 </ul>}
-                  </Col>
-              </Row>
-              <Row>
-                <Col sm>&nbsp;</Col>
-              </Row>
+              {plot_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>
+                {plot_notes.map(n => <li key={n}>{n}</li>)}
+              </ul>}
               <Row>
                 <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
               </Row>
@@ -187,10 +180,7 @@ export default function Plot(props) {
               </Row></li>
               </ul>
               <Row>
-                <Col sm><span className="new">Save the notes between games!</span></Col>
-              </Row>
-              <Row>
-                <Col sm>&nbsp;</Col>
+                <Col sm><p className="new">Save the notes between games!</p></Col>
               </Row>
               <Row>
                 <Col sm><span className='mini-header'>Copied from characters (optional)</span></Col>
@@ -212,7 +202,7 @@ export default function Plot(props) {
 
     return (
       <div>
-        <h1 className='plot' id="app-title">{plot?.name} <span className="new">[CREATE PLOT BUTTON]</span></h1>
+        <h1 className='plot' id="app-title">{plot?.name}</h1>
         {renderPlot()}
       </div>
     )

@@ -49,6 +49,7 @@ const EditMessageModal = (props) => {
         <Modal.Title>Edit Message</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <div><p className="caption">{message?.name}</p></div>
         <div><span className="caption">Sender:</span> {message?.sender?.name}</div>
         <div><span className="caption">Receiver(s):</span> {message?.receivers?.map(receiver => receiver.name).join(', ')}</div>
         <br />
@@ -102,6 +103,16 @@ const EditMessageModal = (props) => {
               onChange={(event) => {
                 setMessage({...message, message: event.target.value});
               }} />
+            <Form.Label>GM Notes:</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={6}
+              autoComplete="off"
+              value={message?.gm_notes}
+              onChange={(event) => {
+                setMessage({ ...message, gm_notes: event.target.value });
+              }}
+            />
           </Form.Group>
         </Form>
       </Modal.Body>

@@ -33,6 +33,7 @@ export default function Messages(props) {
 
     const afterJumpEmpty = (value) => value ? value : 'Not defined';
     const booleanToString = (value) => value ? 'Yes' : 'No';
+    const gm_notes = message.gm_notes ? message.gm_notes.split('\n').flat() : [];
 
     return (
       <div>
@@ -42,15 +43,15 @@ export default function Messages(props) {
               <Col sm><span className='mini-header'>Sender</span></Col>
             </Row>
             <Row>
-              <Col sm><ul>{message.sender?.id && <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> (Card ID: {message.sender?.card_id}) </span></li>}</ul></Col>
+              <Col sm>{message.sender === null ? <ul><li>No sender</li></ul> : <ul>{message.sender?.id && <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> (Card ID: {message.sender?.card_id}) </span></li>}</ul>}</Col>
             </Row>
-            <Row className='row-mini-header'>
+            <Row>
               <Col sm><span className='mini-header'>Receiver(s)</span></Col>
             </Row>
             <Row>
-              <Col sm><span><ul>{message.receivers?.map(receiver => <li key={receiver?.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> (Card ID: {receiver?.card_id})</span></li>)}</ul></span></Col>
+              <Col sm>{message.receivers.length < 1 ? <ul><li>No receivers</li></ul> : <span><ul>{message.receivers?.map(receiver => <li key={receiver?.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> (Card ID: {receiver?.card_id})</span></li>)}</ul></span>}</Col>
             </Row>
-            <Row className='row-mini-header'>
+            <Row>
               <Col sm><span className='mini-header'>Basic Info</span></Col>
             </Row>
             <Row>
@@ -71,16 +72,16 @@ export default function Messages(props) {
             <Row>
               <Col sm><span className='mini-header'>Plots</span></Col>
             </Row>
-            <ul>{message.plots?.map(plot => <li key={plot.id}><Row><Col sm><span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${plot.id}`}>{plot.name}</Link></span></Col></Row></li>)}</ul>
+            {message.plots?.length < 1 ? <ul><li>No linked plots</li></ul> : <ul>{message.plots?.map(plot => <li key={plot.id}><Row><Col sm><span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${plot.id}`}>{plot.name}</Link></span></Col></Row></li>)}</ul>}
             <Row>
               <Col sm><span className='mini-header'>Events</span></Col>
             </Row>
-            <ul>{message.events?.map(event => <li key={event.id}><Row><Col sm><span className='events'><Link onClick={() => props.changeTab('Events')} to={`/events/${event.id}`}>{event.name}</Link></span></Col></Row></li>)}</ul>
+            {message.events?.length < 1 ? <ul><li>No linked events</li></ul> : <ul>{message.events?.map(event => <li key={event.id}><Row><Col sm><span className='events'><Link onClick={() => props.changeTab('Events')} to={`/events/${event.id}`}>{event.name}</Link></span></Col></Row></li>)}</ul>}
             <Row>
               <Col sm><span className='mini-header'>Message</span></Col>
             </Row>
             <Row>
-              <Col sm><span> {message.message} </span></Col>
+              <Col sm><span> {message.message === "" ? "No message" : message.message } </span></Col>
             </Row>
             <Row>
               <Col sm>&nbsp;</Col>
@@ -88,9 +89,7 @@ export default function Messages(props) {
             <Row>
               <Col sm><span className='mini-header'>GM Notes</span></Col>
             </Row>
-            <Row>
-              <Col sm><span> {message.gm_notes} </span></Col>
-            </Row>
+            {gm_notes.length < 1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(e => <li key={e}>{e}</li>)}</ul>}
             <Row>
               <Col sm>&nbsp;</Col>
             </Row>

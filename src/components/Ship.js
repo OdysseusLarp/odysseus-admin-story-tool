@@ -89,11 +89,11 @@ export default function Ship(props) {
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Name: </span>{ship.name}</Col>
-            <Col sm={8}><span className='caption'>ID: </span>{ship.id}</Col>
+            <Col sm={4}><span className='caption'>ID: </span>{ship.id}</Col>
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Class: </span>{ship.class}</Col>
-            <Col sm={8}><span className='caption'>Type: </span>{ship.type}</Col>
+            <Col sm={4}><span className='caption'>Type: </span>{ship.type}</Col>
           </Row>
           <Row>
             <Col sm><span className='caption'>Ownership: </span>{ship.description}</Col>
@@ -118,7 +118,7 @@ export default function Ship(props) {
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Status: </span>{ship.status}</Col>
-            <Col sm={8}><span className='caption'>Position: </span>{ship.position.name}</Col>
+            <Col sm={4}><span className='caption'>Position: </span>{ship.position.name}</Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>
@@ -128,7 +128,7 @@ export default function Ship(props) {
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Fighter Count: </span>{ship.fighter_count}</Col>
-            <Col sm={8}><span className='caption'>Transporter Count: </span>{ship.transporter_count}</Col>
+            <Col sm={4}><span className='caption'>Transporter Count: </span>{ship.transporter_count}</Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>

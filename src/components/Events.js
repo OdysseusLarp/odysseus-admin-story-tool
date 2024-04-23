@@ -53,11 +53,6 @@ export default function Events() {
       sort: true,
       filter: textFilter()
     }, {
-      dataField: 'type',
-      text: 'Type',
-      sort: true,
-      filter: textFilter()
-    }, {
       dataField: 'size',
       text: 'Size',
       sort: true,

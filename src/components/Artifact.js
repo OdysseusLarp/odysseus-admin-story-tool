@@ -54,8 +54,8 @@ export default function Artifact(props) {
   const renderArtifact = () => {
     if (!artifact || !artifactDetails) return null;
 
-    const artifact_entries = artifact.entries.map((e) => e.entry.split('\r\n\r\n')).flat();
-    const artifact_notes = artifact.gm_notes ? artifact.gm_notes.split('\r\n\r\n') : [];
+    const artifact_entries = artifact.entries.map((e) => e.entry.split('\n')).flat();
+    const artifact_notes = artifact.gm_notes ? artifact.gm_notes.split('\n') : [];
 
     return (
       <div className='artifact'>
@@ -68,15 +68,15 @@ export default function Artifact(props) {
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Name: </span>{artifact.catalog_id}</Col>
-            <Col sm={4}><span className='caption'>Catalog ID: </span>{artifact.catalog_id}</Col>
             <Col sm={4}><span className='caption'>ID: </span>{artifact.id}</Col>
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Type: </span>{artifact.name}</Col>
-            <Col sm={8}><span className='caption'>Visible on DataHub: </span>{artifact.is_visible ? "Yes" : "No"}</Col>
+            <Col sm={4}><span className='caption'>Catalog ID: </span>{artifact.catalog_id}</Col>
           </Row>
           <Row>
-            <Col sm><span className='caption'>Origin: </span>{artifact.type}</Col>
+            <Col sm={4}><span className='caption'>Origin: </span>{artifact.type}</Col>
+            <Col sm={4}><span className='caption'>Visible on DataHub: </span>{artifact.is_visible ? "Yes" : "No"}</Col>
           </Row>
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Discovery</span></Col>
@@ -97,36 +97,33 @@ export default function Artifact(props) {
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Artifact Entries</span></Col>
           </Row>
-            {artifact_entries.length <1 ? <p>No entries</p> : <ul>
-              {artifact_entries.map(e => <li key={e}><Row><Col sm>{e}</Col></Row></li>)}
-            </ul>}
+          {artifact_entries.length <1 ? <ul><li>No entries</li></ul> : <ul>
+            {artifact_entries.map(e => <li key={e}><Row><Col sm>{e}</Col></Row></li>)}
+          </ul>}
           <Row>
             <Col sm><span className='mini-header'>Plots</span></Col>
           </Row>
-            {artifactDetails.plots.length<1 ? <p>No linked plots</p> : <ul> {artifactDetails.plots.map(p => <li key={p.id}>
-                  <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
-                  </ul>
-            }
+          {artifactDetails.plots.length<1 ? <ul><li>No linked plots</li></ul> : <ul> {artifactDetails.plots.map(p => <li key={p.id}>
+            <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
+            </ul>
+          }
           <Row>
-              <Col sm><span className='mini-header'>Events <span className='new'>[CREATE EVENT BUTTON]</span></span></Col>
-            </Row>
-            {artifactDetails.events.length<1 ? <p>No linked events</p> : <ul> {artifactDetails.events.map(e => <li key={e.id}>
-                  <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
-                  </ul>
-            }
+            <Col sm><span className='mini-header'>Events <span className='new'></span></span></Col>
+          </Row>
+          {artifactDetails.events.length<1 ? <ul><li>No linked events</li></ul> : <ul> {artifactDetails.events.map(e => <li key={e.id}>
+            <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
+            </ul>
+          }
           <Row>
             <Col sm><span className='mini-header'>GM Notes</span></Col>
           </Row>
           <Row>
             <Col sm>
-            {artifact_notes.length <1 ? <p>No notes</p> : <ul>
+            {artifact_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>
               {artifact_notes.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
             </ul>}
             </Col>
           </Row>
-          <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>  
           <Row>
           <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
           </Row>
