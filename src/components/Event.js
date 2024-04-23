@@ -2,11 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Button, ButtonGroup } from "react-bootstrap";
-import { LuMailPlus, LuCalendarPlus } from "react-icons/lu";
-import CreateNewMessageModal from "./modals/CreateNewMessageModal";
-import { BiMailSend, BiPencil } from "react-icons/bi";
-import EditEventModal from "./modals/EditEventModal";
 import { apiUrl } from "../api";
 
 
@@ -21,22 +16,10 @@ const getEvent = async (id) => {
   return event;
 }
 
-const getEventDetails = async (id) => {
-  const response = await fetch(apiUrl(`/story/events/${id}`));
-  const eventDetails = await response.json();
-  return eventDetails;
-}
-
 const getMessages = async () => {
   const response = await fetch(apiUrl(`/story/messages/`));
   const messages = await response.json();
   return messages;
-}
-
-const getPlots = async (id) => {
-  const response = await fetch(apiUrl(`/story/plots/`));
-  const plot = await response.json();
-  return plot;
 }
 
 const getCharacters = async () => {
@@ -58,11 +41,8 @@ const is_npc = (character) => {
 
 export default function Event(props) {
   const [event, setEvent] = React.useState(null);
-  const [eventDetails, setEventDetails] = React.useState(null);
   const [messages, setMessages] = React.useState(null);
   const [characters, setCharacters] = React.useState([]);
-  const [showMessageNew, setShowMessageNew] = React.useState(false);
-  const [showEventEdit, setShowEventEdit] = React.useState(false);
 
   const params = useParams();
 
@@ -72,12 +52,7 @@ export default function Event(props) {
     getEvent(params.id).then((s) => setEvent(s));
   }, [params.id, setEvent]);
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getEventDetails(params.id).then((s) => setEventDetails(s));
-  }, [params.id]);
-
-  React.useEffect(() => {
+    React.useEffect(() => {
     getMessages().then((s) => setMessages(s));
   }, [setMessages]);
 
@@ -88,9 +63,8 @@ export default function Event(props) {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const [charactersData, plotData] = await Promise.all([
+        const [charactersData] = await Promise.all([
           getCharacters(),
-          getPlots()
         ]);
 
         const allCharacters = [...charactersData];
@@ -104,7 +78,7 @@ export default function Event(props) {
   }, []);
 
   const renderEvent = () => {
-    if (!event || !eventDetails) return null;
+    if (!event) return null;
     const relatedCharacterIds = event.persons.map(p => p.id);
     const relatedCharacters = characters.filter(c => relatedCharacterIds.includes(c.id));
     const relatedMessageIds = event.messages.map(m => m.id)
@@ -184,7 +158,7 @@ export default function Event(props) {
             }
           </Col>
             <Col sm="6"><span className='mini-header'>Plots</span>
-              <span>{eventDetails.plots.length < 1 ? <p>No linked plots</p> : <ul> {eventDetails.plots.map(p => <li key={p.id}>
+              <span>{event.plots.length < 1 ? <p>No linked plots</p> : <ul> {event.plots.map(p => <li key={p.id}>
                 <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
               </ul>
               }</span></Col>
@@ -199,14 +173,8 @@ export default function Event(props) {
                 <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</li>)}
               </ul>
               }</span>
-            <Button size="md" className="float-char-btn" title="Create New Message" variant="outline-secondary" onClick={() => setShowMessageNew(true)}><LuMailPlus className="message-button" size="10px" /><span>New message</span></Button>
             </Col>
-            
-          <CreateNewMessageModal
-            showMessageNew={showMessageNew}
-            handleClose={() => setShowMessageNew(false)}
-          />
-          </Row>
+                      </Row>
           <Row>
             <Col sm>&nbsp;</Col>
           </Row>
