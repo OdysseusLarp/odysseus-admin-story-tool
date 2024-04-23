@@ -13,7 +13,7 @@ const getEvents = async () => {
   return events;
 }
 
-export default function Events() {
+export default function Events(props) {
   const [events, setEvents] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
@@ -43,6 +43,21 @@ export default function Events() {
         return <Link to={`/events/${row.id}`}>{cell}</Link>
       }
     }, {
+      dataField: 'after_jump',
+      text: 'After Jump',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'importance',
+      text: 'Importance',
+      sort: true,
+      filter: textFilter()
+    }, {
+      dataField: 'status',
+      text: 'Status',
+      sort: true,
+      filter: textFilter()
+    }, {
       dataField: 'type',
       text: 'Type',
       sort: true,
@@ -53,31 +68,12 @@ export default function Events() {
       sort: true,
       filter: textFilter()
     }, {
-      dataField: 'type',
-      text: 'Type',
-      sort: true,
-      filter: textFilter()
-    }, {
       dataField: 'size',
       text: 'Size',
       sort: true,
       filter: textFilter()
     }, {
-      dataField: 'importance',
-      text: 'Importance',
-      sort: true,
-      filter: textFilter()
-    }, {
-      dataField: 'after_jump',
-      text: 'After Jump',
-      sort: true,
-      filter: textFilter()
-    }, {
-      dataField: 'status',
-      text: 'Status',
-      sort: true,
-      filter: textFilter()
-    }, {
+    
       dataField: 'gm_actions',
       text: 'GM Actions',
       sort: true,
