@@ -43,7 +43,6 @@ export default function Event(props) {
   const [event, setEvent] = React.useState(null);
   const [messages, setMessages] = React.useState(null);
   const [characters, setCharacters] = React.useState([]);
-
   const params = useParams();
 
 
@@ -52,7 +51,7 @@ export default function Event(props) {
     getEvent(params.id).then((s) => setEvent(s));
   }, [params.id, setEvent]);
 
-    React.useEffect(() => {
+  React.useEffect(() => {
     getMessages().then((s) => setMessages(s));
   }, [setMessages]);
 
@@ -130,10 +129,19 @@ export default function Event(props) {
           <Row>
             <Col sm><span className='mini-header'>NPC needs</span></Col>
           </Row>
-          <Row><Col sm={4}><span className='caption'>NPC Count: </span> {event.npc_count}</Col>
-            <Col sm={6}><span className='caption'>NPC Location: </span> {event.npc_location}</Col></Row>
-          <Row><Col sm><span className='caption'>What is required from NPCs?</span> </Col>
-            <span>{event.gm_note_npc ? event.gm_note_npc : "No needs specified"} </span></Row>
+          <Row>
+            <Col sm={4}>
+              <span className='caption'>NPC Count:</span> {event.npc_count}
+            </Col>
+            <Col sm={6}><span className='caption'>NPC Location: </span>{event.npc_location}</Col>
+          </Row>
+          <Row>
+          <Col sm><span className='caption'>What is required from NPCs?</span></Col>
+          </Row>
+          <Row>
+          <Col sm>
+            <span>{event.gm_note_npc ? event.gm_note_npc : "No needs specified"} </span></Col>
+            </Row>
           <Row>
             <Col sm>&nbsp;</Col>
           </Row>
@@ -151,12 +159,12 @@ export default function Event(props) {
             <Col sm>&nbsp;</Col>
           </Row>
           <Row>
-          <Col sm="4"><span className='mini-header'>Artifacts</span>
-            {event.artifacts.length < 1 ? <p>No linked artifacts</p> : <ul> {event.artifacts.map(a => <li key={a.id}>
-              <Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>Artifact id {a.id}, {a.name}</Link></li>)}
-            </ul>
-            }
-          </Col>
+            <Col sm="4"><span className='mini-header'>Artifacts</span>
+              {event.artifacts.length < 1 ? <p>No linked artifacts</p> : <ul> {event.artifacts.map(a => <li key={a.id}>
+                <Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>Artifact id {a.id}, {a.name}</Link></li>)}
+              </ul>
+              }
+            </Col>
             <Col sm="6"><span className='mini-header'>Plots</span>
               <span>{event.plots.length < 1 ? <p>No linked plots</p> : <ul> {event.plots.map(p => <li key={p.id}>
                 <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
@@ -168,13 +176,13 @@ export default function Event(props) {
             <Col sm>&nbsp;</Col>
           </Row>
           <Row>
-          <Col sm><span className='mini-header'>Messages</span>
+            <Col sm><span className='mini-header'>Messages</span>
               <span>{relatedMessages.length < 1 ? <p>No messages</p> : <ul> {relatedMessages.map(m => <li key={m.id}>
                 <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</li>)}
               </ul>
               }</span>
             </Col>
-                      </Row>
+          </Row>
           <Row>
             <Col sm>&nbsp;</Col>
           </Row>
