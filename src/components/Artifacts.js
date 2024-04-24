@@ -1,6 +1,6 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
@@ -17,6 +17,11 @@ export default function Artifacts() {
   const [artifacts, setArtifacts] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
+
+  const selectOptions = {
+    true: 'Yes',
+    false: 'No'
+  };
 
   React.useEffect(() => {
     getArtifacts().then(data => setArtifacts(data));
@@ -67,6 +72,14 @@ export default function Artifacts() {
       text: 'Discovered From',
       sort: true,
       filter: textFilter()
+    }, {
+      dataField: 'is_visible',
+      text: 'Visible',
+      sort: true,
+      formatter: cell => selectOptions[cell],
+      filter: selectFilter({
+        options: selectOptions
+      })
   }];
 
   const customTotal = (from, to, size) => (
