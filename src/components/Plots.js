@@ -26,10 +26,32 @@ export default function Plots() {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
   
-
   const selectOptions = {
     true: 'Yes',
     false: 'No'
+  };
+
+  const sizeSelectOptions = {
+    "Small": 'Small',
+    "Medium": 'Medium',
+    "Large": 'Large',
+  };
+
+  const importanceSelectOptions = {
+    "Small": 'Nice to have',
+    "Medium": 'Should have',
+    "Large": 'Mandatory',
+  };
+
+  const gmActionSelectOptions = {
+    "No need": 'No need',
+    "Event": 'Event',
+    "Empty Epsilon": 'Empty Epsilon',
+    "Text NPC": 'Text NPC',
+    "Live NPC": 'Live NPC',
+    "Briefing Character": 'Briefing Character',
+    "Briefing NPCs": 'Briefing NPCs',
+    "Other": 'Other',
   };
 
   const columns = [{
@@ -57,12 +79,16 @@ export default function Plots() {
       dataField: 'size',
       text: 'Size',
       sort: true,
-      filter: textFilter()
+      filter: selectFilter({
+        options: sizeSelectOptions
+      }),
     }, {
       dataField: 'importance',
       text: 'Importance',
       sort: true,
-      filter: textFilter()
+      filter: selectFilter({
+        options: importanceSelectOptions
+      }),
     }, {
       dataField: 'after_jump',
       text: 'After Jump',
@@ -72,7 +98,9 @@ export default function Plots() {
       dataField: 'gm_actions',
       text: 'GM Actions',
       sort: true,
-      filter: textFilter(),
+      filter: selectFilter({
+        options: gmActionSelectOptions
+      }),
     }, {
       dataField: 'text_npc_first_message',
       text: 'Text NPC Message First?',

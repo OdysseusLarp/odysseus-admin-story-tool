@@ -18,11 +18,6 @@ export default function Artifacts() {
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  const selectOptions = {
-    true: 'Yes',
-    false: 'No'
-  };
-
   React.useEffect(() => {
     getArtifacts().then(data => setArtifacts(data));
   }, []);
@@ -30,6 +25,19 @@ export default function Artifacts() {
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
+
+  const originSelectOptions = {
+    "Elder": 'Elder',
+    "EOC": 'EOC',
+    "Machine": 'Machine',
+    "Earth": 'Earth',
+    "Unknown": 'Unknown',
+  };
+
+  const selectOptions = {
+    true: 'Yes',
+    false: 'No'
+  };
   
   const columns = [{
       dataField: '_row_index_placeholder',
@@ -41,7 +49,7 @@ export default function Artifacts() {
       align: 'center'
     }, {
       dataField: 'catalog_id',
-      text: 'Name',
+      text: 'Catalog ID',
       sort: true,
       filter: textFilter(),
       formatter: (cell, row) => {
@@ -49,14 +57,19 @@ export default function Artifacts() {
       }
     }, {
       dataField: 'name',
-      text: 'Type',
+      text: 'Name',
       sort: true,
-      filter: textFilter()
+      filter: textFilter(),
+      headerStyle: () => {
+        return { width: '17%', textAlign: 'left' };
+      },
     }, {
       dataField: 'type',
       text: 'Origin',
       sort: true,
-      filter: textFilter()
+      filter: selectFilter({
+        options: originSelectOptions
+      }),
     }, {
       dataField: 'discovered_at',
       text: 'Discovered At',
