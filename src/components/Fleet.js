@@ -1,9 +1,10 @@
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import React from "react";
 import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
+import { Container, Row, Col } from "react-bootstrap";
 
 import './Fleet.css';
 
@@ -26,6 +27,24 @@ export default function Fleet() {
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
+
+  const classSelectOptions = {
+    "Aurora Class Explorer": 'Aurora Class Explorer',
+    "Stellar Class Battlecruiser": 'Stellar Class Battlecruiser',
+    "Helios Class Corvette": 'Helios Class Corvette',
+    "Luna Class Cargo Carrier": 'Luna Class Cargo Carrier',
+    "Eclipse Class Frigate": 'Eclipse Class Frigate',
+  };
+
+  const statusSelectOptions = {
+    "Present and accounted for": 'Accounted',
+    "Destroyed": 'Destroyed',
+  };
+
+  const typeSelectOptions = {
+    "Military": 'Military',
+    "Civilian": 'Civilian',
+  };
   
   const columns = [{
       dataField: '_row_index_placeholder',
@@ -47,14 +66,6 @@ export default function Fleet() {
         return <Link to={`/fleet/${row.id}`}>{cell}</Link>
       }
     }, {
-      dataField: 'id',
-      text: 'ID',
-      sort: true,
-      headerStyle: () => {
-        return { width: '10%', textAlign: 'left' };
-      },
-      filter: textFilter()
-    }, {
       dataField: 'description',
       text: 'Description',
       sort: true,
@@ -63,12 +74,25 @@ export default function Fleet() {
       dataField: 'class',
       text: 'Class',
       sort: true,
-      filter: textFilter()
+      headerStyle: () => {
+        return { width: '20%', textAlign: 'left' };
+      },
+      filter: selectFilter({
+        options: classSelectOptions
+      }),
     }, {
       dataField: 'status',
       text: 'Status',
       sort: true,
-      filter: textFilter()
+      headerStyle: () => {
+        return { width: '13%', textAlign: 'left' };
+      },
+      formatter: (cell, row) => {
+        return cell === 'Present and accounted for' ? "Accounted" : cell
+      },
+      filter: selectFilter({
+        options: statusSelectOptions
+      }),
     }, {
       dataField: 'type',
       text: 'Type',
@@ -76,7 +100,9 @@ export default function Fleet() {
       headerStyle: () => {
         return { width: '10%', textAlign: 'left' };
       },
-      filter: textFilter()
+      filter: selectFilter({
+        options: typeSelectOptions
+      }),
     }, {
       dataField: 'position.name',
       text: 'Position',
@@ -85,22 +111,6 @@ export default function Fleet() {
         return { width: '10%', textAlign: 'left' };
       },
       filter: textFilter()
-    }, {
-      dataField: 'fighter_count',
-      text: 'Fighter Count',
-      sort: true,
-      headerStyle: () => {
-        return { width: '5%', textAlign: 'center' };
-      },
-      align: 'center'
-    }, {
-      dataField: 'transporter_count',
-      text: 'Transporter Count',
-      sort: true,
-      headerStyle: () => {
-        return { width: '5%', textAlign: 'center' };
-      },
-      align: 'center'
     }, {
       dataField: 'person_count',
       text: 'Person Count',
@@ -166,6 +176,11 @@ export default function Fleet() {
 
   return (
     <div className='fleet'>
+    <Container fluid className='ship'>
+      <Row>
+        <Col sm><p className='mini-header'>Total souls alive: {fleet.map(ship => parseInt(ship.person_count)).reduce((a, b) => a + b, 0)}</p></Col>
+      </Row>
+      </Container>
       <BootstrapTable
         bootstrap4
         striped

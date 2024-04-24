@@ -55,3 +55,15 @@ h1.message {
 .modal .caption{
     font-weight: bold;
 }
+
+.splitscreen {
+    display: flex;
+}
+
+.splitscreen .left {
+    flex: 0.8;
+}
+
+.splitscreen .right {
+    flex: 0.2;
+}

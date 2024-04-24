@@ -217,7 +217,8 @@ const CreateNewMessageModal = (props) => {
               }} />
             <Form.Label>GM Notes:</Form.Label>
             <Form.Control
-              type="text"
+              as="textarea"
+              rows={6}
               autoComplete="off"
               value={newMessage?.gm_notes}
               onChange={(event) => {
