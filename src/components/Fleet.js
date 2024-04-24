@@ -37,7 +37,7 @@ export default function Fleet() {
   };
 
   const statusSelectOptions = {
-    "Present and accounted for": 'Present and accounted for',
+    "Present and accounted for": 'Accounted',
     "Destroyed": 'Destroyed',
   };
 
@@ -74,6 +74,9 @@ export default function Fleet() {
       dataField: 'class',
       text: 'Class',
       sort: true,
+      headerStyle: () => {
+        return { width: '20%', textAlign: 'left' };
+      },
       filter: selectFilter({
         options: classSelectOptions
       }),
@@ -81,6 +84,12 @@ export default function Fleet() {
       dataField: 'status',
       text: 'Status',
       sort: true,
+      headerStyle: () => {
+        return { width: '13%', textAlign: 'left' };
+      },
+      formatter: (cell, row) => {
+        return cell === 'Present and accounted for' ? "Accounted" : cell
+      },
       filter: selectFilter({
         options: statusSelectOptions
       }),
