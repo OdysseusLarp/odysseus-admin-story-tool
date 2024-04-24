@@ -33,6 +33,20 @@ export default function Messages(props) {
     "Not yet": 'Not yet'
   };
 
+  const typeSelectOptions = {
+    "Text NPC": 'Text NPC',
+    "EVA": 'EVA',
+    "Fleet Comms": 'Fleet Comms',
+    "Fleet Secretary": 'Fleet Secretary',
+    "Fleet Admiral": 'Fleet Admiral',
+    "Ship Log - Success": 'Ship Log - Success',
+    "Ship Log - Info": 'Ship Log - Info',
+    "Ship Log - Warning": 'Ship Log - Warning',
+    "Ship Log - Error": 'Ship Log - Error',
+    "News": 'News',
+    "Gray Radio": 'Gray Radio',
+  };
+
   const columns = [{
       dataField: '_row_index_placeholder',
       text: 'Row',
@@ -84,7 +98,9 @@ export default function Messages(props) {
       dataField: 'type',
       text: 'Type',
       sort: true,
-      filter: textFilter()
+      filter: selectFilter({
+        options: typeSelectOptions
+      }),
     }, {
       dataField: 'after_jump',
       text: 'After Jump',

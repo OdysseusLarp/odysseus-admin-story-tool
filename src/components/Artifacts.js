@@ -1,6 +1,6 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
@@ -25,6 +25,19 @@ export default function Artifacts() {
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
+
+  const originSelectOptions = {
+    "Elder": 'Elder',
+    "EOC": 'EOC',
+    "Machine": 'Machine',
+    "Earth": 'Earth',
+    "Unknown": 'Unknown',
+  };
+
+  const selectOptions = {
+    true: 'Yes',
+    false: 'No'
+  };
   
   const columns = [{
       dataField: '_row_index_placeholder',
@@ -36,7 +49,7 @@ export default function Artifacts() {
       align: 'center'
     }, {
       dataField: 'catalog_id',
-      text: 'Name',
+      text: 'Catalog ID',
       sort: true,
       filter: textFilter(),
       formatter: (cell, row) => {
@@ -44,14 +57,19 @@ export default function Artifacts() {
       }
     }, {
       dataField: 'name',
-      text: 'Type',
+      text: 'Name',
       sort: true,
-      filter: textFilter()
+      filter: textFilter(),
+      headerStyle: () => {
+        return { width: '17%', textAlign: 'left' };
+      },
     }, {
       dataField: 'type',
       text: 'Origin',
       sort: true,
-      filter: textFilter()
+      filter: selectFilter({
+        options: originSelectOptions
+      }),
     }, {
       dataField: 'discovered_at',
       text: 'Discovered At',
@@ -67,6 +85,14 @@ export default function Artifacts() {
       text: 'Discovered From',
       sort: true,
       filter: textFilter()
+    }, {
+      dataField: 'is_visible',
+      text: 'Visible',
+      sort: true,
+      formatter: cell => selectOptions[cell],
+      filter: selectFilter({
+        options: selectOptions
+      })
   }];
 
   const customTotal = (from, to, size) => (

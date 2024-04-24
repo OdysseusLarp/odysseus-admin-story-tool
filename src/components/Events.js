@@ -167,7 +167,6 @@ export default function Events(props) {
     filter: selectFilter({
       options: selectNPCLocation
     })
-
   }];
 
   const customTotal = (from, to, size) => (
