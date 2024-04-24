@@ -164,14 +164,13 @@ export default function Character(props) {
           <Row>
             <Col sm>&nbsp;</Col>
           </Row>
-
           <Row>
             <Col sm={4}><span className='mini-header'>Plots</span>
               <span>{characterStory.plots.length < 1 ? <p>No linked plots</p> : <ul> {characterStory.plots.map(p => <li key={p.id}>
                 <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
               </ul>
               }</span></Col>
-                          <Col sm={8}><span className='mini-header'>Events</span>
+            <Col sm={8}><span className='mini-header'>Events</span>
               <span>{characterStory.events.length < 1 ? <p>No linked Events</p> : <ul> {characterStory.events.map(e => <li key={e.id}>
                 <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
               </ul>
@@ -214,12 +213,16 @@ export default function Character(props) {
           {<ul>{personal_history.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}</ul>}
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Family</span></Col>
+            <Col sm><span className='mini-header'>Other known relations</span></Col>
           </Row>
-          {<ul>{character.family.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation}, <span>{person.status}, {is_npc(person)}, {person.ship_id}</span>)</Col></Row></li>)}</ul>}
           <Row className='row-mini-header'>
-            <Col sm><span className='mini-header new'>Other known relations</span></Col>
+            <Col sm>
+              {<ul>{character.family.map(person => <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation}, <span>{person.status}, {is_npc(person)}, {person.ship_id}</span>)</li>)}</ul>}
+            </Col>
+            <Col sm>
+              {<ul>{characterStory.relations.map(person => <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span> ({person.relation}, <span>{person.status}, {is_npc(person)}, {person.ship}</span>)</li>)}</ul>}
+            </Col>
           </Row>
-          {<span className='new'><ul><li>Name Surname (<span className='data-found'>status, ship, is_character</span>): relation text</li><li>Name Surname2 (<span className='data-found'>status, ship, is_character</span>): relation text</li></ul></span>}
           <Row className='row-mini-header'>
 
             <Row>
