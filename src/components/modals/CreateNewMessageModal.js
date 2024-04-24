@@ -41,6 +41,10 @@ const CreateNewMessageModal = (props) => {
   const [events, setEvents] = React.useState([]);
   const [newMessage, setNewMessage] = React.useState(DEFAULT_MESSAGE_STATE);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [selectedSender, setSelectedSender] = React.useState([]);
+  const [selectedReceivers, setSelectedReceivers] = React.useState([]);
+  const [selectedPlots, setSelectedPlots] = React.useState([]);
+  const [selectedEvents, setSelectedEvents] = React.useState([]);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -65,23 +69,16 @@ const CreateNewMessageModal = (props) => {
     fetchData();
   }, []);
 
-  const characterOptions = characters.map(character => {
-    return {
-      value: character.id,
-      label: character.full_name
-    }});
+  // Generic function to create options for select dropdowns
+  const createOptions = (data, valueProperty, labelProperty) => data.map(item => ({
+    value: item[valueProperty],
+    label: item[labelProperty]
+  }));
 
-  const plotOptions = plots.map(plot => {
-    return {
-      value: plot.id,
-      label: plot.name
-  }});
+  const characterOptions = createOptions(characters, 'id', 'full_name');
+  const plotOptions = createOptions(plots, 'id', 'name');
+  const eventOptions = createOptions(events, 'id', 'name');
 
-  const eventOptions = events.map(event => {
-    return {
-      value: event.id,
-      label: event.name
-  }});
 
   const messageTypeOptions = [
     {value: 'Text NPC', label: 'Text NPC'},
@@ -100,6 +97,10 @@ const CreateNewMessageModal = (props) => {
   const afterSubmit = (messageId) => {
     handleClose(false);
     setNewMessage(DEFAULT_MESSAGE_STATE);
+    setSelectedSender(null);
+    setSelectedReceivers([]);
+    setSelectedPlots([]);
+    setSelectedEvents([]);
     setIsSubmitting(false);
     navigate(`/messages/${messageId}`);
   };
@@ -109,7 +110,14 @@ const CreateNewMessageModal = (props) => {
       return;
     }
     setIsSubmitting(true);
-    const response = await upsertMessage(newMessage);
+    const data = {
+      ...newMessage,
+      sender_person_id: selectedSender?.value ?? null,
+      receivers: selectedReceivers?.map(receiver => receiver.value) ?? [],
+      plots: selectedPlots?.map(plot => plot.value) ?? [],
+      events: selectedEvents?.map(event => event.value) ?? [],
+    };
+    const response = await upsertMessage(data);
 
     if (response.ok) {
       const data = await response.json();
@@ -148,25 +156,22 @@ const CreateNewMessageModal = (props) => {
           />
           <Form.Label>Sender:</Form.Label>
           <Select
-            value={characterOptions[characterOptions.findIndex(option => option.value === newMessage?.sender_person_id)]}
+            value={selectedSender}
+            onChange={setSelectedSender}
             isClearable={true}
             isSearchable={true}
             isDisabled={newMessage.type === 'Text NPC' ? false : true}
             options={characterOptions}
-            onChange={(event) => {
-              setNewMessage({...newMessage, sender_person_id: event === null ? null : event.value })}}
           />
           <Form.Label>Receiver(s):</Form.Label>
           <Select
+            value={selectedReceivers}
+            onChange={setSelectedReceivers}
             isMulti
             isClearable={true}
             isDisabled={['EVA', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral'].includes(newMessage.type) ? false : true}
             isSearchable={true}
             options={characterOptions}
-            onChange={(event) => {
-              console.log("ReceiverEvent", event);
-              setNewMessage({...newMessage, receivers: event?.map(receivers => receivers.id = receivers.value)});
-            }}
           />
           <Form.Label>Message type: (*)</Form.Label>
           <Select
@@ -235,23 +240,21 @@ const CreateNewMessageModal = (props) => {
             </Form.Select>
             <Form.Label>Plots:</Form.Label>
             <Select
+            value={selectedPlots}
+            onChange={setSelectedPlots}
             isMulti
             isClearable={true}
             isSearchable={true}
             options={plotOptions}
-            onChange={(event) => {
-              setNewMessage({...newMessage, plots: event.map(plots => plots.id = plots.value)});
-            }}
             />
             <Form.Label>Events:</Form.Label>
             <Select
+            value={selectedEvents}
+            onChange={setSelectedEvents}
             isMulti
             isClearable={true}
             isSearchable={true}
             options={eventOptions}
-            onChange={(event) => {
-              setNewMessage({...newMessage, events: event.map(events => events.id = events.value)});
-            }}
             />
           </Form.Group>
           <Form.Group
