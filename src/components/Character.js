@@ -19,6 +19,14 @@ const getCharacterStory = async (id) => {
   return character;
 }
 
+const getFleet = async () => {
+  const response = await fetch(apiUrl("/fleet?show_hidden=true"));
+  const fleet = await response.json();
+  return fleet;
+}
+
+
+
 const is_npc = (character) => {
   if (!character)
     return null
@@ -33,6 +41,7 @@ const is_npc = (character) => {
 export default function Character(props) {
   const [character, setCharacter] = React.useState(null);
   const [characterStory, setCharacterStory] = React.useState(null);
+  const [fleet, setFleet] = React.useState([]);
 
   const params = useParams();
 
@@ -46,11 +55,14 @@ export default function Character(props) {
     getCharacterStory(params.id).then((s) => setCharacterStory(s));
   }, [params.id, setCharacterStory]);
 
+  React.useEffect(() => {
+    getFleet().then(data => setFleet(data));
+  }, []);
+
 
   React.useEffect(() => {
     props.changeTab('Characters');
   }, [props]);
-
 
   const renderCharacter = () => {
     if (!character) return null;
@@ -60,7 +72,11 @@ export default function Character(props) {
     const character_summary = character.summary ? character.summary.split('\n') : [];
     const personal_secret_info = character.personal_secret_info ? character.personal_secret_info.split('\n') : [];
 
-
+    const getShipById = (ship_id) => {  
+      const shipName = (ship_id ? fleet.find(ship => ship.id === ship_id)?.name : "");
+      return shipName;
+    
+    }
 
     return (
       <div className='character'>
@@ -213,18 +229,13 @@ export default function Character(props) {
           {<ul>{personal_history.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}</ul>}
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Family</span></Col>
+          </Row>
+          {<ul>{character.family.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation}, <span>{person.status}, {is_npc(person)}, {person.ship_id ? getShipById(person.ship_id) : ""}</span>)</Col></Row></li>)}</ul>}
+          <Row>
             <Col sm><span className='mini-header'>Other known relations</span></Col>
           </Row>
+          {<ul>{characterStory.relations.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span> ({person.relation}, <span>{person.status}, {is_npc(person)}, {person.ship ? getShipById(person.ship) : ""}</span>)</Col></Row></li>)}</ul>}
           <Row className='row-mini-header'>
-            <Col sm>
-              {<ul>{character.family.map(person => <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation}, <span>{person.status}, {is_npc(person)}, {person.ship_id}</span>)</li>)}</ul>}
-            </Col>
-            <Col sm>
-              {<ul>{characterStory.relations.map(person => <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span> ({person.relation}, <span>{person.status}, {is_npc(person)}, {person.ship}</span>)</li>)}</ul>}
-            </Col>
-          </Row>
-          <Row className='row-mini-header'>
-
             <Row>
               <Col sm><span className='mini-header'>Classified personal data:</span></Col>
             </Row>
