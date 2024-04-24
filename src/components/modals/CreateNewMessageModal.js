@@ -20,11 +20,25 @@ const getNpcs = async () => {
   return npcs.persons;
 }
 
-const DEFAULT_MESSAGE_STATE = {type: 'Text NPC', locked: false, sent: 'Not yet' };
+const getPlots = async () => {
+  const response = await fetch(apiUrl("/story/plots"));
+  const plots = await response.json();
+  return plots;
+}
+
+const getEvents = async () => {
+  const response = await fetch(apiUrl("/story/events"));
+  const events = await response.json();
+  return events;
+}
+
+const DEFAULT_MESSAGE_STATE = {type: 'Text NPC', locked: false, sent: 'Not yet', receivers: [], sender: null };
 
 const CreateNewMessageModal = (props) => {
   const { showMessageNew, handleClose } = props;
   const [characters, setCharacters] = React.useState([]);
+  const [plots, setPlots] = React.useState([]);
+  const [events, setEvents] = React.useState([]);
   const [newMessage, setNewMessage] = React.useState(DEFAULT_MESSAGE_STATE);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const navigate = useNavigate();
@@ -32,13 +46,17 @@ const CreateNewMessageModal = (props) => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const [charactersData, npcsData] = await Promise.all([
+        const [charactersData, npcsData, plotsData, eventsData] = await Promise.all([
           getCharacters(),
           getNpcs(),
+          getPlots(),
+          getEvents(),
         ]);
 
         const allCharacters = [...charactersData, ...npcsData];
         setCharacters(allCharacters);
+        setPlots(plotsData);
+        setEvents(eventsData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -52,7 +70,18 @@ const CreateNewMessageModal = (props) => {
       value: character.id,
       label: character.full_name
     }});
-  characterOptions.unshift({value: null, label: "No Sender"});
+
+  const plotOptions = plots.map(plot => {
+    return {
+      value: plot.id,
+      label: plot.name
+  }});
+
+  const eventOptions = events.map(event => {
+    return {
+      value: event.id,
+      label: event.name
+  }});
 
   const messageTypeOptions = [
     {value: 'Text NPC', label: 'Text NPC'},
@@ -80,7 +109,7 @@ const CreateNewMessageModal = (props) => {
       return;
     }
     setIsSubmitting(true);
-
+    console.log("## new message", newMessage);
     const response = await upsertMessage(newMessage);
 
     if (response.ok) {
@@ -107,7 +136,7 @@ const CreateNewMessageModal = (props) => {
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-          <Form.Label>Name:</Form.Label>
+          <Form.Label>Name: (*)</Form.Label>
           <Form.Control
             type="text"
             autoComplete="off"
@@ -121,20 +150,24 @@ const CreateNewMessageModal = (props) => {
           <Form.Label>Sender:</Form.Label>
           <Select
             value={characterOptions[characterOptions.findIndex(option => option.value === newMessage?.sender_person_id)]}
-            isClearable={false}
+            isClearable={true}
             isSearchable={true}
             isDisabled={newMessage.type === 'Text NPC' ? false : true}
             options={characterOptions}
-            onChange={(event) => {setNewMessage({...newMessage, sender_person_id: event.value })}}
+            onChange={(event) => {
+              console.log("rdrtdh", event);
+              setNewMessage({...newMessage, sender_person_id: event === null ? null : event.value })}}
           />
           <Form.Label>Receiver(s):</Form.Label>
           <Select
             isMulti
+            isClearable={true}
             isDisabled={['EVA', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral'].includes(newMessage.type) ? false : true}
             isSearchable={true}
             options={characterOptions}
             onChange={(event) => {
-              setNewMessage({...newMessage, receivers: event.map(receivers => receivers.id = receivers.value)});
+              console.log("ReceiverEvent", event);
+              setNewMessage({...newMessage, receivers: event?.map(receivers => receivers.id = receivers.value)});
             }}
           />
           <Form.Label>Message type: (*)</Form.Label>
@@ -168,7 +201,7 @@ const CreateNewMessageModal = (props) => {
               setNewMessage({...newMessage, sender_person_id, type: event.value});
             }}
           />
-          <Form.Label>Happens after jump:</Form.Label>
+          <Form.Label>Happens after jump: (*)</Form.Label>
           <Form.Select
             disabled={newMessage?.locked}
             value={newMessage?.after_jump}
@@ -202,12 +235,32 @@ const CreateNewMessageModal = (props) => {
               <option value="No Need">No Need</option>
               <option value="Repeatable">Repeatable</option>
             </Form.Select>
+            <Form.Label>Plots:</Form.Label>
+            <Select
+            isMulti
+            isClearable={true}
+            isSearchable={true}
+            options={plotOptions}
+            onChange={(event) => {
+              setNewMessage({...newMessage, plots: event.map(plots => plots.id = plots.value)});
+            }}
+            />
+            <Form.Label>Events:</Form.Label>
+            <Select
+            isMulti
+            isClearable={true}
+            isSearchable={true}
+            options={eventOptions}
+            onChange={(event) => {
+              setNewMessage({...newMessage, events: event.map(events => events.id = events.value)});
+            }}
+            />
           </Form.Group>
           <Form.Group
             className="mb-3"
             controlId="message"
           >
-            <Form.Label>Message:</Form.Label>
+            <Form.Label>Message: (*)</Form.Label>
             <Form.Control
               as="textarea"
               rows={10}
