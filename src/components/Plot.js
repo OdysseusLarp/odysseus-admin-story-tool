@@ -83,19 +83,6 @@ export default function Plot(props) {
           <div className='plot'>
             <Container fluid className='plot'>
               <Row>
-                <Col sm><span className='mini-header'>Characters Involved</span>
-                  {plot.persons.length<1 ? <p>No linked characters</p> : <ul> {relatedCharacters.map(p => <li key={p.id}>
-                    <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link></span>
-                    <span> - {p.is_character ? "Character" : "NPC"}</span></li>)}
-                    </ul>
-                  }</Col>
-              </Row>
-              <Row>
-                <Col sm><span className='mini-header'>Character Groups Involved</span></Col>
-              </Row>
-              {characterGroups.length <1 ? <p>No linked character groups</p> : 
-              <ul>{characterGroups.map(g => <li key={g}><Row><Col sm>{g}</Col></Row></li>)}</ul>}
-              <Row>
                 <Col sm><span className='mini-header'>Basic Info</span></Col>
               </Row>
               <Row>
@@ -120,27 +107,6 @@ export default function Plot(props) {
                 <Col sm>&nbsp;</Col>
               </Row>
               <Row>
-                <Col sm><span className='mini-header'>Events</span></Col>
-              </Row>
-              {plot.events.length<1 ? <p>No linked events</p> : <ul> {plot.events.map(e => <li key={e.id}>
-                  <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
-                  </ul>
-              }
-              <Row>
-                <Col sm><span className='mini-header'>Messages</span></Col>
-              </Row>
-              {relatedMessages.length<1 ? <p>No messages</p> : <ul> {relatedMessages.map(m => <li key={m.id}>
-                  <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</li>)}
-                  </ul>
-              }
-              <Row>
-                <Col sm><span className='mini-header'>Artifacts</span></Col>
-              </Row>
-              {plot.artifacts.length<1 ? <p>No linked artifacts</p> : <ul> {plot.artifacts.map(a => <li key={a.id}>
-                  <Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>Artifact id {a.id}, {a.name}</Link></li>)}
-                  </ul>
-              }
-              <Row>
                 <Col sm><span className='mini-header'>Short Description</span></Col>
               </Row>
               <Row>
@@ -157,6 +123,35 @@ export default function Plot(props) {
               {plot_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>
                 {plot_notes.map(n => <li key={n}>{n}</li>)}
               </ul>}
+              <Row>
+                <Col sm={4}><span className='mini-header'>Characters Involved</span>
+                  {plot.persons.length<1 ? <p>No linked characters</p> : <ul> {relatedCharacters.map(p => <li key={p.id}>
+                    <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link></span>
+                    <span> - {p.is_character ? "Character" : "NPC"}</span></li>)}
+                    </ul>
+                  }</Col>
+                <Col sm={4}><span className='mini-header'>Character Groups Involved</span>
+                {characterGroups.length <1 ? <p>No linked character groups</p> : 
+              <ul>{characterGroups.map(g => <li key={g}><Row><Col sm>{g}</Col></Row></li>)}</ul>}
+              </Col></Row>
+              <Row>
+                <Col sm={4}><span className='mini-header'>Events</span>
+                  {plot.events.length<1 ? <p>No linked events</p> : <ul> {plot.events.map(e => <li key={e.id}>
+                    <span className='events'><Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></span></li>)}
+                  </ul>}
+                </Col>
+                <Col sm={4}><span className='mini-header'>Artifacts</span>
+                  {plot.artifacts.length<1 ? <p>No linked artifacts</p> : <ul> {plot.artifacts.map(a => <li key={a.id}>
+                    <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>Artifact id {a.id}, {a.name}</Link></span></li>)}
+                  </ul>}
+                </Col>
+              </Row>
+              <Row>
+                <Col sm><span className='mini-header'>Messages</span>
+                {relatedMessages.length<1 ? <p>No messages</p> : <ul> {relatedMessages.map(m => <li key={m.id}>
+                  <span className='messages'><Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</span></li>)}
+                    </ul>}
+              </Col></Row>
               <Row>
                 <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
               </Row>
