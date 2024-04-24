@@ -67,17 +67,6 @@ export default function Artifact(props) {
             <Col sm><span className='mini-header'>Basic Info</span></Col>
           </Row>
           <Row>
-<<<<<<< Updated upstream
-            <Col sm={4}><span className='caption'>Name: </span>{artifact.catalog_id}</Col>
-            <Col sm={4}><span className='caption'>ID: </span>{artifact.id}</Col>
-          </Row>
-          <Row>
-            <Col sm={4}><span className='caption'>Type: </span>{artifact.name}</Col>
-            <Col sm={4}><span className='caption'>Catalog ID: </span>{artifact.catalog_id}</Col>
-          </Row>
-          <Row>
-            <Col sm={4}><span className='caption'>Origin: </span>{artifact.type}</Col>
-=======
             <Col sm={4}><span className='caption'>Name: </span>{artifact.name}</Col>
             <Col sm={4}><span className='caption'>ID: </span>{artifact.id}</Col>
           </Row>
@@ -86,7 +75,6 @@ export default function Artifact(props) {
             <Col sm={4}><span className='caption'>Catalog ID: </span>{artifact.catalog_id}</Col>
           </Row>
           <Row>
->>>>>>> Stashed changes
             <Col sm={4}><span className='caption'>Visible on DataHub: </span>{artifact.is_visible ? "Yes" : "No"}</Col>
           </Row>
           <Row className='row-mini-header'>
