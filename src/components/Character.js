@@ -25,7 +25,11 @@ const getFleet = async () => {
   return fleet;
 }
 
-
+const getMessages = async () => {
+  const response = await fetch(apiUrl(`/story/messages/`));
+  const messages = await response.json();
+  return messages;
+}
 
 const is_npc = (character) => {
   if (!character)
@@ -42,6 +46,7 @@ export default function Character(props) {
   const [character, setCharacter] = React.useState(null);
   const [characterStory, setCharacterStory] = React.useState(null);
   const [fleet, setFleet] = React.useState([]);
+  const [messages, setMessages] = React.useState([]);
 
   const params = useParams();
 
@@ -56,7 +61,21 @@ export default function Character(props) {
   }, [params.id, setCharacterStory]);
 
   React.useEffect(() => {
-    getFleet().then(data => setFleet(data));
+    const fetchData = async () => {
+      try {
+        const [fleetData, messageData] = await Promise.all([
+          getFleet(),
+          getMessages(),
+        ]);
+
+        setFleet(fleetData);
+        setMessages(messageData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
 
@@ -71,11 +90,13 @@ export default function Character(props) {
     const personal_history = character.entries.filter((e) => e.type === "PERSONAL").map((e) => e.entry.split('\n\n')).flat();
     const character_summary = character.summary ? character.summary.split('\n') : [];
     const personal_secret_info = character.personal_secret_info ? character.personal_secret_info.split('\n') : [];
+    const relatedMessageIds = characterStory.messages.map(m => m.id);
+    const relatedMessages = messages.filter(m => relatedMessageIds.includes(m.id));
+
 
     const getShipById = (ship_id) => {  
       const shipName = (ship_id ? fleet.find(ship => ship.id === ship_id)?.name : "");
       return shipName;
-    
     }
 
     return (
@@ -169,17 +190,12 @@ export default function Character(props) {
             </Col>
           </Row>
           <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
-          <Row>
             <Col sm><span className='mini-header'>GM Notes</span></Col>
           </Row>
           <Row>
             <Col sm><span>{character.gm_notes < 1 ? <p>No GM notes available.</p> : character.gm_notes}</span></Col>
           </Row>
-          <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
+
           <Row>
             <Col sm={4}><span className='mini-header'>Plots</span>
               <span>{characterStory.plots.length < 1 ? <p>No linked plots</p> : <ul> {characterStory.plots.map(p => <li key={p.id}>
@@ -191,6 +207,14 @@ export default function Character(props) {
                 <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
               </ul>
               }</span></Col>
+          </Row>
+          <Row>
+            <Col sm><span className='mini-header'>Messages</span>
+              <span>{characterStory.messages.length < 1 ? <p>No messages</p> : <ul> {relatedMessages.map(m => <li key={m.id}>
+                <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</li>)}
+              </ul>
+              }</span>
+            </Col>
           </Row>
           <Row>
             <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
@@ -223,17 +247,19 @@ export default function Character(props) {
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header' id='personal'>Personal</span></Col>
           </Row>
-          <Row>
-            <Col sm><span className='caption'>Personal History:</span>{personal_history.length === 0 && " None"}</Col>
-          </Row>
+          
+            {personal_history.length === 0 && <Row><Col sm>None</Col></Row>}
+
           {<ul>{personal_history.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}</ul>}
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Family</span></Col>
           </Row>
+          {character.family.length === 0 && <Row><Col sm>None</Col></Row>}
           {<ul>{character.family.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link></span> ({person._pivot_relation}, <span>{person.status}, {is_npc(person)}, {person.ship_id ? getShipById(person.ship_id) : ""}</span>)</Col></Row></li>)}</ul>}
           <Row>
             <Col sm><span className='mini-header'>Other known relations</span></Col>
           </Row>
+          {characterStory.relations.length === 0 && <Row><Col sm>None</Col></Row>}
           {<ul>{characterStory.relations.map(person => <li><Row key={person}><Col sm><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span> ({person.relation}, <span>{person.status}, {is_npc(person)}, {person.ship ? getShipById(person.ship) : ""}</span>)</Col></Row></li>)}</ul>}
           <Row className='row-mini-header'>
             <Row>
@@ -290,6 +316,7 @@ export default function Character(props) {
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Groups/Roles</span></Col>
           </Row>
+          {character.groups.length === 0 && <Row><Col sm>None</Col></Row>}
           <ul>{character.groups.map(group => <li><Row key={group}><Col sm>{group}</Col></Row></li>)}</ul>
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Metadata</span></Col>
