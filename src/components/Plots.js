@@ -3,24 +3,22 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import useSWR from "swr";
 
 import './Plots.css';
 
-const getPlots = async () => {
-  const response = await fetch(apiUrl("/story/plots"));
-  const plots = await response.json();
-  return plots;
-}
-
 export default function Plots() {
-  const [plots, setPlots] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    getPlots().then(data => setPlots(data));
-  }, []);
+  const { data: plots, error, isLoading } = useSWR(
+    "/story/plots",
+    apiGetRequest
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Failed to load data</div>;
 
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;

@@ -3,26 +3,23 @@ import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import React from "react";
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
 import { Container, Row, Col } from "react-bootstrap";
+import useSWR from "swr";
 
 import './Fleet.css';
 
-
-const getFleet = async () => {
-  const response = await fetch(apiUrl("/fleet?show_hidden=true"));
-  const fleet = await response.json();
-  return fleet;
-}
-
 export default function Fleet() {
-  const [fleet, setFleet] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    getFleet().then(data => setFleet(data));
-  }, []);
+  const { data: fleet, error, isLoading } = useSWR(
+    "/fleet?show_hidden=true",
+    apiGetRequest
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Failed to load data</div>;
 
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
@@ -45,7 +42,7 @@ export default function Fleet() {
     "Military": 'Military',
     "Civilian": 'Civilian',
   };
-  
+
   const columns = [{
       dataField: '_row_index_placeholder',
       text: 'Row',

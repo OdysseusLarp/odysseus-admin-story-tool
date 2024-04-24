@@ -3,24 +3,22 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter, selectFilter, Comparator } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import useSWR from "swr";
 
 import './Messages.css';
 
-const getMessages = async () => {
-  const response = await fetch(apiUrl("/story/messages"));
-  const messages = await response.json();
-  return messages;
-}
-
 export default function Messages(props) {
-  const [messages, setMessages] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    getMessages().then(data => setMessages(data));
-  }, []);
+  const { data: messages, error, isLoading } = useSWR(
+    "/story/messages",
+    apiGetRequest
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Failed to load data</div>;
 
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;

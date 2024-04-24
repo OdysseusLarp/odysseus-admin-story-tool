@@ -3,24 +3,22 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import useSWR from "swr";
 
 import './Artifacts.css';
 
-const getArtifacts = async () => {
-  const response = await fetch(apiUrl("/science/artifact"));
-  const artifacts = await response.json();
-  return artifacts;
-}
-
 export default function Artifacts() {
-  const [artifacts, setArtifacts] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    getArtifacts().then(data => setArtifacts(data));
-  }, []);
+  const { data: artifacts, error, isLoading } = useSWR(
+    "/science/artifact",
+    apiGetRequest
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Failed to load data</div>;
 
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;

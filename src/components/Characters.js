@@ -2,46 +2,31 @@ import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter, selectFilter, Comparator } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import useSWR from "swr";
 
 import { Link } from "react-router-dom";
 
 import './Characters.css';
 
-const getCharacters = async () => {
-  const response = await fetch(apiUrl("/person?show_hidden=true&is_character=true"));
-  const characters = await response.json();
-  return characters.persons;
-}
-
-const getNpcs = async () => {
-  const response = await fetch(apiUrl("/person?show_hidden=true&is_character=false"));
-  const npcs = await response.json();
-  return npcs.persons;
-}
-
 export default function Characters(props) {
-  const [characters, setCharacters] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [charactersData, npcsData] = await Promise.all([
-          getCharacters(),
-          getNpcs(),
-        ]);
+  const swrCharacters = useSWR(
+    "/person?show_hidden=true&is_character=true",
+    apiGetRequest,
+  );
 
-        const allCharacters = [...charactersData, ...npcsData];
-        setCharacters(allCharacters);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  const swrNpcs = useSWR(
+    "/person?show_hidden=true&is_character=true",
+    apiGetRequest,
+  );
 
-    fetchData();
-  }, []);
+  if (swrCharacters.isLoading || swrNpcs.isLoading) return <div>Loading...</div>;
+  if (swrCharacters.error || swrNpcs.error) return <div>Failed to load data</div>;
+
+  const characters = [...swrCharacters.data.persons, ...swrNpcs.data.persons];
 
   function getRowIndex(cell, row, rowIndex) {
     return (page - 1) * sizePerPage + rowIndex + 1;

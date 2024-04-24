@@ -21,17 +21,6 @@ import { Toaster } from 'react-hot-toast';
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
 
-const TabKeys = {
-  Characters: "Characters",
-  Fleet: "Fleet",
-  Artifacts: "Artifacts",
-  Plots: "Plots",
-  Events: "Events",
-  Messages: "Messages",
-};
-
-const tableRoutes = Object.keys(TabKeys).map((k) => "/" + k.toLowerCase());
-
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -49,9 +38,6 @@ function App() {
       navigate("/characters")
     }
   }, [location.pathname, navigate]);
-  
-  const shouldRenderTable =
-    tableRoutes.includes(location.pathname) || location.pathname === "/";
 
   const onSelectTab = (k) => {
     setKey(k);
@@ -62,44 +48,6 @@ function App() {
 
   const changeTab = (k) => {
     setKey(k);
-  };
-
-  const renderTable = () => {
-    const style = shouldRenderTable ? {} : { display: "none" };
-    return (
-      <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
-        <Tab eventKey="Characters" title="Characters">
-          <div style={style}>
-            <Characters changeTab={changeTab} />
-          </div>
-        </Tab>
-        <Tab eventKey="Fleet" title="Fleet">
-          <div style={style}>
-            <Fleet />
-          </div>
-        </Tab>
-        <Tab eventKey="Artifacts" title="Artifacts">
-          <div style={style}>
-            <Artifacts />
-          </div>
-        </Tab>
-        <Tab eventKey="Plots" title="Plots">
-          <div style={style}>
-            <Plots />
-          </div>
-        </Tab>
-        <Tab eventKey="Events" title="Events">
-          <div style={style}>
-            <Events />
-          </div>
-        </Tab>
-        <Tab eventKey="Messages" title="Messages">
-          <div style={style}>
-            <Messages />
-          </div>
-        </Tab>
-      </Tabs>
-    );
   };
 
   return (
@@ -117,13 +65,26 @@ function App() {
           showMessageNew={showMessageNew}
           handleClose={() => setShowMessageNew(false)}
         />
-      {renderTable()}
+      <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
+        <Tab eventKey="Characters" title="Characters" />
+        <Tab eventKey="Fleet" title="Fleet" />
+        <Tab eventKey="Artifacts" title="Artifacts" />
+        <Tab eventKey="Plots" title="Plots" />
+        <Tab eventKey="Events" title="Events" />
+        <Tab eventKey="Messages" title="Messages" />
+      </Tabs>
       <Routes>
+        <Route path="/fleet" element={<Fleet />} />
         <Route path="/fleet/:id" element={<Ship changeTab={changeTab} />} />
+        <Route path="/characters" element={<Characters changeTab={changeTab} />} />
         <Route path="/characters/:id" element={<Character changeTab={changeTab} />} />
+        <Route path="/artifacts" element={<Artifacts />} />
         <Route path="/artifacts/:id" element={<Artifact changeTab={changeTab} />} />
+        <Route path="/plots" element={<Plots />} />
         <Route path="/plots/:id" element={<Plot changeTab={changeTab} />} />
+        <Route path="/events" element={<Events />} />
         <Route path="/events/:id" element={<Event changeTab={changeTab} />} />
+        <Route path="/messages" element={<Messages />} />
         <Route path="/messages/:id" element={<Message changeTab={changeTab} />} />
         <Route path="*" element={<></>} />
       </Routes>
