@@ -87,21 +87,25 @@ export default function Plot(props) {
               </Row>
               <Row>
                 <Col sm={4}><span className='caption'>GM Actions: </span>{plot.gm_actions}</Col>
-                <Col sm={4}><span className='caption'>Plot size: </span>{plot.size}</Col>
+                <Col sm={4}><span className='caption'>ID: </span>{plot.id}</Col>
               </Row>
               <Row>
                 <Col sm={4}><span className='caption'>Text NPC should send first message: </span>{plot.text_npc_first_message ? "Yes" : "No"}</Col>
-                <Col sm={4}><span className='caption'>Plot themes: </span>
-                {plot.themes.length<1 ? <span>No themes defined</span> : plot.themes}</Col>
+                <Col sm={4}><span className='caption'>Plot size: </span>{plot.size}</Col>
               </Row>
               <Row>
-                <Col sm={4}><span className='caption'>Happens after jump: </span>
-                {plot.after_jump ? plot.after_jump : <span>No jump defined</span>}
-                <span className='new'> (Editable unless plot is locked)</span></Col>
-                <Col sm={4}><span className='caption'>Plot Importance: </span> {plot.importance}</Col>
+                <Col sm={4}>
+                  <span className='caption'>Happens after jump: </span>
+                  {plot.after_jump ? plot.after_jump : <span>No jump defined</span>}
+                </Col>
+                <Col sm={4}>
+                  <span className='caption'>Plot themes: </span>
+                  {plot.themes.length<1 ? <span>No themes defined</span> : plot.themes}
+                </Col>
               </Row>
               <Row>
                 <Col sm={4}><span className='caption'>Locked plot: </span>{plot.locked ? "Yes" : "No"}</Col>
+                <Col sm={4}><span className='caption'>Plot Importance: </span> {plot.importance}</Col>
               </Row>
               <Row>
                 <Col sm>&nbsp;</Col>
@@ -136,19 +140,19 @@ export default function Plot(props) {
               </Col></Row>
               <Row>
                 <Col sm={4}><span className='mini-header'>Events</span>
-                  {plot.events.length<1 ? <p>No linked events</p> : <ul> {plot.events.map(e => <li key={e.id}>
+                  {plot.events.length<1 ? <ul><li>No linked events</li></ul> : <ul> {plot.events.map(e => <li key={e.id}>
                     <span className='events'><Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></span></li>)}
                   </ul>}
                 </Col>
                 <Col sm={4}><span className='mini-header'>Artifacts</span>
-                  {plot.artifacts.length<1 ? <p>No linked artifacts</p> : <ul> {plot.artifacts.map(a => <li key={a.id}>
-                    <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>Artifact id {a.id}, {a.name}</Link></span></li>)}
+                  {plot.artifacts.length<1 ? <ul><li>No linked artifacts</li></ul> : <ul> {plot.artifacts.map(a => <li key={a.id}>
+                    <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>{a.catalog_id}, {a.name}</Link></span></li>)}
                   </ul>}
                 </Col>
               </Row>
               <Row>
                 <Col sm><span className='mini-header'>Messages</span>
-                {relatedMessages.length<1 ? <p>No messages</p> : <ul> {relatedMessages.map(m => <li key={m.id}>
+                {relatedMessages.length<1 ? <ul><li>No messages</li></ul> : <ul> {relatedMessages.map(m => <li key={m.id}>
                   <span className='messages'><Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</span></li>)}
                     </ul>}
               </Col></Row>

@@ -39,23 +39,11 @@ export default function Messages(props) {
       <div>
         <div className='message'>
           <Container fluid className='message'>
-            <Row className='row-mini-header'>
-              <Col sm><span className='mini-header'>Sender</span></Col>
-            </Row>
-            <Row>
-              <Col sm>{message.sender === null ? <ul><li>No sender</li></ul> : <ul>{message.sender?.id && <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> - Card ID: {message.sender?.card_id} </span></li>}</ul>}</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>Receiver(s)</span></Col>
-            </Row>
-            <Row>
-              <Col sm>{message.receivers.length < 1 ? <ul><li>No receivers</li></ul> : <span><ul>{message.receivers?.map(receiver => <li key={receiver?.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> - Card ID: {receiver?.card_id}</span></li>)}</ul></span>}</Col>
-            </Row>
             <Row>
               <Col sm><span className='mini-header'>Basic Info</span></Col>
             </Row>
             <Row>
-              <Col sm={6}><span className='caption'>Message type: </span> {message.type} </Col>
+              <Col sm={6}><span className='caption'>Message type: </span> {message.type}</Col>
             </Row>
             <Row>
               <Col sm={6}><span className='caption'>Happens after jump: </span> {afterJumpEmpty(message.after_jump)}</Col>
@@ -68,6 +56,18 @@ export default function Messages(props) {
             </Row>
             <Row>
               <Col sm>&nbsp;</Col>
+            </Row>
+            <Row>
+              <Col sm><span className='mini-header'>Sender</span></Col>
+            </Row>
+            <Row>
+              <Col sm>{message.sender === null ? <ul><li>No sender</li></ul> : <ul>{message.sender?.id && <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> - Card ID: {message.sender?.card_id} </span></li>}</ul>}</Col>
+            </Row>
+            <Row>
+              <Col sm><span className='mini-header'>Receiver(s)</span></Col>
+            </Row>
+            <Row>
+              <Col sm>{message.receivers.length < 1 ? <ul><li>No receivers</li></ul> : <span><ul>{message.receivers?.map(receiver => <li key={receiver?.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> - Card ID: {receiver?.card_id}</span></li>)}</ul></span>}</Col>
             </Row>
             <Row>
               <Col sm><span className='mini-header'>Plots</span></Col>
@@ -112,14 +112,18 @@ export default function Messages(props) {
 
   return (
     <div>
-      <h1 className='message' id="app-title"> {message?.name}
-        <ButtonGroup>
-          <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)} disabled={message?.sent === 'Yes'}><BiPencil size="24px"/><span>Edit</span></Button>
-          <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={null} disabled={message?.sent === 'Yes'}><BiMailSend size="24px"/><span>Send</span></Button>
-        </ButtonGroup>
-      </h1>
+      <div className='splitscreen'>
+        <div className='left'>
+          <h1 className='message' id="app-title"> {message?.name}</h1>
+        </div>
+        <div className='right message'>
+          <ButtonGroup>
+            <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)} disabled={message?.sent === 'Yes'}><BiPencil size="24px"/><span>Edit</span></Button>
+            <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={null} disabled={message?.sent === 'Yes'}><BiMailSend size="24px"/><span>Send</span></Button>
+          </ButtonGroup>
+        </div>
+      </div>
       {renderMessage()}
-
     </div>
   );
 }
