@@ -13,12 +13,12 @@ const getCharacter = async (id) => {
   return character;
 }
 
-/* const getStoryCharacter = async (id) => {
-  const response = await fetch(apiUrl(/story/person/${id}));
+const getCharacterStory = async (id) => {
+  const response = await fetch(apiUrl(`/story/person/${id}`));
   const character = await response.json();
   return character;
 }
- */
+
 const is_npc = (character) => {
   if (!character)
     return null
@@ -32,7 +32,7 @@ const is_npc = (character) => {
 
 export default function Character(props) {
   const [character, setCharacter] = React.useState(null);
-  /* const [characterStory, setCharacterStory] = React.useState(null); */
+  const [characterStory, setCharacterStory] = React.useState(null);
 
   const params = useParams();
 
@@ -41,15 +41,16 @@ export default function Character(props) {
     getCharacter(params.id).then((s) => setCharacter(s));
   }, [params.id, setCharacter]);
 
-/*   React.useEffect(() => {
+  React.useEffect(() => {
     if (!params.id) return;
     getCharacterStory(params.id).then((s) => setCharacterStory(s));
   }, [params.id, setCharacterStory]);
- */
+
 
   React.useEffect(() => {
     props.changeTab('Characters');
   }, [props]);
+
 
   const renderCharacter = () => {
     if (!character) return null;
@@ -98,7 +99,7 @@ export default function Character(props) {
             <Col sm><span className='caption'>Military Academy: </span>{character.military_academies}</Col>
           </Row>
           <Row>
-          <Col sm>&nbsp;</Col>
+            <Col sm>&nbsp;</Col>
           </Row>
           <Row>
             <Col sm><span className='caption'>File created: </span>{character.created_year}</Col>
@@ -132,9 +133,9 @@ export default function Character(props) {
             <Col sm><span className='caption'>Role: </span>{character.role ? character.role : "-"}</Col>
             <Col sm><span className='caption'>Character group: </span>{character.character_group}</Col>
             <Col sm><span className='caption'>Elder gene: </span>{character.medical_elder_gene ? "Yes" : "No"}</Col>
-            </Row>
+          </Row>
           <Row>
-          <Col sm={4}><span className='caption'>Additional role: </span>{character.role_additional ? character.role_additional : "-"}</Col>
+            <Col sm={4}><span className='caption'>Additional role: </span>{character.role_additional ? character.role_additional : "-"}</Col>
 
             <Col sm={8}><span className='caption'>Special group: </span>{character.special_group ? character.special_group : "-"}</Col>
           </Row>
@@ -164,27 +165,18 @@ export default function Character(props) {
             <Col sm>&nbsp;</Col>
           </Row>
 
-          {/*         <Row>
-        <Col sm="6"><span className='mini-header'>Plots</span>
-              <span>{character.plots ? <p>No linked plots</p> : <ul> {character.plots.map(p => <li key={p.id}>
+          <Row>
+            <Col sm={4}><span className='mini-header'>Plots</span>
+              <span>{characterStory.plots.length < 1 ? <p>No linked plots</p> : <ul> {characterStory.plots.map(p => <li key={p.id}>
                 <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
               </ul>
               }</span></Col>
-
-                </Row> */}
-          <Row>
-            <Col sm><span className='mini-header new'>Events</span></Col>
+                          <Col sm={8}><span className='mini-header'>Events</span>
+              <span>{characterStory.events.length < 1 ? <p>No linked Events</p> : <ul> {characterStory.events.map(e => <li key={e.id}>
+                <Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></li>)}
+              </ul>
+              }</span></Col>
           </Row>
-          <Row>
-            <Col sm><span className='new'><ul>
-              <li>Event name 1 (links to event)</li>
-              <li>Event name 2 (links to event)</li>
-              <li>Event name 3 (links to event)</li>
-            </ul></span></Col>
-          </Row>
-
-
-
           <Row>
             <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
           </Row>
@@ -230,15 +222,15 @@ export default function Character(props) {
           {<span className='new'><ul><li>Name Surname (<span className='data-found'>status, ship, is_character</span>): relation text</li><li>Name Surname2 (<span className='data-found'>status, ship, is_character</span>): relation text</li></ul></span>}
           <Row className='row-mini-header'>
 
-          <Row>
-            <Col sm><span className='mini-header'>Classified personal data:</span></Col>
-          </Row>
-          <Row>
-                      <Col sm>
-              {personal_secret_info.length < 1 ? <p>No classified personal data</p> : <ul>
-                {personal_secret_info.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
-              </ul>}
-            </Col>
+            <Row>
+              <Col sm><span className='mini-header'>Classified personal data:</span></Col>
+            </Row>
+            <Row>
+              <Col sm>
+                {personal_secret_info.length < 1 ? <p>No classified personal data</p> : <ul>
+                  {personal_secret_info.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
+                </ul>}
+              </Col>
             </Row>
             <Col sm><span className='mini-header' id='military'>Military</span></Col>
           </Row>
@@ -261,7 +253,7 @@ export default function Character(props) {
             <Col sm={8}><span className='caption'>Blood Type: </span>{character.medical_blood_type ? character.medical_blood_type : "-"}</Col>
           </Row>
           <Row>
-            <Col sm><span className='caption'>Last Fitness Check: </span>{character.medical_last_fitness_check  ? character.medical_last_fitness_check : "-"}</Col>
+            <Col sm><span className='caption'>Last Fitness Check: </span>{character.medical_last_fitness_check ? character.medical_last_fitness_check : "-"}</Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>
