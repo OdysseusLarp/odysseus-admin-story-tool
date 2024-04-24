@@ -70,13 +70,13 @@ export default function Messages(props) {
               <Col sm>{message.receivers.length < 1 ? <ul><li>No receivers</li></ul> : <span><ul>{message.receivers?.map(receiver => <li key={receiver?.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> - Card ID: {receiver?.card_id}</span></li>)}</ul></span>}</Col>
             </Row>
             <Row>
-              <Col sm><span className='mini-header'>Plots</span></Col>
+              <Col sm={5}><span className='mini-header'>Plots</span>
+                {message.plots?.length < 1 ? <ul><li>No linked plots</li></ul> : <ul>{message.plots?.map(plot => <li key={plot.id}><Row><Col sm><span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${plot.id}`}>{plot.name}</Link></span></Col></Row></li>)}</ul>}
+              </Col>
+              <Col sm={5}><span className='mini-header'>Events</span>
+                {message.events?.length < 1 ? <ul><li>No linked events</li></ul> : <ul>{message.events?.map(event => <li key={event.id}><Row><Col sm><span className='events'><Link onClick={() => props.changeTab('Events')} to={`/events/${event.id}`}>{event.name}</Link></span></Col></Row></li>)}</ul>}
+              </Col>
             </Row>
-            {message.plots?.length < 1 ? <ul><li>No linked plots</li></ul> : <ul>{message.plots?.map(plot => <li key={plot.id}><Row><Col sm><span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${plot.id}`}>{plot.name}</Link></span></Col></Row></li>)}</ul>}
-            <Row>
-              <Col sm><span className='mini-header'>Events</span></Col>
-            </Row>
-            {message.events?.length < 1 ? <ul><li>No linked events</li></ul> : <ul>{message.events?.map(event => <li key={event.id}><Row><Col sm><span className='events'><Link onClick={() => props.changeTab('Events')} to={`/events/${event.id}`}>{event.name}</Link></span></Col></Row></li>)}</ul>}
             <Row>
               <Col sm><span className='mini-header'>Message</span></Col>
             </Row>
