@@ -3,42 +3,16 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select'
 import { Button } from "react-bootstrap";
-import { apiUrl } from "../../api";
+import { apiGetRequest } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { errorToast, successToast } from "../../utils/toaster";
 import { upsertMessage } from "../../api/messages";
-
-const getCharacters = async () => {
-  const response = await fetch(apiUrl("/person?show_hidden=true&is_character=true"));
-  const characters = await response.json();
-  return characters.persons;
-}
-
-const getNpcs = async () => {
-  const response = await fetch(apiUrl("/person?show_hidden=true&is_character=false"));
-  const npcs = await response.json();
-  return npcs.persons;
-}
-
-const getPlots = async () => {
-  const response = await fetch(apiUrl("/story/plots"));
-  const plots = await response.json();
-  return plots;
-}
-
-const getEvents = async () => {
-  const response = await fetch(apiUrl("/story/events"));
-  const events = await response.json();
-  return events;
-}
+import useSWR from "swr";
 
 const DEFAULT_MESSAGE_STATE = {type: 'Text NPC', locked: false, sent: 'Not yet', receivers: [], sender: null };
 
 const CreateNewMessageModal = (props) => {
   const { showMessageNew, handleClose } = props;
-  const [characters, setCharacters] = React.useState([]);
-  const [plots, setPlots] = React.useState([]);
-  const [events, setEvents] = React.useState([]);
   const [newMessage, setNewMessage] = React.useState(DEFAULT_MESSAGE_STATE);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [selectedSender, setSelectedSender] = React.useState([]);
@@ -47,27 +21,20 @@ const CreateNewMessageModal = (props) => {
   const [selectedEvents, setSelectedEvents] = React.useState([]);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [charactersData, npcsData, plotsData, eventsData] = await Promise.all([
-          getCharacters(),
-          getNpcs(),
-          getPlots(),
-          getEvents(),
-        ]);
+  const swrCharacters = useSWR("/person?show_hidden=true&is_character=true", apiGetRequest);
+  const swrNpcs = useSWR("/person?show_hidden=true&is_character=true", apiGetRequest);
+  const swrPlots = useSWR("/story/plots", apiGetRequest);
+  const swrEvents = useSWR("/story/events", apiGetRequest);
 
-        const allCharacters = [...charactersData, ...npcsData];
-        setCharacters(allCharacters);
-        setPlots(plotsData);
-        setEvents(eventsData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  const isLoading = swrCharacters.isLoading || swrNpcs.isLoading || swrPlots.isLoading || swrEvents.isLoading;
+  const isError = swrCharacters.error || swrNpcs.error || swrPlots.error || swrEvents.error;
 
-    fetchData();
-  }, []);
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Failed to load data</div>;
+
+  const characters = [...swrCharacters.data.persons, ...swrNpcs.data.persons];
+  const plots = swrPlots.data;
+  const events = swrEvents.data;
 
   // Generic function to create options for select dropdowns
   const createOptions = (data, valueProperty, labelProperty) => data.map(item => ({
