@@ -4,28 +4,12 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
 
-
-import './Events.css';
 import './Event.css';
-
-//TODO: Add datafetch etc. Copy from for example Character.js or Artifact.js
 
 const getEvent = async (id) => {
   const response = await fetch(apiUrl(`/story/events/${id}`));
   const event = await response.json();
   return event;
-}
-
-const getMessages = async () => {
-  const response = await fetch(apiUrl(`/story/messages/`));
-  const messages = await response.json();
-  return messages;
-}
-
-const getCharacters = async () => {
-  const response = await fetch(apiUrl("/person?show_hidden=true&is_character=true"));
-  const characters = await response.json();
-  return characters.persons;
 }
 
 const is_npc = (character) => {
@@ -41,8 +25,6 @@ const is_npc = (character) => {
 
 export default function Event(props) {
   const [event, setEvent] = React.useState(null);
-  const [characters, setCharacters] = React.useState([]);
-  const [messages, setMessages] = React.useState([]);
 
   const params = useParams();
 
@@ -56,34 +38,11 @@ export default function Event(props) {
     props.changeTab('Events');
   }, [props]);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [charactersData, messageData] = await Promise.all([
-          getCharacters(),
-          getMessages(),
-        ]);
-
-        const allCharacters = [...charactersData];
-        setCharacters(allCharacters);
-        setMessages(messageData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const renderEvent = () => {
     if (!event) return null;
-    const relatedCharacterIds = event.persons.map(p => p.id);
-    const relatedCharacters = characters.filter(c => relatedCharacterIds.includes(c.id));
-    const relatedMessageIds = event.messages.map(m => m.id);
-    const relatedMessages = messages.filter(m => relatedMessageIds.includes(m.id));
-
-    const character_groups = event.character_groups.split(',').flat();
-
+    const gm_notes = event.gm_notes ? event.gm_notes.split('\n') : [];
+    const gm_note_npc = event.gm_note_npc ? event.gm_note_npc.split('\n') : [];
+    const character_groups = event.character_groups ? event.character_groups.split(',').flat() : [];
 
     return (
       <div className='event'>
@@ -96,7 +55,7 @@ export default function Event(props) {
             <Col sm={6}><span className='caption'>Event size: </span>{event.size}</Col>
           </Row>
           <Row>
-            <Col sm={4}><span className='caption'>Happens after jump: </span>{event.after_jump}</Col>
+            <Col sm={4}><span className='caption'>Happens after jump: </span>{event.after_jump ? event.after_jump : "?"}</Col>
             <Col sm={6}><span className='caption'>Event type: </span> {event.type}</Col>
           </Row>
           <Row>
@@ -105,7 +64,7 @@ export default function Event(props) {
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Status: </span>{event.status}</Col>
-            <Col sm={6}><span className='caption'>DMX event number: </span>{event.dmx_event_num}</Col>
+            <Col sm={6}><span className='caption'>DMX event number: </span>{event.dmx_event_num ? event.dmx_event_num : "None"}</Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>
@@ -120,18 +79,13 @@ export default function Event(props) {
           <Row>
             <Col sm><span className='mini-header'>GM Notes</span></Col>
           </Row>
-          <Row>
-            <Col sm><span>{event.gm_notes < 1 ? <p>No GM notes available.</p> : event.gm_notes}</span></Col>
-          </Row>
-          <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
+          {gm_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}
           <Row>
             <Col sm><span className='mini-header'>NPC needs</span></Col>
           </Row>
           {event.npc_count === 0 ?
             <Row>
-              <Col sm={4}><span className='caption'>NPC Count: </span> {event.npc_count}</Col>
+              <Col sm={4}><p><span className='caption'>NPC Count: </span> {event.npc_count}</p></Col>
             </Row> :
             <Row>
               <Col sm={4}><span className='caption'>NPC Count: </span> {event.npc_count}</Col>
@@ -139,52 +93,40 @@ export default function Event(props) {
             </Row>}
           {event.npc_count === 0 ? <Row /> :
             <Row>
-              <Col sm><span className='caption'>What is required from NPCs?</span> </Col>
-              <span>{event.gm_note_npc ? event.gm_note_npc : "No needs specified"} </span>
+              <Col sm><span className='caption'>What is required from NPCs?</span> 
+                {gm_note_npc.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_note_npc.map(n => <li key={n}>{n}</li>)}</ul>}
+              </Col>
             </Row>}
           <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
-          <Row>
             <Col sm={4}><span className='mini-header'>Characters Involved</span>
-              {event.persons.length < 1 ? <p>No linked characters</p> : <span><ul> {relatedCharacters.map(p => <li key={p.id}>
-                <Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link>
+              {event.persons.length < 1 ? <ul><li>No linked characters</li></ul> : <span><ul> {event.persons.map(p => <li key={p.id}>
+                <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.name}</Link></span>
                 <span> - {is_npc(p)}</span></li>)}
-              </ul></span>}</Col>
+              </ul></span>}
+            </Col>
             <Col sm={6}><span className='mini-header'>Character Groups Involved</span>
-              <span>{event.character_groups.length === 0 && "No involved character groups"}</span>
-              {<span><ul>{character_groups.map(e => <li><Row key={e}><Col sm>{e}</Col></Row></li>)}</ul></span>}
-            </Col></Row>
+            {character_groups.length <1 ? <ul><li>No involved character groups</li></ul> : <ul>{character_groups.map(n => <li key={n}>{n}</li>)}</ul>}
+           </Col></Row>
           <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
-          <Row>
-
             <Col sm="4"><span className='mini-header'>Plots</span>
-              <span>{event.plots.length < 1 ? <p>No linked plots</p> : <ul> {event.plots.map(p => <li key={p.id}>
-                <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
+              <span>{event.plots.length < 1 ? <ul><li>No linked plots</li></ul> : <ul> {event.plots.map(p => <li key={p.id}>
+                <span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></span></li>)}
               </ul>
               }</span></Col>
             <Col sm="6"><span className='mini-header'>Artifacts</span>
-              {event.artifacts.length < 1 ? <p>No linked artifacts</p> : <ul> {event.artifacts.map(a => <li key={a.id}>
-                <Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>Artifact id {a.id}, {a.name}</Link></li>)}
+              {event.artifacts.length < 1 ? <ul><li>No linked artifacts</li></ul> : <ul> {event.artifacts.map(a => <li key={a.id}>
+                <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>{a.name} - Catalog ID: {a.catalog_id}</Link></span></li>)}
               </ul>
               }
             </Col>
           </Row>
           <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
-          <Row>
             <Col sm><span className='mini-header'>Messages</span>
-              <span>{event.messages.length < 1 ? <p>No messages</p> : <ul> {relatedMessages.map(m => <li key={m.id}>
-                <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</li>)}
+              <span>{event.messages.length < 1 ? <ul><li>No messages</li></ul> : <ul> {event.messages.map(m => <li key={m.id}>
+                <span className='messages'><Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link></span> - Sent: {m.sent}</li>)}
               </ul>
               }</span>
             </Col>
-          </Row>
-          <Row>
-            <Col sm>&nbsp;</Col>
           </Row>
           <Row>
             <Col sm><span className='mini-header'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
