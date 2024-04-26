@@ -1,10 +1,11 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter, selectFilter, Comparator } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { apiGetRequest } from "../api";
 import { toSelectOptions } from "../utils/helpers";
 import { Link } from "react-router-dom";
+import TableLoading from "./TableLoading";
 import useSWR from "swr";
 
 import './Characters.css';
@@ -23,7 +24,7 @@ export default function Characters(props) {
     apiGetRequest,
   );
 
-  if (swrCharacters.isLoading || swrNpcs.isLoading) return <div>Loading...</div>;
+  if (swrCharacters.isLoading || swrNpcs.isLoading) return <TableLoading />
   if (swrCharacters.error || swrNpcs.error) return <div>Failed to load data</div>;
 
   const characters = [...swrCharacters.data.persons, ...swrNpcs.data.persons];

@@ -5,6 +5,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
 import { toSelectOptions } from "../utils/helpers";
+import TableLoading from "./TableLoading";
 import useSWR from "swr";
 
 import './Messages.css';
@@ -18,7 +19,7 @@ export default function Messages(props) {
     apiGetRequest
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
 
   function getRowIndex(cell, row, rowIndex) {
