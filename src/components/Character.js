@@ -228,19 +228,19 @@ export default function Character(props) {
             <Col sm><span className='mini-header' id='personal'>Personal</span></Col>
           </Row>
           <Row>
-            <Col sm>{personal_history_list ? <ul>{personal_history_list}</ul> : "None"}</Col>
+            <Col sm>{personal_history_list ? <ul>{personal_history_list}</ul> : <ul><li>None</li></ul>}</Col>
           </Row>
           <Row>
             <Col sm><span className='mini-header'>Family</span></Col>
           </Row>
           <Row>
-            <Col sm>{family_list.length ? <ul>{family_list}</ul> : "None"}</Col>
+            <Col sm>{family_list.length ? <ul>{family_list}</ul> : <ul><li>None</li></ul>}</Col>
           </Row>
           <Row>
             <Col sm><span className='mini-header'>Other known relations</span></Col>
           </Row>
           <Row>
-          <Col sm>{relations_list.length ? <ul>{relations_list}</ul> : "None"}</Col>
+          <Col sm>{relations_list.length ? <ul>{relations_list}</ul> : <ul><li>None</li></ul>}</Col>
           </Row>
           <Row>
             <Col sm><span className='mini-header'>Classified personal data</span></Col>
