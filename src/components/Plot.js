@@ -146,7 +146,7 @@ export default function Plot(props) {
                 </Col>
                 <Col sm={4}><span className='mini-header'>Artifacts</span>
                   {plot.artifacts.length<1 ? <ul><li>No linked artifacts</li></ul> : <ul> {plot.artifacts.map(a => <li key={a.id}>
-                    <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>{a.catalog_id}, {a.name}</Link></span></li>)}
+                    <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>{a.name} - Catalog ID: {a.catalog_id}</Link></span></li>)}
                   </ul>}
                 </Col>
               </Row>

@@ -1,105 +1,139 @@
+import React from "react";
+import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
-import './Events.css';
+import { Link } from "react-router-dom";
+import { apiUrl } from "../api";
+
 import './Event.css';
 
-//TODO: Add datafetch etc. Copy from for example Character.js or Artifact.js
+const getEvent = async (id) => {
+  const response = await fetch(apiUrl(`/story/events/${id}`));
+  const event = await response.json();
+  return event;
+}
 
-export default function Event() {
+const is_npc = (character) => {
+  if (!character)
+    return null
+  if (character.is_character === true)
+    return 'Character'
+  else if (character.is_character === false)
+    return 'NPC'
+  else
+    return 'Random Generated Character'
+}
+
+export default function Event(props) {
+  const [event, setEvent] = React.useState(null);
+
+  const params = useParams();
+
+
+  React.useEffect(() => {
+    if (!params.id) return;
+    getEvent(params.id).then((s) => setEvent(s));
+  }, [params.id, setEvent]);
+
+  React.useEffect(() => {
+    props.changeTab('Events');
+  }, [props]);
+
+  const renderEvent = () => {
+    if (!event) return null;
+    const gm_notes = event.gm_notes ? event.gm_notes.split('\n') : [];
+    const gm_note_npc = event.gm_note_npc ? event.gm_note_npc.split('\n') : [];
+    const character_groups = event.character_groups ? event.character_groups.split(',').flat() : [];
+
     return (
-      <div>
-        <h1 className='event' id="app-title">Event Name [CREATE EVENT BUTTON]</h1>
-        <div className='event'>
-          <Container fluid className='event'>
+      <div className='event'>
+        <Container fluid className='event'>
+          <Row>
+            <Col sm><span className='mini-header'>Basic Info</span></Col>
+          </Row>
+          <Row>
+            <Col sm={4}><span className='caption'>GM Actions: </span>{event.gm_actions}</Col>
+            <Col sm={6}><span className='caption'>Event size: </span>{event.size}</Col>
+          </Row>
+          <Row>
+            <Col sm={4}><span className='caption'>Happens after jump: </span>{event.after_jump ? event.after_jump : "?"}</Col>
+            <Col sm={6}><span className='caption'>Event type: </span> {event.type}</Col>
+          </Row>
+          <Row>
+            <Col sm={4}><span className='caption'>Locked event: </span>{event.locked ? "Yes" : "No"}</Col>
+            <Col sm={6}><span className='caption'>Event Importance: </span>{event.importance}</Col>
+          </Row>
+          <Row>
+            <Col sm={4}><span className='caption'>Status: </span>{event.status}</Col>
+            <Col sm={6}><span className='caption'>DMX event number: </span>{event.dmx_event_num ? event.dmx_event_num : "None"}</Col>
+          </Row>
+          <Row>
+            <Col sm>&nbsp;</Col>
+          </Row>
+          <Row>
+            <Col sm><span className='mini-header'>Short Description</span></Col>
+            <span>{event.description}</span>
+          </Row>
+          <Row>
+            <Col sm>&nbsp;</Col>
+          </Row>
+          <Row>
+            <Col sm><span className='mini-header'>GM Notes</span></Col>
+          </Row>
+          {gm_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}
+          <Row>
+            <Col sm><span className='mini-header'>NPC needs</span></Col>
+          </Row>
+          {event.npc_count === 0 ?
             <Row>
-              <Col sm><span className='mini-header'>Characters Involved</span></Col>
-            </Row>
-            {<span><ul><li>Name Surname (Main character, Character)</li><li>Name Surname2 (Side character, NPC)</li><li>Name Surname2 (Knows random info, Character)</li></ul></span>}
+              <Col sm={4}><p><span className='caption'>NPC Count: </span> {event.npc_count}</p></Col>
+            </Row> :
             <Row>
-              <Col sm><span className='mini-header'>Character Groups Involved</span></Col>
-            </Row>
-            {<span><ul><li>Engineers</li><li>Scientists</li><li>All</li></ul></span>}
+              <Col sm={4}><span className='caption'>NPC Count: </span> {event.npc_count}</Col>
+              <Col sm={6}><span className='caption'>NPC Location: </span> {event.npc_location}</Col>
+            </Row>}
+          {event.npc_count === 0 ? <Row /> :
             <Row>
-              <Col sm><span className='mini-header'>Basic Info</span></Col>
-            </Row>
-            <Row>
-              <Col sm={4}><span className='caption'>GM Actions: </span>No need / Empty Epsilon / Text NPC / Briefing character</Col>
-              <Col sm={6}><span className='caption'>Event size: </span>Small / Medium / Large</Col>
-            </Row>
-            <Row>
-              <Col sm={4}><span className='caption'>Happens after jump: </span>- / 3 / 13 (Editable unless event is locked or status done)</Col>
-              <Col sm={6}><span className='caption'>Event type: </span>Jump / Land Mission / Empty Epsilon / Political / Machine / Hazard / Bomb / Character</Col>
-            </Row>
-            <Row>
-              <Col sm={4}><span className='caption'>Locked event: </span>Yes / No</Col>
-              <Col sm={6}><span className='caption'>Event Importance: </span>Nice to have / Should have / Mandatory</Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm={4}><span className='caption'>Status: </span>Done / In progress / Not Done (editable dropdown)</Col>
-              <Col sm={6}><span className='caption'>DMX event number: </span>162</Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>Requires NPC: </span>Yes / No</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>NPC Location: </span>Odysseus / Text NPC / Mission</Col>
-            </Row>
-            <Row>
-              <Col sm={6}><span className='caption'>NPC Count: </span>- / 13 / 50</Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>Plots</span></Col>
-            </Row>
-            {<span><ul><li>Not part of a plot</li><li>Link to plot 1</li><li>Link to plot 2</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>Messages [CREATE MESSAGE BUTTON]</span></Col>
-            </Row>
-            {<span><ul><li>No messages</li><li>Link to message 1 [sent / not sent]</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>Artifacts</span></Col>
-            </Row>
-            {<span><ul><li>No artifacts</li><li>Link to artifact 1</li></ul></span>}
-            <Row>
-              <Col sm><span className='mini-header'>Short Description</span></Col>
-            </Row>
-            <Row>
-              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>What is required from NPCs?</span></Col>
-            </Row>
-            <Row>
-              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>GM Notes</span></Col>
-            </Row>
-            <Row>
-              <Col sm><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-            <Row>
-              <Col sm><span className='mini-header'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
-            </Row>
-            <ul><li><Row>
-              <Col sm><span>Timestamp: Note 6</span></Col>
-            </Row></li>
+              <Col sm><span className='caption'>What is required from NPCs?</span> 
+                {gm_note_npc.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_note_npc.map(n => <li key={n}>{n}</li>)}</ul>}
+              </Col>
+            </Row>}
+          <Row>
+            <Col sm={4}><span className='mini-header'>Characters Involved</span>
+              {event.persons.length < 1 ? <ul><li>No linked characters</li></ul> : <span><ul> {event.persons.map(p => <li key={p.id}>
+                <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.name}</Link></span>
+                <span> - {is_npc(p)}</span></li>)}
+              </ul></span>}
+            </Col>
+            <Col sm={6}><span className='mini-header'>Character Groups Involved</span>
+            {character_groups.length <1 ? <ul><li>No involved character groups</li></ul> : <ul>{character_groups.map(n => <li key={n}>{n}</li>)}</ul>}
+           </Col></Row>
+          <Row>
+            <Col sm="4"><span className='mini-header'>Plots</span>
+              <span>{event.plots.length < 1 ? <ul><li>No linked plots</li></ul> : <ul> {event.plots.map(p => <li key={p.id}>
+                <span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></span></li>)}
+              </ul>
+              }</span></Col>
+            <Col sm="6"><span className='mini-header'>Artifacts</span>
+              {event.artifacts.length < 1 ? <ul><li>No linked artifacts</li></ul> : <ul> {event.artifacts.map(a => <li key={a.id}>
+                <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>{a.name} - Catalog ID: {a.catalog_id}</Link></span></li>)}
+              </ul>
+              }
+            </Col>
+          </Row>
+          <Row>
+            <Col sm><span className='mini-header'>Messages</span>
+              <span>{event.messages.length < 1 ? <ul><li>No messages</li></ul> : <ul> {event.messages.map(m => <li key={m.id}>
+                <span className='messages'><Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link></span> - Sent: {m.sent}</li>)}
+              </ul>
+              }</span>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm><span className='mini-header'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
+          </Row>
+          <ul><li><Row>
+            <Col sm><span>Timestamp: Note 6</span></Col>
+          </Row></li>
             <li><Row>
               <Col sm><span>Timestamp: Note 5</span></Col>
             </Row></li>
@@ -115,15 +149,29 @@ export default function Event() {
             <li><Row>
               <Col sm><span>Timestamp: Note 1</span></Col>
             </Row></li>
-            </ul>
-            <Row>
-              <Col sm><span>Save the notes between games!</span></Col>
-            </Row>
-            <Row>
-              <Col sm>&nbsp;</Col>
-            </Row>
-          </Container>
-        </div>
+          </ul>
+          <Row>
+            <Col sm><span>Save the notes between games!</span></Col>
+          </Row>
+          <Row>
+            <Col sm>&nbsp;</Col>
+          </Row>
+        </Container>
+
+
       </div>
     )
   }
+
+  return (
+    <div>
+      <Row>
+        <Col sm><h1 className='event'>{event?.name}</h1>
+
+        </Col>
+
+      </Row>
+      {renderEvent()}
+    </div>
+  );
+}
