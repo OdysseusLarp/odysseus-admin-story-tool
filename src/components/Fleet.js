@@ -5,6 +5,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
 import { Container, Row, Col } from "react-bootstrap";
+import { toSelectOptions } from '../utils/helpers';
 import useSWR from "swr";
 
 import './Fleet.css';
@@ -25,23 +26,9 @@ export default function Fleet() {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
 
-  const classSelectOptions = {
-    "Aurora Class Explorer": 'Aurora Class Explorer',
-    "Stellar Class Battlecruiser": 'Stellar Class Battlecruiser',
-    "Helios Class Corvette": 'Helios Class Corvette',
-    "Luna Class Cargo Carrier": 'Luna Class Cargo Carrier',
-    "Eclipse Class Frigate": 'Eclipse Class Frigate',
-  };
-
-  const statusSelectOptions = {
-    "Present and accounted for": 'Accounted',
-    "Destroyed": 'Destroyed',
-  };
-
-  const typeSelectOptions = {
-    "Military": 'Military',
-    "Civilian": 'Civilian',
-  };
+  const classSelectOptions = toSelectOptions(fleet, "class");
+  const statusSelectOptions = toSelectOptions(fleet, "status");
+  const typeSelectOptions = toSelectOptions(fleet, "type");
 
   const columns = [{
       dataField: '_row_index_placeholder',

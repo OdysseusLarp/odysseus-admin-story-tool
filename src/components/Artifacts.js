@@ -4,6 +4,7 @@ import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
+import { toSelectOptions } from "../utils/helpers";
 import useSWR from "swr";
 
 import './Artifacts.css';
@@ -24,13 +25,7 @@ export default function Artifacts() {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
 
-  const originSelectOptions = {
-    "Elder": 'Elder',
-    "EOC": 'EOC',
-    "Machine": 'Machine',
-    "Earth": 'Earth',
-    "Unknown": 'Unknown',
-  };
+  const originSelectOptions = toSelectOptions(artifacts, 'type');
 
   const selectOptions = {
     true: 'Yes',

@@ -4,6 +4,7 @@ import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
+import { toSelectOptions } from "../utils/helpers";
 import useSWR from "swr";
 
 import './Plots.css';
@@ -29,28 +30,9 @@ export default function Plots() {
     false: 'No'
   };
 
-  const sizeSelectOptions = {
-    "Small": 'Small',
-    "Medium": 'Medium',
-    "Large": 'Large',
-  };
-
-  const importanceSelectOptions = {
-    "Small": 'Nice to have',
-    "Medium": 'Should have',
-    "Large": 'Mandatory',
-  };
-
-  const gmActionSelectOptions = {
-    "No need": 'No need',
-    "Event": 'Event',
-    "Empty Epsilon": 'Empty Epsilon',
-    "Text NPC": 'Text NPC',
-    "Live NPC": 'Live NPC',
-    "Briefing Character": 'Briefing Character',
-    "Briefing NPCs": 'Briefing NPCs',
-    "Other": 'Other',
-  };
+  const sizeSelectOptions = toSelectOptions(plots, 'size');
+  const importanceSelectOptions = toSelectOptions(plots, 'importance');
+  const gmActionSelectOptions = toSelectOptions(plots, 'gm_actions');
 
   const columns = [{
       dataField: '_row_index_placeholder',

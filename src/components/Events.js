@@ -4,6 +4,7 @@ import filterFactory, { textFilter, Comparator, selectFilter } from 'react-boots
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
+import { toSelectOptions } from "../utils/helpers";
 import useSWR from "swr";
 
 import './Events.css';
@@ -36,54 +37,12 @@ export default function Events() {
     Velian: 'Velian'
   };
 
-  const selectImportance = {
-    "Nice to have": "Nice to have",
-    "Should have": "Should have",
-    "Mandatory": "Mandatory"
-  };
-
-  const selectStatus = {
-    "Not Done": "Not Done",
-    "In Progress": "In Progress",
-    "Done": "Done"
-  };
-
-  const selectNPCLocation = {
-    "Fleet Comms & EE": "Fleet Comms & EE",
-    "Text NPC": "Text NPC",
-    "Empty Epsilon": "Empty Epsilon",
-    "Odysseus": "Odysseus",
-    "Mission": "Mission",
-    "Other": "Other"
-  };
-
-
-  const selectGmActions = {
-    "No need": "No need",
-    "Empty Epsilon": "Empty Epsilon",
-    "Briefing Character": "Briefing Character",
-    "Briefing NPCs": "Briefing NPCs",
-    "Jump actions": "Jump actions",
-    "DMX Event": "DMX Event"
-  };
-
-  const selectType = {
-    Character: "Character",
-    "Empty Epsilon": "Empty Epsilon",
-    Hazard: "Hazard",
-    Jump: "Jump",
-    "Land Mission": "Land Mission",
-    Machine: "Machine",
-    "Plot related": "Plot related",
-    Political: "Political"
-  };
-
-  const selectSize = {
-    Small: "Small",
-    Medium: "Medium",
-    Large: "Large"
-  };
-
+  const selectImportance = toSelectOptions(events, 'importance');
+  const selectStatus = toSelectOptions(events, 'status');
+  const selectNPCLocation = toSelectOptions(events, 'npc_location');
+  const selectGmActions = toSelectOptions(events, 'gm_actions');
+  const selectSize = toSelectOptions(events, 'size');
+  const selectType = toSelectOptions(events, 'type');
 
   const columns = [{
     dataField: '_row_index_placeholder',

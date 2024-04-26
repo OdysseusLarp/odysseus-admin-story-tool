@@ -3,9 +3,9 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter, selectFilter, Comparator } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { apiGetRequest } from "../api";
-import useSWR from "swr";
-
+import { toSelectOptions } from "../utils/helpers";
 import { Link } from "react-router-dom";
+import useSWR from "swr";
 
 import './Characters.css';
 
@@ -19,7 +19,7 @@ export default function Characters(props) {
   );
 
   const swrNpcs = useSWR(
-    "/person?show_hidden=true&is_character=true",
+    "/person?show_hidden=true&is_character=false",
     apiGetRequest,
   );
 
@@ -37,81 +37,10 @@ export default function Characters(props) {
     false: 'NPC'
   };
 
-  const selectPlanet = {
-    Caelena: 'Caelena',
-    Ellarion: 'Ellarion',
-    Osiris: 'Osiris',
-    Velian: 'Velian',
-    Voidborn: 'Voidborn',
-    Unknown: 'Unknown',
-    None: 'None'
-  };
-
-  const selectDynasty = {
-    Defiance: 'Defiance',
-    Hope: 'Hope',
-    Mercy: 'Mercy',
-    Purity: 'Purity',
-    Strength: 'Strength',
-    Wisdom: 'Wisdom',
-    Floater: 'Floater',
-    None: 'None'
-  };
-
-  const selectCharGroup = {
-    'Bridge Crew': 'Bridge Crew',
-    Civilian: 'Civilian',
-    Engineer: 'Engineer',
-    Marine: 'Marine',
-    Medic: 'Medic',
-    Officer: 'Officer',
-    Pilot: 'Pilot',
-    Scientist: 'Scientist',
-    Royalty: 'Royalty',
-    Velian: 'Velian'
-  };
-
-  const selectStatus = {
-    'Present and accounted for' : 'Accounted',
-    'Deceased' : 'Deceased',
-    'Killed in action' : 'Killed in action',
-    'Missing in action' : 'Missing in action',
-    'Unknown' : 'Unknown',
-    'None' : 'None'
-  };
-
-  const selectShip = {
-    'CSS Centurion': 'CSS Centurion',
-    'CSS Cyclone': 'CSS Cyclone',
-    'CSS Prophet': 'CSS Prophet',
-    'CSS Taurus': 'CSS Taurus',
-    'CSS Whirlwind': 'CSS Whirlwind',
-    'ESS Aries': 'ESS Aries',
-    'ESS Arthas': '	ESS Arthas',
-    'ESS Aurora': '	ESS Aurora',
-    'ESS Bluecoat': 'ESS Bluecoat',
-    'ESS Discovery': 'ESS Discovery',
-    'ESS Envoy': 'ESS Envoy',
-    'ESS Halo': 'ESS Halo',
-    'ESS Harbinger': 'ESS Harbinger',
-    'ESS Inferno': 'ESS Inferno',
-    'ESS Memory': 'ESS Memory',
-    'ESS Odysseus': 'ESS Odysseus',
-    'ESS Polaris': 'ESS Polaris',
-    'ESS Spectrum': 'ESS Spectrum',
-    'ESS Valkyrie': 'ESS Valkyrie',
-    'ESS Valor': 'ESS Valor',
-    'ESS Warrior': 'ESS Warrior',
-    None: 'None',
-    'OSS Burro': 'OSS Burro',
-    'OSS Immortal': 'OSS Immortal',
-    'OSS Karma': 'OSS Karma',
-    'OSS Marauder': 'OSS Marauder',
-    'OSS Ravager': 'OSS Ravager',
-    'OSS Starfall': 'OSS Starfall',
-    'OSS Vulture': 'OSS Vulture',
-    Unknown: 'Unknown'
-  };
+  const selectPlanet = toSelectOptions(characters, 'home_planet');
+  const selectDynasty = toSelectOptions(characters, 'dynasty');
+  const selectStatus = toSelectOptions(characters, 'status');
+  const selectShip = toSelectOptions(characters.map((c) => c.ship), 'name');
 
   const columns = [{
     dataField: '_row_index_placeholder',
@@ -146,10 +75,7 @@ export default function Characters(props) {
     dataField: 'character_group',
     text: 'Character Group',
     sort: true,
-    filter: selectFilter({
-      options: selectCharGroup,
-      comparator: Comparator.LIKE
-    })
+    filter: textFilter(),
   }, {
     dataField: 'status',
     text: 'Status',

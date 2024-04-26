@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import { Button } from "react-bootstrap";
 import { upsertMessage } from "../../api/messages";
 import { errorToast, successToast } from "../../utils/toaster";
-import { cloneDeep } from "../../utils/helpers";
+import { cloneDeep } from "lodash-es";
 
 const EditMessageModal = (props) => {
   const { showMessageEdit, handleClose, handleSave } = props;

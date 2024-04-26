@@ -4,6 +4,7 @@ import filterFactory, { textFilter, selectFilter, Comparator } from 'react-boots
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
+import { toSelectOptions } from "../utils/helpers";
 import useSWR from "swr";
 
 import './Messages.css';
@@ -23,27 +24,9 @@ export default function Messages(props) {
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
-  
-  const sentSelectOptions = {
-    "Yes": 'Yes',
-    "No need": 'No Need',
-    "Repeatable": 'Repeatable',
-    "Not yet": 'Not yet'
-  };
 
-  const typeSelectOptions = {
-    "Text NPC": 'Text NPC',
-    "EVA": 'EVA',
-    "Fleet Comms": 'Fleet Comms',
-    "Fleet Secretary": 'Fleet Secretary',
-    "Fleet Admiral": 'Fleet Admiral',
-    "Ship Log - Success": 'Ship Log - Success',
-    "Ship Log - Info": 'Ship Log - Info',
-    "Ship Log - Warning": 'Ship Log - Warning',
-    "Ship Log - Error": 'Ship Log - Error',
-    "News": 'News',
-    "Gray Radio": 'Gray Radio',
-  };
+  const sentSelectOptions = toSelectOptions(messages, 'sent');
+  const typeSelectOptions = toSelectOptions(messages, 'type');
 
   const columns = [{
       dataField: '_row_index_placeholder',
