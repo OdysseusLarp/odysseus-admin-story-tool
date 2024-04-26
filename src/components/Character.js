@@ -3,29 +3,13 @@ import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import FloatingButtons from "./FloatingButtons";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import TableLoading from "./TableLoading";
+import useSWR from "swr";
 
 import './Character.css';
 
-const getCharacter = async (id) => {
-  const response = await fetch(apiUrl(`/person/${id}`));
-  const character = await response.json();
-  return character;
-}
-
-const getCharacterStory = async (id) => {
-  const response = await fetch(apiUrl(`/story/person/${id}`));
-  const character = await response.json();
-  return character;
-}
-
-const getFleet = async () => {
-  const response = await fetch(apiUrl("/fleet?show_hidden=true"));
-  const fleet = await response.json();
-  return fleet;
-}
-
-const is_npc = (character) => {
+const getIsCharacterText = (character) => {
   if (!character)
     return null
   if (character.is_character === true)
@@ -37,41 +21,20 @@ const is_npc = (character) => {
 }
 
 export default function Character(props) {
-  const [character, setCharacter] = React.useState(null);
-  const [characterStory, setCharacterStory] = React.useState(null);
-  const [fleet, setFleet] = React.useState([]);
-
   const params = useParams();
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getCharacter(params.id).then((s) => setCharacter(s));
-  }, [params.id, setCharacter]);
+  const swrCharacter = useSWR( "/person/" + params.id, apiGetRequest);
+  const swrCharacterStory = useSWR( "/story/person/" + params.id, apiGetRequest);
+  const swrFleet = useSWR( "/fleet?show_hidden=true", apiGetRequest);
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getCharacterStory(params.id).then((s) => setCharacterStory(s));
-  }, [params.id, setCharacterStory]);
+  const isLoading = swrCharacter.isLoading || swrCharacterStory.isLoading || swrFleet.isLoading;
+  const error = swrCharacter.error || swrCharacterStory.error || swrFleet.error;
+  if (isLoading) return <TableLoading />;
+  if (error) return <div>Failed to load data</div>;
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [fleetData] = await Promise.all([
-          getFleet(),
-        ]);
-        setFleet(fleetData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-
-  React.useEffect(() => {
-    props.changeTab('Characters');
-  }, [props]);
+  const character = swrCharacter.data;
+  const characterStory = swrCharacterStory.data;
+  const fleet = swrFleet.data;
 
   const renderCharacter = () => {
     if (!character) return null;
@@ -93,8 +56,8 @@ export default function Character(props) {
       return shipName;
     }
 
-    const family_list = character.family.map(person => <li key={person.id}><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link> - {person._pivot_relation} - {person.status} - {is_npc(person)} {person.ship_id ? <span className='fleet'>- <Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${person.ship_id}`}>{person.ship_id && getShipById(person.ship_id)}</Link></span> : ""}</li>);
-    const relations_list = characterStory.relations.map(person => <li key={person.id}><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link> - {person.status} - {is_npc(person)} {person.ship ? <span className='fleet'>- <Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${person.ship}`}>{person.ship && getShipById(person.ship)}</Link></span> : ""}<ul key={person.id}><li>{person.relation}</li></ul></li>);
+    const family_list = character.family.map(person => <li key={person.id}><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.full_name}</Link> - {person._pivot_relation} - {person.status} - {getIsCharacterText(person)} {person.ship_id ? <span className='fleet'>- <Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${person.ship_id}`}>{person.ship_id && getShipById(person.ship_id)}</Link></span> : ""}</li>);
+    const relations_list = characterStory.relations.map(person => <li key={person.id}><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link> - {person.status} - {getIsCharacterText(person)} {person.ship ? <span className='fleet'>- <Link onClick={() => props.changeTab('Fleet')} to={`/fleet/${person.ship}`}>{person.ship && getShipById(person.ship)}</Link></span> : ""}<ul key={person.id}><li>{person.relation}</li></ul></li>);
     const military_academies_list = character.military_academies && character.military_academies.split(',').map(r => <li key={r}>{r}</li>);
     const gm_notes_list = character.gm_notes ? character.gm_notes.split('\n') : [];
 
@@ -307,7 +270,7 @@ export default function Character(props) {
             <Col sm><span className='mini-header'>Metadata</span></Col>
           </Row>
           <Row>
-            <Col sm={4}><span className='caption'>Is Character: </span>{is_npc(character)}</Col>
+            <Col sm={4}><span className='caption'>Is Character: </span>{getIsCharacterText(character)}</Col>
             <Col sm={4}><span className='caption'>Is Visible: </span>{character.is_visible ? "Yes" : "No"}</Col>
           </Row>
           <Row>
@@ -320,7 +283,7 @@ export default function Character(props) {
 
   return (
     <div className='character'>
-      <h1 className='character' id="app-title">{character?.full_name} ({is_npc(character)})</h1>
+      <h1 className='character' id="app-title">{character?.full_name} ({getIsCharacterText(character)})</h1>
       {renderCharacter()}
       <FloatingButtons />
     </div>
