@@ -3,24 +3,24 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import { toSelectOptions } from "../utils/helpers";
+import TableLoading from "./TableLoading";
+import useSWR from "swr";
 
 import './Plots.css';
 
-const getPlots = async () => {
-  const response = await fetch(apiUrl("/story/plots"));
-  const plots = await response.json();
-  return plots;
-}
-
 export default function Plots() {
-  const [plots, setPlots] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    getPlots().then(data => setPlots(data));
-  }, []);
+  const { data: plots, error, isLoading } = useSWR(
+    "/story/plots",
+    apiGetRequest
+  );
+
+  if (isLoading) return <TableLoading />;
+  if (error) return <div>Failed to load data</div>;
 
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
@@ -31,28 +31,9 @@ export default function Plots() {
     false: 'No'
   };
 
-  const sizeSelectOptions = {
-    "Small": 'Small',
-    "Medium": 'Medium',
-    "Large": 'Large',
-  };
-
-  const importanceSelectOptions = {
-    "Small": 'Nice to have',
-    "Medium": 'Should have',
-    "Large": 'Mandatory',
-  };
-
-  const gmActionSelectOptions = {
-    "No need": 'No need',
-    "Event": 'Event',
-    "Empty Epsilon": 'Empty Epsilon',
-    "Text NPC": 'Text NPC',
-    "Live NPC": 'Live NPC',
-    "Briefing Character": 'Briefing Character',
-    "Briefing NPCs": 'Briefing NPCs',
-    "Other": 'Other',
-  };
+  const sizeSelectOptions = toSelectOptions(plots, 'size');
+  const importanceSelectOptions = toSelectOptions(plots, 'importance');
+  const gmActionSelectOptions = toSelectOptions(plots, 'gm_actions');
 
   const columns = [{
       dataField: '_row_index_placeholder',

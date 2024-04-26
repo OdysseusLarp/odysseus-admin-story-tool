@@ -3,49 +3,33 @@ import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import React from "react";
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
 import { Container, Row, Col } from "react-bootstrap";
+import { toSelectOptions } from '../utils/helpers';
+import useSWR from "swr";
 
 import './Fleet.css';
 
-
-const getFleet = async () => {
-  const response = await fetch(apiUrl("/fleet?show_hidden=true"));
-  const fleet = await response.json();
-  return fleet;
-}
-
 export default function Fleet() {
-  const [fleet, setFleet] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    getFleet().then(data => setFleet(data));
-  }, []);
+  const { data: fleet, error, isLoading } = useSWR(
+    "/fleet?show_hidden=true",
+    apiGetRequest
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Failed to load data</div>;
 
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
 
-  const classSelectOptions = {
-    "Aurora Class Explorer": 'Aurora Class Explorer',
-    "Stellar Class Battlecruiser": 'Stellar Class Battlecruiser',
-    "Helios Class Corvette": 'Helios Class Corvette',
-    "Luna Class Cargo Carrier": 'Luna Class Cargo Carrier',
-    "Eclipse Class Frigate": 'Eclipse Class Frigate',
-  };
+  const classSelectOptions = toSelectOptions(fleet, "class");
+  const statusSelectOptions = toSelectOptions(fleet, "status");
+  const typeSelectOptions = toSelectOptions(fleet, "type");
 
-  const statusSelectOptions = {
-    "Present and accounted for": 'Accounted',
-    "Destroyed": 'Destroyed',
-  };
-
-  const typeSelectOptions = {
-    "Military": 'Military',
-    "Civilian": 'Civilian',
-  };
-  
   const columns = [{
       dataField: '_row_index_placeholder',
       text: 'Row',

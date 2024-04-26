@@ -75,7 +75,14 @@
   position: fixed;
   top: 20px;
   right: 20px;
+}
 
+.floating-button-container > div > button {
+  background-color: #fff;
+}
+
+[data-bs-theme='dark'] .floating-button-container > div > button {
+  background-color: #212529;
 }
 
 .floating-button-container > *:not(:last-child) {

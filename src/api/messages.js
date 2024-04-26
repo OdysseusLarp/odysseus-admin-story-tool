@@ -8,7 +8,8 @@ export async function upsertMessage(message) {
     after_jump: message.after_jump ?? null,
     gm_notes: message.gm_notes?.trim() ?? null,
     // Should only contain IDs, not the full object
-    receivers: message.receivers.map((receiver) => {
+    sender_person_id: message.sender_person_id?.id ?? null,
+    receivers: message.receivers?.map((receiver) => {
       if (typeof receiver === 'string') {
         return receiver;
       }
@@ -16,7 +17,7 @@ export async function upsertMessage(message) {
         return receiver.id;
       }
       throw new Error(`Invalid receiver: ${receiver}`);
-    }),
+    }) ?? [],
   };
 
   const response = await fetch(apiUrl("/story/messages"), {

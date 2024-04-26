@@ -3,49 +3,31 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter, selectFilter, Comparator } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import { toSelectOptions } from "../utils/helpers";
+import TableLoading from "./TableLoading";
+import useSWR from "swr";
 
 import './Messages.css';
 
-const getMessages = async () => {
-  const response = await fetch(apiUrl("/story/messages"));
-  const messages = await response.json();
-  return messages;
-}
-
 export default function Messages(props) {
-  const [messages, setMessages] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
-  React.useEffect(() => {
-    getMessages().then(data => setMessages(data));
-  }, []);
+  const { data: messages, error, isLoading } = useSWR(
+    "/story/messages",
+    apiGetRequest
+  );
+
+  if (isLoading) return <TableLoading />;
+  if (error) return <div>Failed to load data</div>;
 
   function getRowIndex(cell, row, rowIndex) {
     return (page-1) * sizePerPage + rowIndex + 1;
   }
-  
-  const sentSelectOptions = {
-    "Yes": 'Yes',
-    "No need": 'No Need',
-    "Repeatable": 'Repeatable',
-    "Not yet": 'Not yet'
-  };
 
-  const typeSelectOptions = {
-    "Text NPC": 'Text NPC',
-    "EVA": 'EVA',
-    "Fleet Comms": 'Fleet Comms',
-    "Fleet Secretary": 'Fleet Secretary',
-    "Fleet Admiral": 'Fleet Admiral',
-    "Ship Log - Success": 'Ship Log - Success',
-    "Ship Log - Info": 'Ship Log - Info',
-    "Ship Log - Warning": 'Ship Log - Warning',
-    "Ship Log - Error": 'Ship Log - Error',
-    "News": 'News',
-    "Gray Radio": 'Gray Radio',
-  };
+  const sentSelectOptions = toSelectOptions(messages, 'sent');
+  const typeSelectOptions = toSelectOptions(messages, 'type');
 
   const columns = [{
       dataField: '_row_index_placeholder',
