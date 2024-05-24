@@ -44,11 +44,11 @@ export default function Characters(props) {
   const selectShip = toSelectOptions(characters.map((c) => c.ship), 'name');
 
   const columns = [{
-    dataField: '_row_index_placeholder',
-    text: 'Row',
-    formatter: getRowIndex,
+    dataField: 'id',
+    text: 'Id',
+    sort: true,
     headerStyle: () => {
-      return { width: '50px', textAlign: 'center' };
+      return { width: '60px', textAlign: 'center' };
     },
     align: 'center'
   }, {
