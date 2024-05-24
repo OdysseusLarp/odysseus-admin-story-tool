@@ -71,7 +71,9 @@ export default function Event(props) {
           </Row>
           <Row>
             <Col sm><span className='mini-header'>Short Description</span></Col>
-            <span>{event.description}</span>
+          </Row>
+          <Row>
+            <Col><span className='description'>{event.description}</span></Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>
@@ -79,7 +81,7 @@ export default function Event(props) {
           <Row>
             <Col sm><span className='mini-header'>GM Notes</span></Col>
           </Row>
-          {gm_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}
+          <span className='description'>{gm_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
           <Row>
             <Col sm><span className='mini-header'>NPC needs</span></Col>
           </Row>

@@ -105,7 +105,7 @@ export default function Ship(props) {
             <Col sm><span className='mini-header'>Description</span></Col>
           </Row>
           <Row>
-            <Col sm><span>{artifacts.filter(artifact => artifact.name === ship.class)[0].text.split('![]')[0].trim()}</span></Col>
+            <Col sm><span className="description">{artifacts.filter(artifact => artifact.name === ship.class)[0].text.split('![]')[0].trim()}</span></Col>
           </Row>
           <Row>
             <Col sm>&nbsp;</Col>

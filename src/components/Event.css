@@ -24,3 +24,9 @@ h1.event {
 .event a {
     color: #a52626 !important;
 }
+
+.event span.description {
+    white-space: pre-line;
+    max-width: 150ch;
+    display: inline-block;
+}

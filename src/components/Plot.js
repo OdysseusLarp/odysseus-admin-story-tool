@@ -113,29 +113,25 @@ export default function Plot(props) {
               <Row>
                 <Col sm><span className='mini-header'>Short Description</span></Col>
               </Row>
-              <Row>
-                <Col sm>
-                  {plot.description}
-                </Col>
-              </Row>
+              <span className="description">{plot.description}</span>
               <Row>
                 <Col sm>&nbsp;</Col>
               </Row>
               <Row>
                 <Col sm><span className='mini-header'>GM Notes</span></Col>
               </Row>
-              {plot_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>
+              <span className='description'>{plot_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>
                 {plot_notes.map(n => <li key={n}>{n}</li>)}
-              </ul>}
+              </ul>}</span>
               <Row>
                 <Col sm={4}><span className='mini-header'>Characters Involved</span>
-                  {plot.persons.length<1 ? <p>No linked characters</p> : <ul> {relatedCharacters.map(p => <li key={p.id}>
+                  {plot.persons.length<1 ? <ul><li>No linked characters</li></ul> : <ul> {relatedCharacters.map(p => <li key={p.id}>
                     <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link></span>
                     <span> - {p.is_character ? "Character" : "NPC"}</span></li>)}
                     </ul>
                   }</Col>
                 <Col sm={4}><span className='mini-header'>Character Groups Involved</span>
-                {characterGroups.length <1 ? <p>No linked character groups</p> : 
+                {characterGroups.length <1 ? <ul><li>No linked character groups</li></ul> : 
               <ul>{characterGroups.map(g => <li key={g}><Row><Col sm>{g}</Col></Row></li>)}</ul>}
               </Col></Row>
               <Row>
@@ -186,9 +182,11 @@ export default function Plot(props) {
               </Row>
               <Row>
                 <Col sm>
-                {copiedFromCharacter.length <1 ? <p>Nothing copied</p> : 
-                copiedFromCharacter.map(n => <p key={n}>{n}</p>)}
-                  </Col>
+                  <span className="description">
+                    {copiedFromCharacter.length <1 ? <p>Nothing copied</p> : 
+                    copiedFromCharacter.map(n => <p key={n}>{n}</p>)}
+                  </span>
+                </Col>
               </Row>
               <Row>
                 <Col sm>&nbsp;</Col>

@@ -22,17 +22,18 @@ export default function Messages(props) {
   if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
 
-  function getRowIndex(cell, row, rowIndex) {
-    return (page-1) * sizePerPage + rowIndex + 1;
-  }
-
   const sentSelectOptions = toSelectOptions(messages, 'sent');
   const typeSelectOptions = toSelectOptions(messages, 'type');
 
+  const defaultSorted = [{
+    dataField: 'id',
+    order: 'asc'
+  }];
+
   const columns = [{
-      dataField: '_row_index_placeholder',
-      text: 'Row',
-      formatter: getRowIndex,
+      dataField: 'id',
+      text: 'Id',
+      sort: true,
       headerStyle: () => {
         return { width: '50px', textAlign: 'center' };
       },
@@ -47,6 +48,22 @@ export default function Messages(props) {
       },
       formatter: (cell, row) => {
         return <Link to={`/messages/${row.id}`}>{cell}</Link>
+      }
+    }, {
+      dataField: 'after_jump',
+      text: 'After Jump',
+      sort: true,
+      filter: textFilter({comparator: Comparator.EQ}),
+      headerStyle: () => {
+        return { width: '7%', textAlign: 'left' };
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        const aValue = a === "" ? 100 : a;
+        const bValue = b === "" ? 100 : b;
+        if (order === 'asc') {
+          return bValue - aValue;
+        }
+        return aValue - bValue;
       }
     }, {
       dataField: 'sender.name',
@@ -83,22 +100,6 @@ export default function Messages(props) {
       filter: selectFilter({
         options: typeSelectOptions
       }),
-    }, {
-      dataField: 'after_jump',
-      text: 'After Jump',
-      sort: true,
-      filter: textFilter({comparator: Comparator.EQ}),
-      headerStyle: () => {
-        return { width: '10%', textAlign: 'left' };
-      },
-      sortFunc: (a, b, order, dataField, rowA, rowB) => {
-        const aValue = a === "" ? -1 : a;
-        const bValue = b === "" ? -1 : b;
-        if (order === 'asc') {
-          return bValue - aValue;
-        }
-        return aValue - bValue;
-      }
     }, {
       dataField: 'sent',
       text: 'Sent',
@@ -166,6 +167,7 @@ export default function Messages(props) {
         columns={ columns }
         filter={ filterFactory() }
         pagination={ paginationFactory(options) }
+        defaultSorted={defaultSorted}
       />
     </div>
   )

@@ -81,7 +81,7 @@ export default function Messages(props) {
               <Col sm><span className='mini-header'>Message</span></Col>
             </Row>
             <Row>
-              <Col sm><span> {message.message === "" ? "No message" : message.message } </span></Col>
+              <Col sm><span className="description"> {message.message === "" ? "No message" : message.message } </span></Col>
             </Row>
             <Row>
               <Col sm>&nbsp;</Col>
@@ -89,7 +89,7 @@ export default function Messages(props) {
             <Row>
               <Col sm><span className='mini-header'>GM Notes</span></Col>
             </Row>
-            {gm_notes.length < 1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(e => <li key={e}>{e}</li>)}</ul>}
+            <span className="description">{gm_notes.length < 1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(e => <li key={e}>{e}</li>)}</ul>}</span>
             <Row>
               <Col sm>&nbsp;</Col>
             </Row>

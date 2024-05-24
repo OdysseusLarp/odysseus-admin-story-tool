@@ -22,9 +22,6 @@ export default function Events() {
   if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
 
-  function getRowIndex(cell, row, rowIndex) {
-    return (page - 1) * sizePerPage + rowIndex + 1;
-  }
   const selectCharGroup = {
     'Bridge Crew': 'Bridge Crew',
     Civilian: 'Civilian',
@@ -45,10 +42,15 @@ export default function Events() {
   const selectSize = toSelectOptions(events, 'size');
   const selectType = toSelectOptions(events, 'type');
 
+  const defaultSorted = [{
+    dataField: 'id',
+    order: 'asc'
+  }];
+
   const columns = [{
-    dataField: '_row_index_placeholder',
-    text: 'Row',
-    formatter: getRowIndex,
+    dataField: 'id',
+    sort: true,
+    text: 'Id',
     headerStyle: () => {
       return { width: '50px', textAlign: 'center' };
     },
@@ -65,7 +67,18 @@ export default function Events() {
     dataField: 'after_jump',
     text: 'After Jump',
     sort: true,
-    filter: textFilter()
+    filter: textFilter(),
+    headerStyle: () => {
+      return { width: '7%', textAlign: 'left' };
+    },
+    sortFunc: (a, b, order, dataField, rowA, rowB) => {
+      const aValue = a === "" ? 100 : a;
+      const bValue = b === "" ? 100 : b;
+      if (order === 'asc') {
+        return bValue - aValue;
+      }
+      return aValue - bValue;
+    }
   }, {
     dataField: 'importance',
     text: 'Importance',
@@ -185,6 +198,7 @@ export default function Events() {
         columns={columns}
         filter={filterFactory()}
         pagination={paginationFactory(options)}
+        defaultSorted={defaultSorted}
       />
     </div>
   )

@@ -21,10 +21,6 @@ export default function Plots() {
 
   if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
-
-  function getRowIndex(cell, row, rowIndex) {
-    return (page-1) * sizePerPage + rowIndex + 1;
-  }
   
   const selectOptions = {
     true: 'Yes',
@@ -35,10 +31,16 @@ export default function Plots() {
   const importanceSelectOptions = toSelectOptions(plots, 'importance');
   const gmActionSelectOptions = toSelectOptions(plots, 'gm_actions');
 
+  const defaultSorted = [{
+    dataField: 'id',
+    order: 'asc'
+  }
+];
+
   const columns = [{
-      dataField: '_row_index_placeholder',
-      text: 'Row',
-      formatter: getRowIndex,
+      dataField: 'id',
+      text: 'Id',
+      sort: true,
       headerStyle: () => {
         return { width: '50px', textAlign: 'center' };
       },
@@ -50,6 +52,22 @@ export default function Plots() {
       filter: textFilter(),
       formatter: (cell, row) => {
         return <Link to={`/plots/${row.id}`}>{cell}</Link>
+      }
+    }, {
+      dataField: 'after_jump',
+      text: 'After Jump',
+      sort: true,
+      filter: textFilter(),
+      headerStyle: () => {
+        return { width: '7%', textAlign: 'left' };
+      },
+      sortFunc: (a, b, order, dataField, rowA, rowB) => {
+        const aValue = a === "" ? 100 : a;
+        const bValue = b === "" ? 100 : b;
+        if (order === 'asc') {
+          return bValue - aValue;
+        }
+        return aValue - bValue;
       }
     }, {
       dataField: 'character_groups',
@@ -70,11 +88,6 @@ export default function Plots() {
       filter: selectFilter({
         options: importanceSelectOptions
       }),
-    }, {
-      dataField: 'after_jump',
-      text: 'After Jump',
-      sort: true,
-      filter: textFilter()
     }, {
       dataField: 'gm_actions',
       text: 'GM Actions',
@@ -150,6 +163,7 @@ export default function Plots() {
         columns={ columns }
         filter={ filterFactory() }
         pagination={ paginationFactory(options) }
+        defaultSorted={defaultSorted}
       />
     </div>
   )
