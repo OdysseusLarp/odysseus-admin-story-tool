@@ -32,3 +32,9 @@ h1.character {
 .character .data-found {
     color: #f26bf7;
 }
+
+.character span.description {
+    white-space: pre-line;
+    max-width: 150ch;
+    display: inline-block;
+}

@@ -88,10 +88,14 @@ export default function Artifact(props) {
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Artifact Description</span></Col>
           </Row>
-          <Row><Col sm><p>{artifact.text.split('![]')[0]}</p></Col></Row>
-          <Row><Col sm><span className='mini-header'>GM Notes</span></Col></Row>
-          {artifact_notes.length < 1 ? <ul><li>No notes</li></ul> :
-            <ul>{artifact_notes.map(n => <li key={n}>{n}</li>)}</ul>}
+          <Row>
+            <Col sm><span className='description'>{artifact.text.split('![]')[0]}</span></Col>
+          </Row>
+          <Row className='row-mini-header'>
+            <Col sm><span className='mini-header'>GM Notes</span></Col>
+          </Row>
+          <span className='description'> {artifact_notes.length < 1 ? <ul><li>No notes</li></ul> :
+            <ul>{artifact_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
           <Row>
             <Col sm={4}><span className='mini-header'>Plots</span>
               {artifactDetails.plots.length < 1 ? <ul><li>No linked plots</li></ul> : <ul> {artifactDetails.plots.map(p => <li key={p.id}>

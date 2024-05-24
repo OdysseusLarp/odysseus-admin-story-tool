@@ -25,6 +25,8 @@ h1.ship {
     color: #f26bf7;
 }
 
-.ship span {
+.ship span.description {
     white-space: pre-line;
-  }
+    max-width: 150ch;
+    display: inline-block;
+}

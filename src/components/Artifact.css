@@ -24,3 +24,9 @@ h1.artifact {
 .artifact .new {
     color: #da3e00;
 }
+
+.artifact span.description {
+    white-space: pre-line;
+    max-width: 150ch;
+    display: inline-block;
+}

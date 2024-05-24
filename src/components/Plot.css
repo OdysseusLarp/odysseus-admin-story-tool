@@ -28,3 +28,9 @@ h1.plot {
 .plot .new {
     color: #da3e00 !important; 
 }
+
+.plot span.description {
+    white-space: pre-line;
+    max-width: 150ch;
+    display: inline-block;
+}

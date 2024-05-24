@@ -96,6 +96,9 @@ export default function Character(props) {
             <Col sm><span className='caption'>Database ID: </span>{character.id}</Col>
           </Row>
           <Row>
+            <Col sm={8}><span className='caption'>Military Rank: </span>{character.military_rank ? character.military_rank : "-"}</Col>
+          </Row>
+          <Row>
             <Col sm><span className='caption'>Shift: </span>{character.shift ? character.shift : "-"}</Col>
           </Row>
           <Row className='row-mini-header'>
@@ -132,12 +135,15 @@ export default function Character(props) {
           <Row className='row-mini-header'>
             <Col sm ><span className='mini-header'>Summary</span></Col>
           </Row>
-          {character_summary.length < 1 ? <p>No summary</p> : <ul>{character_summary.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
-          </ul>}
+          <span className="description">{character_summary.length < 1 ? <p>No summary</p> : <ul>{character_summary.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
+          </ul>}</span>
           <Row>
-            <Col sm><span className='mini-header'>GM Notes</span>
-              {gm_notes_list.length <1 ? <ul><li>No notes</li></ul> :
-                <ul>{gm_notes_list.map(n => <li key={n}>{n}</li>)}</ul>}
+            <Col sm><span className='mini-header'>GM Notes</span></Col>
+          </Row>
+          <Row>
+            <Col sm>
+              <span className="description">{gm_notes_list.length <1 ? <ul><li>No notes</li></ul> :
+                <ul>{gm_notes_list.map(n => <li key={n}>{n}</li>)}</ul>}</span>
             </Col>
           </Row>
           <Row>
@@ -203,7 +209,7 @@ export default function Character(props) {
             <Col sm><span className='mini-header'>Other known relations</span></Col>
           </Row>
           <Row>
-          <Col sm>{relations_list.length ? <ul>{relations_list}</ul> : <ul><li>None</li></ul>}</Col>
+            <Col sm><span className="description">{relations_list.length ? <ul>{relations_list}</ul> : <ul><li>None</li></ul>}</span></Col>
           </Row>
           <Row>
             <Col sm><span className='mini-header'>Classified personal data</span></Col>
