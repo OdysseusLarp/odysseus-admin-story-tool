@@ -65,7 +65,7 @@ function App() {
         <span>Admin Story DB: </span>
         <span className={`title-tab ${key}`}>{key}</span>
         <ButtonGroup>
-          <Button size="sm" className="float-char-btn" title="Toggle Dark Mode" variant="outline-secondary" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? "🌞 Light mode" : "🌚 Dark mode"}</Button>
+          <Button size="md" className="float-char-btn" title="Toggle Dark Mode" variant="outline-secondary" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? "🌞 Light mode" : "🌚 Dark mode"}</Button>
           <Button size="md" className="float-char-btn" title="Create New Plot" variant="outline-secondary" onClick={null}><TbMessagePlus className="plot-button" size="24px"/><span>New plot</span></Button>
           <Button size="md" className="float-char-btn" title="Create New Event" variant="outline-secondary" onClick={null}><LuCalendarPlus className="event-button" size="24px"/><span>New event</span></Button>
           <Button size="md" className="float-char-btn" title="Create New Message" variant="outline-secondary" onClick={() => setShowMessageNew(true)}><LuMailPlus className="message-button" size="24px"/><span>New message</span></Button>

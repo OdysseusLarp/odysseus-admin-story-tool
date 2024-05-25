@@ -2,6 +2,7 @@ import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min';
 import { apiGetRequest } from "../api";
 import { toSelectOptions } from "../utils/helpers";
 import { Link } from "react-router-dom";
@@ -29,10 +30,6 @@ export default function Characters(props) {
 
   const characters = [...swrCharacters.data.persons, ...swrNpcs.data.persons];
 
-  function getRowIndex(cell, row, rowIndex) {
-    return (page - 1) * sizePerPage + rowIndex + 1;
-  }
-
   const selectOptions = {
     true: 'Character',
     false: 'NPC'
@@ -40,8 +37,13 @@ export default function Characters(props) {
 
   const selectPlanet = toSelectOptions(characters, 'home_planet');
   const selectDynasty = toSelectOptions(characters, 'dynasty');
+  const selectParty = toSelectOptions(characters, 'political_party');
+  const selectReligion = toSelectOptions(characters, 'religion');
+  const selectShift = toSelectOptions(characters, 'shift');
   const selectStatus = toSelectOptions(characters, 'status');
   const selectShip = toSelectOptions(characters.map((c) => c.ship), 'name');
+
+  const { ToggleList } = ColumnToggle;
 
   const columns = [{
     dataField: 'id',
@@ -50,7 +52,13 @@ export default function Characters(props) {
     headerStyle: () => {
       return { width: '60px', textAlign: 'center' };
     },
-    align: 'center'
+    align: 'center',
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
   }, {
     dataField: 'full_name',
     text: 'Full Name',
@@ -58,12 +66,27 @@ export default function Characters(props) {
     filter: textFilter(),
     formatter: (cell, row) => {
       return <Link to={`/characters/${row.id}`}>{cell}</Link>
+    },
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
     }
   }, {
     dataField: 'card_id',
     text: 'Card ID',
     sort: true,
-    filter: textFilter()
+    filter: textFilter(),
+    headerStyle: () => {
+      return { width: '100px'};
+    },
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
   }, {
     dataField: 'is_character',
     text: 'Character/NPC',
@@ -71,36 +94,124 @@ export default function Characters(props) {
     formatter: cell => selectOptions[cell],
     filter: selectFilter({
       options: selectOptions
-    })
+    }),
+    headerStyle: () => {
+      return { width: '10%'};
+    },
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
   }, {
     dataField: 'character_group',
     text: 'Character Group',
     sort: true,
     filter: textFilter(),
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
+  }, {
+    dataField: 'shift',
+    text: 'Shift',
+    sort: true,
+    hidden: true,
+    filter: selectFilter({
+      options: selectShift
+    }),
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
+  }, {
+    dataField: 'title',
+    text: 'Title',
+    sort: true,
+    filter: textFilter(),
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
   }, {
     dataField: 'status',
     text: 'Status',
     sort: true,
+    hidden: true,
     formatter: (cell, row) => {
       return cell === 'Present and accounted for' ? "Accounted" : cell
     },
     filter: selectFilter({
       options: selectStatus
-    })
+    }),
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
   }, {
     dataField: 'dynasty',
     text: 'Dynasty',
     sort: true,
     filter: selectFilter({
       options: selectDynasty
-    })
+    }),
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
+  }, {
+    dataField: 'political_party',
+    text: 'Political party',
+    sort: true,
+    hidden: true,
+    filter: selectFilter({
+      options: selectParty
+    }),
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
+  }, {
+    dataField: 'religion',
+    text: 'Religion',
+    sort: true,
+    hidden: true,
+    filter: selectFilter({
+      options: selectReligion
+    }),
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
   }, {
     dataField: 'home_planet',
     text: 'Home Planet',
     sort: true,
+    hidden: true,
     filter: selectFilter({
       options: selectPlanet
-    })
+    }),
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
   }, {
 
     dataField: 'ship.name',
@@ -111,7 +222,16 @@ export default function Characters(props) {
     },
     filter: selectFilter({
       options: selectShip
-    })
+    }),
+    headerStyle: () => {
+      return { width: '10%'};
+    },
+    sortCaret: (order, column) => {
+      if (!order) return (<span>&nbsp;<font color="gray">↑↓</font></span>);
+      else if (order === 'asc') return (<span>&nbsp;↑<font color="gray">↓</font></span>);
+      else if (order === 'desc') return (<span>&nbsp;<font color="gray">↑</font>↓</span>);
+      return null;
+    }
   },
   ];
 
@@ -162,18 +282,37 @@ export default function Characters(props) {
   };
 
   return (
-    <div className="characters">
-      <BootstrapTable
-        bootstrap4
-        striped
-        hover
-        keyField="id"
-        bordered={false}
-        data={characters}
-        columns={columns}
-        filter={filterFactory()}
-        pagination={paginationFactory(options)}
-      />
-    </div>
+    <ToolkitProvider
+      keyField="id"
+      data={ characters }
+      columns={ columns }
+      columnToggle
+    >
+      {
+        props => (
+          <div className="characters">
+            <ToggleList
+              contextual="outline-secondary"
+              className="list-custom-class"
+              btnClassName="list-btn-custom-class"
+              { ...props.columnToggleProps }
+            />
+            <hr />
+            <BootstrapTable
+              bootstrap4
+              striped
+              hover
+              keyField="id"
+              bordered={false}
+              data={characters}
+              columns={columns}
+              filter={filterFactory()}
+              pagination={paginationFactory(options)}
+              { ...props.baseProps }
+            />
+          </div>
+        )
+      }
+    </ToolkitProvider>
   )
 }
