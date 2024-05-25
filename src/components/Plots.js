@@ -75,6 +75,11 @@ export default function Plots() {
       sort: true,
       filter: textFilter()
     }, {
+      dataField: 'themes',
+      text: 'Themes',
+      sort: true,
+      filter: textFilter()
+    }, {
       dataField: 'size',
       text: 'Size',
       sort: true,
