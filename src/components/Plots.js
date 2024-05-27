@@ -10,7 +10,7 @@ import useSWR from "swr";
 
 import './Plots.css';
 
-export default function Plots() {
+export default function Plots(props) {
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
@@ -23,8 +23,8 @@ export default function Plots() {
   if (error) return <div>Failed to load data</div>;
   
   const selectOptions = {
-    true: 'Yes',
-    false: 'No'
+    false: 'No',
+    true: 'Yes'
   };
 
   const sizeSelectOptions = toSelectOptions(plots, 'size');
@@ -70,15 +70,47 @@ export default function Plots() {
         return aValue - bValue;
       }
     }, {
+      dataField: 'persons',
+      text: 'Characters involved',
+      sort: true,
+      filter: textFilter({
+        onFilter: (filterValue, cell) => {
+          if (!filterValue) return cell;
+          const filtered = cell.filter((row) => {
+            if (row.persons.length === 0) {
+              return false;
+            }
+            const hasValue = row.persons.map(person => person.name.toLowerCase()).toString().includes(filterValue.toLowerCase());
+            return hasValue;
+            });
+          return filtered;
+        }
+      }),
+      formatter: (cell, row, index) => {
+        if (cell.length === 0 ) { return null }
+        const persons = cell.filter((e, i) => i < 3).map(person => 
+          <div key={person.id.concat(index)}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>);
+        if (cell.length > 3) { persons.push(<div key={index}>({cell.length})</div>) }
+        return persons;
+      }
+    }, {
       dataField: 'character_groups',
       text: 'Character groups',
       sort: true,
-      filter: textFilter()
+      filter: textFilter(),
+      formatter: (cell, row, i) => {
+        if (cell === null ) { return null }
+        return cell.split(", ").sort().map(character_group => <div key={character_group.concat(i)}>{character_group}</div>)
+      }
     }, {
       dataField: 'themes',
       text: 'Themes',
       sort: true,
-      filter: textFilter()
+      filter: textFilter(),
+      formatter: (cell, row) => {
+        if (cell === null ) { return null }
+        return cell.split(", ").sort().map(theme => <div key={theme}>{theme}</div>)
+      }
     }, {
       dataField: 'size',
       text: 'Size',
@@ -86,6 +118,9 @@ export default function Plots() {
       filter: selectFilter({
         options: sizeSelectOptions
       }),
+      headerStyle: () => {
+        return { width: '7%', textAlign: 'left' };
+      }
     }, {
       dataField: 'importance',
       text: 'Importance',
@@ -93,6 +128,9 @@ export default function Plots() {
       filter: selectFilter({
         options: importanceSelectOptions
       }),
+      headerStyle: () => {
+        return { width: '10%', textAlign: 'left' };
+      },
     }, {
       dataField: 'gm_actions',
       text: 'GM Actions',
@@ -100,14 +138,20 @@ export default function Plots() {
       filter: selectFilter({
         options: gmActionSelectOptions
       }),
+      headerStyle: () => {
+        return { width: '10%', textAlign: 'left' };
+      }
     }, {
       dataField: 'text_npc_first_message',
-      text: 'Text NPC Message First?',
+      text: 'Text NPC starts',
       sort: true,
       formatter: cell => selectOptions[cell],
       filter: selectFilter({
         options: selectOptions
-      })
+      }),
+      headerStyle: () => {
+        return { width: '10%', textAlign: 'left' };
+      }
   }];
 
   const customTotal = (from, to, size) => (
@@ -115,6 +159,25 @@ export default function Plots() {
       Showing { from } to { to } of { size } Results
     </span>
   );
+
+  const nonExpandableRows = plots.map((e) => {
+    if (e.persons.length < 4) { return e.id }
+    return null;
+   }).filter(e => e !== null);
+
+  const expandRow = {
+    renderer: row => (
+      <div className="plots">
+        <p>All characters involved ({row.persons.length})</p>
+        <div className="text-to-columns">
+          {row.persons.map(person => 
+          <div key={person.id.concat(row.id)}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>)}
+        </div>
+      </div>
+    ),
+    showExpandColumn: true,
+    nonExpandable: nonExpandableRows,
+  };
 
   const options = {
     page: page,
@@ -169,6 +232,7 @@ export default function Plots() {
         filter={ filterFactory() }
         pagination={ paginationFactory(options) }
         defaultSorted={defaultSorted}
+        expandRow={ expandRow }
       />
     </div>
   )

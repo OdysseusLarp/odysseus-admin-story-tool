@@ -145,9 +145,6 @@ export default function Characters(props) {
     text: 'Status',
     sort: true,
     hidden: true,
-    formatter: (cell, row) => {
-      return cell === 'Present and accounted for' ? "Accounted" : cell
-    },
     filter: selectFilter({
       options: selectStatus
     }),

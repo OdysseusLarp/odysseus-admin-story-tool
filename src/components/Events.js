@@ -10,7 +10,7 @@ import useSWR from "swr";
 
 import './Events.css';
 
-export default function Events() {
+export default function Events(props) {
   const [page, setPage] = React.useState(1);
   const [sizePerPage, setSizePerPage] = React.useState(15);
 
@@ -21,19 +21,6 @@ export default function Events() {
 
   if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
-
-  const selectCharGroup = {
-    'Bridge Crew': 'Bridge Crew',
-    Civilian: 'Civilian',
-    Engineer: 'Engineer',
-    Marine: 'Marine',
-    Medic: 'Medic',
-    Officer: 'Officer',
-    Pilot: 'Pilot',
-    Scientist: 'Scientist',
-    Royalty: 'Royalty',
-    Velian: 'Velian'
-  };
 
   const selectImportance = toSelectOptions(events, 'importance');
   const selectStatus = toSelectOptions(events, 'status');
@@ -80,6 +67,53 @@ export default function Events() {
       return aValue - bValue;
     }
   }, {
+    dataField: 'persons',
+    text: 'Characters involved',
+    sort: true,
+    filter: textFilter({
+      onFilter: (filterValue, cell) => {
+        if (!filterValue) return cell;
+        const filtered = cell.filter((row) => {
+          if (row.persons.length === 0) {
+            return false;
+          }
+          const hasValue = row.persons.map(person => person.name.toLowerCase()).toString().includes(filterValue.toLowerCase());
+          return hasValue;
+          });
+        return filtered;
+      }
+    }),
+    formatter: (cell, row, index) => {
+      if (cell.length === 0 ) { return null }
+      const persons = cell.filter((e, i) => i < 3).map(person => 
+        <div key={person.id.concat(index)}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>);
+      if (cell.length > 3) { persons.push(<div key={index}>({cell.length})</div>) }
+      return persons;
+    }
+  }, {
+    dataField: 'character_groups',
+    text: 'Character Group',
+    sort: true,
+    filter: textFilter(),
+    formatter: (cell, row, i) => {
+      if (cell === null ) { return null }
+      return cell.split(", ").sort().map(character_group => <div key={character_group.concat(i)}>{character_group}</div>)
+    }
+  }, {
+    dataField: 'type',
+    text: 'Type',
+    sort: true,
+    filter: selectFilter({
+      options: selectType
+    })
+  }, {
+    dataField: 'size',
+    text: 'Size',
+    sort: true,
+    filter: selectFilter({
+      options: selectSize
+    })
+  }, {
     dataField: 'importance',
     text: 'Importance',
     sort: true,
@@ -94,38 +128,12 @@ export default function Events() {
       options: selectStatus
     })
   }, {
-    dataField: 'type',
-    text: 'Type',
-    sort: true,
-    filter: selectFilter({
-      options: selectType
-    })
-
-  }, {
-    dataField: 'character_groups',
-    text: 'Character Group',
-    sort: true,
-    filter: selectFilter({
-      options: selectCharGroup,
-      comparator: Comparator.LIKE
-    })
-  }, {
-    dataField: 'size',
-    text: 'Size',
-    sort: true,
-    filter: selectFilter({
-      options: selectSize
-    })
-
-  }, {
-
     dataField: 'gm_actions',
     text: 'GM Actions',
     sort: true,
     filter: selectFilter({
       options: selectGmActions
     })
-
   }, {
     dataField: 'npc_count',
     text: 'NPC Count',
@@ -145,6 +153,25 @@ export default function Events() {
       Showing {from} to {to} of {size} Results
     </span>
   );
+
+  const nonExpandableRows = events.map((e, i) => {
+      if (e.persons.length < 4) { return e.id }
+      return null;
+     }).filter(e => e !== null);
+
+  const expandRow = {
+    renderer: row => (
+      <div className="events">
+        <p>All characters involved ({row.persons.length})</p>
+        <div className="text-to-columns">
+          {row.persons.map(person => 
+          <div key={person.id.concat(row.id)}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>)}
+        </div>
+      </div>
+    ),
+    showExpandColumn: true,
+    nonExpandable: nonExpandableRows,
+  };
 
   const options = {
     page: page,
@@ -199,6 +226,7 @@ export default function Events() {
         filter={filterFactory()}
         pagination={paginationFactory(options)}
         defaultSorted={defaultSorted}
+        expandRow={ expandRow }
       />
     </div>
   )

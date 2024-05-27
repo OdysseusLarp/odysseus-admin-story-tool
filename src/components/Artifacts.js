@@ -29,8 +29,8 @@ export default function Artifacts() {
   const originSelectOptions = toSelectOptions(artifacts, 'type');
 
   const selectOptions = {
-    true: 'Yes',
-    false: 'No'
+    false: 'No',
+    true: 'Yes'
   };
   
   const columns = [{

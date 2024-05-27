@@ -71,9 +71,6 @@ export default function Fleet() {
       headerStyle: () => {
         return { width: '13%', textAlign: 'left' };
       },
-      formatter: (cell, row) => {
-        return cell === 'Present and accounted for' ? "Accounted" : cell
-      },
       filter: selectFilter({
         options: statusSelectOptions
       }),

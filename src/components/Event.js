@@ -66,23 +66,7 @@ export default function Event(props) {
             <Col sm={4}><span className='caption'>Status: </span>{event.status}</Col>
             <Col sm={6}><span className='caption'>DMX event number: </span>{event.dmx_event_num ? event.dmx_event_num : "None"}</Col>
           </Row>
-          <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
-          <Row>
-            <Col sm><span className='mini-header'>Short Description</span></Col>
-          </Row>
-          <Row>
-            <Col><span className='description'>{event.description}</span></Col>
-          </Row>
-          <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
-          <Row>
-            <Col sm><span className='mini-header'>GM Notes</span></Col>
-          </Row>
-          <span className='description'>{gm_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
-          <Row>
+          <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>NPC needs</span></Col>
           </Row>
           {event.npc_count === 0 ?
@@ -92,24 +76,27 @@ export default function Event(props) {
             <Row>
               <Col sm={4}><span className='caption'>NPC Count: </span> {event.npc_count}</Col>
               <Col sm={6}><span className='caption'>NPC Location: </span> {event.npc_location}</Col>
-            </Row>}
+            </Row>
+          }
           {event.npc_count === 0 ? <Row /> :
             <Row>
               <Col sm><span className='caption'>What is required from NPCs?</span> 
                 {gm_note_npc.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_note_npc.map(n => <li key={n}>{n}</li>)}</ul>}
               </Col>
-            </Row>}
+            </Row>
+          }
           <Row>
-            <Col sm={4}><span className='mini-header'>Characters Involved</span>
-              {event.persons.length < 1 ? <ul><li>No linked characters</li></ul> : <span><ul> {event.persons.map(p => <li key={p.id}>
+            <Col sm={6}><span className='mini-header'>Characters Involved</span>
+              <div className="text-to-columns">{event.persons.length < 1 ? <ul><li>No linked characters</li></ul> : <span><ul> {event.persons.map(p => <li key={p.id}>
                 <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.name}</Link></span>
                 <span> - {is_npc(p)}</span></li>)}
-              </ul></span>}
+              </ul></span>}</div>
             </Col>
             <Col sm={6}><span className='mini-header'>Character Groups Involved</span>
-            {character_groups.length <1 ? <ul><li>No involved character groups</li></ul> : <ul>{character_groups.map(n => <li key={n}>{n}</li>)}</ul>}
-           </Col></Row>
-          <Row>
+              {character_groups.length <1 ? <ul><li>No involved character groups</li></ul> : <ul>{character_groups.map(n => <li key={n}>{n}</li>)}</ul>}
+           </Col>
+          </Row>
+          <Row className='row-mini-header'>
             <Col sm="4"><span className='mini-header'>Plots</span>
               <span>{event.plots.length < 1 ? <ul><li>No linked plots</li></ul> : <ul> {event.plots.map(p => <li key={p.id}>
                 <span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></span></li>)}
@@ -130,6 +117,19 @@ export default function Event(props) {
               }</span>
             </Col>
           </Row>
+          <Row>
+            <Col sm><span className='mini-header'>Description</span></Col>
+          </Row>
+          <Row>
+            <Col><span className='description'>{event.description}</span></Col>
+          </Row>
+          <Row>
+            <Col sm>&nbsp;</Col>
+          </Row>
+          <Row>
+            <Col sm><span className='mini-header'>GM Notes</span></Col>
+          </Row>
+          <span className='description'>{gm_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
           <Row>
             <Col sm><span className='mini-header'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
           </Row>

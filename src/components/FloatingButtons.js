@@ -25,7 +25,7 @@ export default function FloatingButtons() {
     <div className="floating-button-container">
       <ButtonGroup>
         <Button className="float-char-btn" title="Top" variant="outline-secondary" onClick={scrollToTop}><BiArrowToTop size="25px"/></Button>
-        <Button className="float-char-btn" title="Personal" variant="outline-secondary" onClick={() => scrollToTitle("personal")}><MdOutlinePerson size="25px"/></Button>
+        <Button className="float-char-btn" title="Personal" variant="outline-secondary" onClick={() => scrollToTitle("family")}><MdOutlinePerson size="25px"/></Button>
         <Button className="float-char-btn" title="Military" variant="outline-secondary" onClick={() => scrollToTitle("military")}><MdOutlineMilitaryTech size="25px"/></Button>
         <Button className="float-char-btn" title="Medical" variant="outline-secondary" onClick={() => scrollToTitle("medical")}><MdOutlineMedicalServices size="25px"/></Button>
         <Button className="float-char-btn" title="Bottom" variant="outline-secondary" onClick={scrollToBottom}><BiArrowToBottom size="25px"/></Button>

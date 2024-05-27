@@ -9,6 +9,7 @@ h1.artifact {
 
 .artifact .caption{
     font-weight: bold;
+    vertical-align: top;
 }
 
 .artifact .row-mini-header {
@@ -29,4 +30,8 @@ h1.artifact {
     white-space: pre-line;
     max-width: 150ch;
     display: inline-block;
+}
+
+.artifact li::marker {
+    vertical-align: top;
 }

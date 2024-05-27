@@ -45,10 +45,7 @@ export default function Character(props) {
     const medical_history_list = medical_history.map(medhistory => <li key={medhistory}>{medhistory}</li>);
     const personal_history = character.entries.filter((e) => e.type === "PERSONAL").map((e) => e.entry.split('\n\n')).flat();
     const personal_history_list = personal_history.map(phistory => <li key={phistory}>{phistory}</li>);
-
     const character_summary = character.summary ? character.summary.split('\n') : [];
-    const personal_secret_info = character.personal_secret_info ? character.personal_secret_info.split('\n') : [];
-    const personal_secret_info_list = personal_secret_info.map(secretinfo => <li key={secretinfo}>{secretinfo}</li>);
 
 
     const getShipById = (ship_id) => {
@@ -69,10 +66,7 @@ export default function Character(props) {
              {character.link_to_character ? <a href={character.link_to_character} target="_blank" rel="noreferrer">Link to Character document</a> : ""}
             </Col>
           </Row>
-          <Row>
-            <Col sm>&nbsp;</Col>
-          </Row>
-          <Row>
+          <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Basic Info</span></Col>
           </Row>
           <Row>
@@ -133,20 +127,6 @@ export default function Character(props) {
             <Col sm={8}><span className='caption'>Special group: </span>{character.special_group ? character.special_group : "-"}</Col>
           </Row>
           <Row className='row-mini-header'>
-            <Col sm ><span className='mini-header'>Summary</span></Col>
-          </Row>
-          <span className="description">{character_summary.length < 1 ? <p>No summary</p> : <ul>{character_summary.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
-          </ul>}</span>
-          <Row>
-            <Col sm><span className='mini-header'>GM Notes</span></Col>
-          </Row>
-          <Row>
-            <Col sm>
-              <span className="description">{gm_notes_list.length <1 ? <ul><li>No notes</li></ul> :
-                <ul>{gm_notes_list.map(n => <li key={n}>{n}</li>)}</ul>}</span>
-            </Col>
-          </Row>
-          <Row>
             <Col sm={4}><span className='mini-header'>Plots</span>
               <span className="plots">{characterStory?.plots.length < 1 ? <ul><li>No linked plots</li></ul> : <ul> {characterStory?.plots.map(p => <li key={p.id}>
                 <Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></li>)}
@@ -166,6 +146,20 @@ export default function Character(props) {
                 <Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</li>)}
               </ul>
               }</span>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm ><span className='mini-header'>Summary</span></Col>
+          </Row>
+          <span className="description">{character_summary.length < 1 ? <p>No summary</p> : <ul>{character_summary.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
+          </ul>}</span>
+          <Row>
+            <Col sm><span className='mini-header'>GM Notes</span></Col>
+          </Row>
+          <Row>
+            <Col sm>
+              <span className="description">{gm_notes_list.length <1 ? <ul><li>No notes</li></ul> :
+                <ul>{gm_notes_list.map(n => <li key={n}>{n}</li>)}</ul>}</span>
             </Col>
           </Row>
           <Row>
@@ -194,13 +188,7 @@ export default function Character(props) {
             <Col sm><span className='new'>Save the notes between games!</span></Col>
           </Row>
           <Row className='row-mini-header'>
-            <Col sm><span className='mini-header' id='personal'>Personal</span></Col>
-          </Row>
-          <Row>
-            <Col sm>{personal_history_list ? <ul>{personal_history_list}</ul> : <ul><li>None</li></ul>}</Col>
-          </Row>
-          <Row>
-            <Col sm><span className='mini-header'>Family</span></Col>
+            <Col sm><span className='mini-header' id='family'>Family</span></Col>
           </Row>
           <Row>
             <Col sm>{family_list.length ? <ul>{family_list}</ul> : <ul><li>None</li></ul>}</Col>
@@ -212,12 +200,18 @@ export default function Character(props) {
             <Col sm><span className="description">{relations_list.length ? <ul>{relations_list}</ul> : <ul><li>None</li></ul>}</span></Col>
           </Row>
           <Row>
+            <Col sm><span className='mini-header'>Personal</span></Col>
+          </Row>
+          <Row>
+            <Col sm>{personal_history_list ? <ul>{personal_history_list}</ul> : <ul><li>None</li></ul>}</Col>
+          </Row>
+          <Row>
             <Col sm><span className='mini-header'>Classified personal data</span></Col>
           </Row>
           <Row>
-            <Col sm>{personal_secret_info_list.length ? <ul>{personal_secret_info_list}</ul> : <ul><li>None</li></ul>}</Col>
+            <Col sm><span className="description">{character.personal_secret_info ? character.personal_secret_info : "No classified personal data"}</span></Col>
           </Row>
-          <Row>
+          <Row className='row-mini-header'>
             <Col sm><span className='mini-header' id='military'>Military</span></Col>
           </Row>
           <Row>
