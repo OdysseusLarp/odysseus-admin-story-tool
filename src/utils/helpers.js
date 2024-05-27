@@ -11,5 +11,6 @@ export const toSelectOptions = (array, key) => {
       selectOptions[item[key]] = item[key];
     };
   });
-  return selectOptions;
+  const sortedSelectOptions = Object.fromEntries(Object.entries(selectOptions).sort())
+  return sortedSelectOptions;
 }
