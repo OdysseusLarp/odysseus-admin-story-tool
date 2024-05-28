@@ -75,6 +75,7 @@ export default function Plot(props) {
     const relatedCharacterIds = plot.persons.map(p => p.id)
     const relatedCharacters = characters.filter(c => relatedCharacterIds.includes(c.id))
     const plot_notes = plot.gm_notes ? plot.gm_notes.split('\n') : [];
+    const description = plot.description ? plot.description.split('\n') : [];
     const copiedFromCharacter = plot.copy_from_characters ? plot.copy_from_characters.split('\n') : [];
     const characterGroups = plot.character_groups ? plot.character_groups.split(', ') : [];
 
@@ -90,7 +91,7 @@ export default function Plot(props) {
                 <Col sm={4}><span className='caption'>ID: </span>{plot.id}</Col>
               </Row>
               <Row>
-                <Col sm={4}><span className='caption'>Text NPC should send first message: </span>{plot.text_npc_first_message ? "Yes" : "No"}</Col>
+                <Col sm={4}><span className='caption'>Text NPC should start: </span>{plot.text_npc_first_message ? "Yes" : "No"}</Col>
                 <Col sm={4}><span className='caption'>Plot size: </span>{plot.size}</Col>
               </Row>
               <Row>
@@ -107,34 +108,20 @@ export default function Plot(props) {
                 <Col sm={4}><span className='caption'>Locked plot: </span>{plot.locked ? "Yes" : "No"}</Col>
                 <Col sm={4}><span className='caption'>Plot Importance: </span> {plot.importance}</Col>
               </Row>
-              <Row>
-                <Col sm>&nbsp;</Col>
-              </Row>
-              <Row>
-                <Col sm><span className='mini-header'>Short Description</span></Col>
-              </Row>
-              <span className="description">{plot.description}</span>
-              <Row>
-                <Col sm>&nbsp;</Col>
-              </Row>
-              <Row>
-                <Col sm><span className='mini-header'>GM Notes</span></Col>
-              </Row>
-              <span className='description'>{plot_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>
-                {plot_notes.map(n => <li key={n}>{n}</li>)}
-              </ul>}</span>
-              <Row>
+              <Row className='row-mini-header'>
                 <Col sm={4}><span className='mini-header'>Characters Involved</span>
-                  {plot.persons.length<1 ? <ul><li>No linked characters</li></ul> : <ul> {relatedCharacters.map(p => <li key={p.id}>
-                    <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link></span>
-                    <span> - {p.is_character ? "Character" : "NPC"}</span></li>)}
-                    </ul>
-                  }</Col>
+                  <div className="text-to-columns">{plot.persons.length<1 ? <ul><li>No linked characters</li></ul> : <ul> {relatedCharacters.map(p => <li key={p.id}>
+                      <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link></span>
+                      <span> - {p.is_character ? "Character" : "NPC"}</span></li>)}
+                      </ul>
+                    }</div>
+                  </Col>
                 <Col sm={4}><span className='mini-header'>Character Groups Involved</span>
-                {characterGroups.length <1 ? <ul><li>No linked character groups</li></ul> : 
-              <ul>{characterGroups.map(g => <li key={g}><Row><Col sm>{g}</Col></Row></li>)}</ul>}
-              </Col></Row>
-              <Row>
+                  {characterGroups.length <1 ? <ul><li>No linked character groups</li></ul> : 
+                  <ul>{characterGroups.map(g => <li key={g}><Row><Col sm>{g}</Col></Row></li>)}</ul>}
+                </Col>
+              </Row>
+              <Row className='row-mini-header'>
                 <Col sm={4}><span className='mini-header'>Events</span>
                   {plot.events.length<1 ? <ul><li>No linked events</li></ul> : <ul> {plot.events.map(e => <li key={e.id}>
                     <span className='events'><Link onClick={() => props.changeTab('Events')} to={`/events/${e.id}`}>{e.name}</Link></span></li>)}
@@ -142,7 +129,7 @@ export default function Plot(props) {
                 </Col>
                 <Col sm={4}><span className='mini-header'>Artifacts</span>
                   {plot.artifacts.length<1 ? <ul><li>No linked artifacts</li></ul> : <ul> {plot.artifacts.map(a => <li key={a.id}>
-                    <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>{a.name} - Catalog ID: {a.catalog_id}</Link></span></li>)}
+                    <span className='artifacts'><Link onClick={() => props.changeTab('Artifacts')} to={`/artifacts/${a.id}`}>{a.catalog_id} - {a.name}</Link></span></li>)}
                   </ul>}
                 </Col>
               </Row>
@@ -151,7 +138,25 @@ export default function Plot(props) {
                 {relatedMessages.length<1 ? <ul><li>No messages</li></ul> : <ul> {relatedMessages.map(m => <li key={m.id}>
                   <span className='messages'><Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</span></li>)}
                     </ul>}
-              </Col></Row>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm><span className='mini-header'>Description</span></Col>
+              </Row>
+              <Row>
+                <Col sm>
+                  <span className="description">
+                    {description.length <1 ? <p>No description</p> : 
+                    description.map(n => <p key={n}>{n}</p>)}
+                  </span>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm><span className='mini-header'>GM Notes</span></Col>
+              </Row>
+              <span className='description'>{plot_notes.length <1 ? <ul><li>No notes</li></ul> : <ul>
+                {plot_notes.map(n => <li key={n}>{n}</li>)}
+              </ul>}</span>
               <Row>
                 <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
               </Row>

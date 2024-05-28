@@ -31,87 +31,82 @@ export default function Messages(props) {
   }];
 
   const columns = [{
-      dataField: 'id',
-      text: 'Id',
-      sort: true,
-      headerStyle: () => {
-        return { width: '50px', textAlign: 'center' };
-      },
-      align: 'center'
-    }, {
-      dataField: 'name',
-      text: 'Name',
-      sort: true,
-      filter: textFilter(),
-      headerStyle: () => {
-        return { width: '30%', textAlign: 'left' };
-      },
-      formatter: (cell, row) => {
-        return <Link to={`/messages/${row.id}`}>{cell}</Link>
+    dataField: 'id',
+    text: 'Id',
+    sort: true,
+    headerStyle: () => { return { width: '50px', textAlign: 'center' } },
+    align: 'center'
+  }, {
+    dataField: 'name',
+    text: 'Name',
+    sort: true,
+    filter: textFilter(),
+    headerStyle: () => { return { width: '30%', textAlign: 'left' } },
+    formatter: (cell, row) => { return <Link to={`/messages/${row.id}`}>{cell}</Link> }
+  }, {
+    dataField: 'after_jump',
+    text: 'After Jump',
+    sort: true,
+    filter: textFilter({ comparator: Comparator.EQ }),
+    headerStyle: () => { return { width: '7%', textAlign: 'left' } },
+    sortFunc: (a, b, order, dataField, rowA, rowB) => {
+      const aValue = a === "" ? 100 : a;
+      const bValue = b === "" ? 100 : b;
+      if (order === 'asc') {
+        return bValue - aValue;
       }
-    }, {
-      dataField: 'after_jump',
-      text: 'After Jump',
-      sort: true,
-      filter: textFilter({comparator: Comparator.EQ}),
-      headerStyle: () => {
-        return { width: '7%', textAlign: 'left' };
-      },
-      sortFunc: (a, b, order, dataField, rowA, rowB) => {
-        const aValue = a === "" ? 100 : a;
-        const bValue = b === "" ? 100 : b;
-        if (order === 'asc') {
-          return bValue - aValue;
-        }
-        return aValue - bValue;
+      return aValue - bValue;
+    }
+  }, {
+    dataField: 'sender.name',
+    text: 'Sender',
+    sort: true,
+    filter: textFilter(),
+    formatter: (cell, row) => {
+      return <span className='characters'>
+        <Link to={`/characters/${row.sender_person_id}`} onClick={() => props.changeTab('Characters')}>{cell}</Link>
+      </span>
+    }
+  }, {
+    dataField: 'receivers',
+    text: 'Receiver(s)',
+    sort: true,
+    filter: textFilter({
+      onFilter: (filterValue, cell) => {
+        if (!filterValue) return cell;
+        const filtered = cell.filter((row) => {
+          if (row.receivers.length === 0) {
+            return false;
+          }
+          const hasValue = row.receivers.map(receiver => receiver.name.toLowerCase()).toString().includes(filterValue.toLowerCase());
+          return hasValue;
+        });
+        return filtered;
       }
-    }, {
-      dataField: 'sender.name',
-      text: 'Sender',
-      sort: true,
-      filter: textFilter(),
-      formatter: (cell, row) => {
-        return <span className='characters'><Link to={`/characters/${row.sender_person_id}` } onClick={() => props.changeTab('Characters')}>{cell}</Link></span>
-      }
-    }, {
-      dataField: 'receivers',
-      text: 'Receiver(s)',
-      sort: true,
-      filter: textFilter({
-        onFilter: (filterValue, cell) => {
-          if (!filterValue) return cell;
-          const filtered = cell.filter((row) => {
-            if (row.receivers.length === 0) {
-              return false;
-            }
-            const hasValue = row.receivers.map(receiver => receiver.name.toLowerCase()).toString().includes(filterValue.toLowerCase());
-            return hasValue;
-            });
-          return filtered;
-        }
-      }),
-      formatter: (cell, row) => {
-        return cell.map(person => <div key={person.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>)
-      }
-    }, {
-      dataField: 'type',
-      text: 'Type',
-      sort: true,
-      filter: selectFilter({
-        options: typeSelectOptions
-      }),
-    }, {
-      dataField: 'sent',
-      text: 'Sent',
-      sort: true,
-      filter: selectFilter({
-        options: sentSelectOptions
-      }),
+    }),
+    formatter: (cell, row) => {
+      return cell.map(person => <div key={person.id}>
+        <span className='characters'>
+          <Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link>
+        </span>
+        <br />
+      </div>)
+    }
+  }, {
+    dataField: 'type',
+    text: 'Type',
+    sort: true,
+    filter: selectFilter({ options: typeSelectOptions }),
+  }, {
+    dataField: 'sent',
+    text: 'Sent',
+    sort: true,
+    filter: selectFilter({ options: sentSelectOptions }),
   }];
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
-      Showing { from } to { to } of { size } Results
+      Showing {from} to {to} of {size} Results
     </span>
   );
 
@@ -131,12 +126,12 @@ export default function Messages(props) {
     lastPageTitle: 'Last page',
     showTotal: true,
     paginationTotalRenderer: customTotal,
-    onPageChange: (page, sizePerPage) => { 
-      setPage(page); 
+    onPageChange: (page, sizePerPage) => {
+      setPage(page);
       setSizePerPage(sizePerPage);
     },
-    onSizePerPageChange: (sizePerPage, page) => { 
-      setPage(page); 
+    onSizePerPageChange: (sizePerPage, page) => {
+      setPage(page);
       setSizePerPage(sizePerPage);
     },
     disablePageTitle: true,
@@ -162,11 +157,11 @@ export default function Messages(props) {
         striped
         hover
         keyField="id"
-        bordered={ false }
-        data={ messages }
-        columns={ columns }
-        filter={ filterFactory() }
-        pagination={ paginationFactory(options) }
+        bordered={false}
+        data={messages}
+        columns={columns}
+        filter={filterFactory()}
+        pagination={paginationFactory(options)}
         defaultSorted={defaultSorted}
       />
     </div>

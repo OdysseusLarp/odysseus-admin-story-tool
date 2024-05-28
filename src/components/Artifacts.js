@@ -22,76 +22,75 @@ export default function Artifacts() {
   if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
 
+  const originSelectOptions = toSelectOptions(artifacts, 'type');
+  const selectOptions = {
+    false: 'No',
+    true: 'Yes'
+  };
+
   function getRowIndex(cell, row, rowIndex) {
-    return (page-1) * sizePerPage + rowIndex + 1;
+    return (page - 1) * sizePerPage + rowIndex + 1;
   }
 
-  const originSelectOptions = toSelectOptions(artifacts, 'type');
-
-  const selectOptions = {
-    true: 'Yes',
-    false: 'No'
-  };
-  
   const columns = [{
-      dataField: '_row_index_placeholder',
-      text: 'Row',
-      formatter: getRowIndex,
-      headerStyle: () => {
-        return { width: '50px', textAlign: 'center' };
-      },
-      align: 'center'
-    }, {
-      dataField: 'catalog_id',
-      text: 'Catalog ID',
-      sort: true,
-      filter: textFilter(),
-      formatter: (cell, row) => {
-        return <Link to={`/artifacts/${row.id}`}>{cell}</Link>
-      }
-    }, {
-      dataField: 'name',
-      text: 'Name',
-      sort: true,
-      filter: textFilter(),
-      headerStyle: () => {
-        return { width: '17%', textAlign: 'left' };
-      },
-    }, {
-      dataField: 'type',
-      text: 'Origin',
-      sort: true,
-      filter: selectFilter({
-        options: originSelectOptions
-      }),
-    }, {
-      dataField: 'discovered_at',
-      text: 'Discovered At',
-      sort: true,
-      filter: textFilter()
-    }, {
-      dataField: 'discovered_by',
-      text: 'Discovered By',
-      sort: true,
-      filter: textFilter()
-    }, {
-      dataField: 'discovered_from',
-      text: 'Discovered From',
-      sort: true,
-      filter: textFilter()
-    }, {
-      dataField: 'is_visible',
-      text: 'Visible',
-      sort: true,
-      formatter: cell => selectOptions[cell],
-      filter: selectFilter({
-        options: selectOptions
-      })
+    dataField: '_row_index_placeholder',
+    text: 'Row',
+    formatter: getRowIndex,
+    headerStyle: () => {
+      return { width: '50px', textAlign: 'center' }
+    },
+    align: 'center'
+  }, {
+    dataField: 'catalog_id',
+    text: 'Catalog ID',
+    sort: true,
+    filter: textFilter(),
+    formatter: (cell, row) => {
+      return <Link to={`/artifacts/${row.id}`}>{cell}</Link>
+    }
+  }, {
+    dataField: 'name',
+    text: 'Name',
+    sort: true,
+    filter: textFilter(),
+    headerStyle: () => {
+      return { width: '17%', textAlign: 'left' }
+    },
+  }, {
+    dataField: 'type',
+    text: 'Origin',
+    sort: true,
+    filter: selectFilter({
+      options: originSelectOptions
+    }),
+  }, {
+    dataField: 'discovered_at',
+    text: 'Discovered At',
+    sort: true,
+    filter: textFilter()
+  }, {
+    dataField: 'discovered_by',
+    text: 'Discovered By',
+    sort: true,
+    filter: textFilter()
+  }, {
+    dataField: 'discovered_from',
+    text: 'Discovered From',
+    sort: true,
+    filter: textFilter()
+  }, {
+    dataField: 'is_visible',
+    text: 'Visible',
+    sort: true,
+    formatter: cell => selectOptions[cell],
+    filter: selectFilter({
+      options: selectOptions
+    })
   }];
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
-      Showing { from } to { to } of { size } Results
+      Showing {from} to {to} of {size} Results
     </span>
   );
 
@@ -111,12 +110,12 @@ export default function Artifacts() {
     lastPageTitle: 'Last page',
     showTotal: true,
     paginationTotalRenderer: customTotal,
-    onPageChange: (page, sizePerPage) => { 
-      setPage(page); 
+    onPageChange: (page, sizePerPage) => {
+      setPage(page);
       setSizePerPage(sizePerPage);
     },
-    onSizePerPageChange: (sizePerPage, page) => { 
-      setPage(page); 
+    onSizePerPageChange: (sizePerPage, page) => {
+      setPage(page);
       setSizePerPage(sizePerPage);
     },
     disablePageTitle: true,
@@ -142,11 +141,11 @@ export default function Artifacts() {
         striped
         hover
         keyField="id"
-        bordered={ false }
-        data={ artifacts }
-        columns={ columns }
-        filter={ filterFactory() }
-        pagination={ paginationFactory(options) }
+        bordered={false}
+        data={artifacts}
+        columns={columns}
+        filter={filterFactory()}
+        pagination={paginationFactory(options)}
       />
     </div>
   )

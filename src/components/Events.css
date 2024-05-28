@@ -27,3 +27,8 @@
 .events table {
     text-align: left;
 }
+
+.events .text-to-columns {
+    column-count: 6;
+    margin-bottom: 12px;
+}

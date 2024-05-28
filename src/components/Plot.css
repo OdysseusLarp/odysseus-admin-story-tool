@@ -34,3 +34,7 @@ h1.plot {
     max-width: 150ch;
     display: inline-block;
 }
+
+.plot .text-to-columns {
+    column-count: 2;
+}

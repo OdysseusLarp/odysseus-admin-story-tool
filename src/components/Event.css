@@ -30,3 +30,7 @@ h1.event {
     max-width: 150ch;
     display: inline-block;
 }
+
+.event .text-to-columns {
+    column-count: 3;
+}

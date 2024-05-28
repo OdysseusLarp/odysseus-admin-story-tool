@@ -65,16 +65,16 @@ function App() {
         <span>Admin Story DB: </span>
         <span className={`title-tab ${key}`}>{key}</span>
         <ButtonGroup>
-          <Button size="sm" className="float-char-btn" title="Toggle Dark Mode" variant="outline-secondary" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? "🌞 Light mode" : "🌚 Dark mode"}</Button>
+          <Button size="md" className="float-char-btn" title="Toggle Dark Mode" variant="outline-secondary" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? "🌞 Light mode" : "🌚 Dark mode"}</Button>
           <Button size="md" className="float-char-btn" title="Create New Plot" variant="outline-secondary" onClick={null}><TbMessagePlus className="plot-button" size="24px"/><span>New plot</span></Button>
           <Button size="md" className="float-char-btn" title="Create New Event" variant="outline-secondary" onClick={null}><LuCalendarPlus className="event-button" size="24px"/><span>New event</span></Button>
           <Button size="md" className="float-char-btn" title="Create New Message" variant="outline-secondary" onClick={() => setShowMessageNew(true)}><LuMailPlus className="message-button" size="24px"/><span>New message</span></Button>
         </ButtonGroup>
       </h1>
       <CreateNewMessageModal
-          showMessageNew={showMessageNew}
-          handleClose={() => setShowMessageNew(false)}
-        />
+        showMessageNew={showMessageNew}
+        handleClose={() => setShowMessageNew(false)}
+      />
       <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
         <Tab eventKey="Characters" title="Characters" />
         <Tab eventKey="Fleet" title="Fleet" />
@@ -88,13 +88,13 @@ function App() {
         <Route path="/fleet/:id" element={<Ship changeTab={changeTab} />} />
         <Route path="/characters" element={<Characters changeTab={changeTab} />} />
         <Route path="/characters/:id" element={<Character changeTab={changeTab} />} />
-        <Route path="/artifacts" element={<Artifacts />} />
+        <Route path="/artifacts" element={<Artifacts changeTab={changeTab}/>} />
         <Route path="/artifacts/:id" element={<Artifact changeTab={changeTab} />} />
-        <Route path="/plots" element={<Plots />} />
+        <Route path="/plots" element={<Plots changeTab={changeTab}/>} />
         <Route path="/plots/:id" element={<Plot changeTab={changeTab} />} />
-        <Route path="/events" element={<Events />} />
+        <Route path="/events" element={<Events changeTab={changeTab}/>} />
         <Route path="/events/:id" element={<Event changeTab={changeTab} />} />
-        <Route path="/messages" element={<Messages />} />
+        <Route path="/messages" element={<Messages changeTab={changeTab}/>} />
         <Route path="/messages/:id" element={<Message changeTab={changeTab} />} />
         <Route path="*" element={<></>} />
       </Routes>

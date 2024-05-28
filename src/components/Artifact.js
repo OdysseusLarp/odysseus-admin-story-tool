@@ -55,6 +55,7 @@ export default function Artifact(props) {
 
     const artifact_entries = artifact.entries.map((e) => e.entry.split('\n')).flat();
     const artifact_notes = artifact.gm_notes ? artifact.gm_notes.split('\n') : [];
+    const test_result_none = "No significant findings were discovered."
 
     return (
       <div className='artifact'>
@@ -91,11 +92,6 @@ export default function Artifact(props) {
           <Row>
             <Col sm><span className='description'>{artifact.text.split('![]')[0]}</span></Col>
           </Row>
-          <Row className='row-mini-header'>
-            <Col sm><span className='mini-header'>GM Notes</span></Col>
-          </Row>
-          <span className='description'> {artifact_notes.length < 1 ? <ul><li>No notes</li></ul> :
-            <ul>{artifact_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
           <Row>
             <Col sm={4}><span className='mini-header'>Plots</span>
               {artifactDetails.plots.length < 1 ? <ul><li>No linked plots</li></ul> : <ul> {artifactDetails.plots.map(p => <li key={p.id}>
@@ -108,6 +104,29 @@ export default function Artifact(props) {
               </ul>}
             </Col>
           </Row>
+          <Row>
+            <Col sm><span className='mini-header'>Test Results</span></Col>
+          </Row>
+          <Row>
+            <Col sm><p><span className='caption'>Age: </span>{artifact.test_age ? artifact.test_age : test_result_none}</p></Col>
+          </Row>
+          <Row>
+            <Col sm><p><span className='caption test'>History: </span><span className="description">{artifact.test_history ? artifact.test_history : test_result_none}</span></p></Col>
+          </Row>
+          <Row>
+            <Col sm><p><span className='caption test'>Material: </span><span className="description">{artifact.test_material ? artifact.test_material : test_result_none}</span></p></Col>
+          </Row>
+          <Row>
+            <Col sm><p><span className='caption test'>Microscope: </span><span className="description">{artifact.test_microscope ? artifact.test_microscope : test_result_none}</span></p></Col>
+          </Row>
+          <Row>
+            <Col sm><p><span className='caption'>X-ray fluorecense: </span><span className="description">{artifact.test_xrf ? artifact.test_xrf : test_result_none}</span></p></Col>
+          </Row>
+          <Row>
+            <Col sm><span className='mini-header'>GM Notes</span></Col>
+          </Row>
+          <span className='description'> {artifact_notes.length < 1 ? <ul><li>No notes</li></ul> :
+            <ul>{artifact_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
           <Row>
             <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
           </Row>
@@ -137,7 +156,7 @@ export default function Artifact(props) {
             <Col sm><span className='mini-header'>Artifact Entries</span></Col>
           </Row>
           {artifact_entries.length < 1 ? <ul><li>No entries</li></ul> : <ul>
-            {artifact_entries.map(e => <li key={e}><Row><Col sm>{e}</Col></Row></li>)}
+            {artifact_entries.map(e => e ? <span className="description"><li key={e}>{e}</li></span> : null)}
           </ul>}
         </Container>
       </div>
