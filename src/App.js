@@ -72,9 +72,9 @@ function App() {
         </ButtonGroup>
       </h1>
       <CreateNewMessageModal
-          showMessageNew={showMessageNew}
-          handleClose={() => setShowMessageNew(false)}
-        />
+        showMessageNew={showMessageNew}
+        handleClose={() => setShowMessageNew(false)}
+      />
       <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
         <Tab eventKey="Characters" title="Characters" />
         <Tab eventKey="Fleet" title="Fleet" />

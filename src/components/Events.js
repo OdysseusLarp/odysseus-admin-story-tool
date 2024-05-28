@@ -1,6 +1,6 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter, Comparator, selectFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
@@ -79,14 +79,19 @@ export default function Events(props) {
           }
           const hasValue = row.persons.map(person => person.name.toLowerCase()).toString().includes(filterValue.toLowerCase());
           return hasValue;
-          });
-        return filtered;
+        });
+        return filtered; 
       }
     }),
     formatter: (cell, row, index) => {
-      if (cell.length === 0 ) { return null }
-      const persons = cell.filter((e, i) => i < 3).map(person => 
-        <div key={person.id.concat(index)}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>);
+      if (cell.length === 0) { return null }
+      const persons = cell.filter((e, i) => i < 3).map(person =>
+        <div key={person.id.concat(index)}>
+          <span className='characters'>
+            <Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link>
+          </span>
+          <br />
+        </div>);
       if (cell.length > 3) { persons.push(<div key={index}>({cell.length})</div>) }
       return persons;
     }
@@ -96,7 +101,7 @@ export default function Events(props) {
     sort: true,
     filter: textFilter(),
     formatter: (cell, row, i) => {
-      if (cell === null ) { return null }
+      if (cell === null) { return null }
       return cell.split(", ").sort().map(character_group => <div key={character_group.concat(i)}>{character_group}</div>)
     }
   }, {
@@ -155,17 +160,23 @@ export default function Events(props) {
   );
 
   const nonExpandableRows = events.map((e, i) => {
-      if (e.persons.length < 4) { return e.id }
-      return null;
-     }).filter(e => e !== null);
+    if (e.persons.length < 4) { return e.id }
+    return null;
+  }).filter(e => e !== null);
 
   const expandRow = {
     renderer: row => (
       <div className="events">
         <p>All characters involved ({row.persons.length})</p>
         <div className="text-to-columns">
-          {row.persons.map(person => 
-          <div key={person.id.concat(row.id)}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>)}
+          {row.persons.map(person =>
+            <div key={person.id.concat(row.id)}>
+              <span className='characters'>
+                <Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link>
+              </span>
+              <br />
+            </div>
+          )}
         </div>
       </div>
     ),
@@ -226,7 +237,7 @@ export default function Events(props) {
         filter={filterFactory()}
         pagination={paginationFactory(options)}
         defaultSorted={defaultSorted}
-        expandRow={ expandRow }
+        expandRow={expandRow}
       />
     </div>
   )

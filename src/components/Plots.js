@@ -21,15 +21,14 @@ export default function Plots(props) {
 
   if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
-  
-  const selectOptions = {
-    false: 'No',
-    true: 'Yes'
-  };
 
   const sizeSelectOptions = toSelectOptions(plots, 'size');
   const importanceSelectOptions = toSelectOptions(plots, 'importance');
   const gmActionSelectOptions = toSelectOptions(plots, 'gm_actions');
+  const selectOptions = {
+    false: 'No',
+    true: 'Yes'
+  };
 
   const defaultSorted = [{
     dataField: 'id',
@@ -89,7 +88,13 @@ export default function Plots(props) {
       formatter: (cell, row, index) => {
         if (cell.length === 0 ) { return null }
         const persons = cell.filter((e, i) => i < 3).map(person => 
-          <div key={person.id.concat(index)}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>);
+          <div key={person.id.concat(index)}>
+            <span className='characters'>
+              <Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link>
+            </span>
+            <br/>
+          </div>
+        );
         if (cell.length > 3) { persons.push(<div key={index}>({cell.length})</div>) }
         return persons;
       }
@@ -100,7 +105,8 @@ export default function Plots(props) {
       filter: textFilter(),
       formatter: (cell, row, i) => {
         if (cell === null ) { return null }
-        return cell.split(", ").sort().map(character_group => <div key={character_group.concat(i)}>{character_group}</div>)
+        return cell.split(", ").sort().map(character_group => 
+          <div key={character_group.concat(i)}>{character_group}</div>)
       }
     }, {
       dataField: 'themes',
@@ -171,7 +177,12 @@ export default function Plots(props) {
         <p>All characters involved ({row.persons.length})</p>
         <div className="text-to-columns">
           {row.persons.map(person => 
-          <div key={person.id.concat(row.id)}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link></span><br/></div>)}
+          <div key={person.id.concat(row.id)}>
+            <span className='characters'>
+              <Link onClick={() => props.changeTab('Characters')} to={`/characters/${person.id}`}>{person.name}</Link>
+            </span>
+            <br/>
+          </div>)}
         </div>
       </div>
     ),
