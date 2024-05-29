@@ -7,21 +7,21 @@
 }
 
 .characters #pageDropDown {
-    background-color:#aa6cb9;
+    background-color: var(--character-color);
 }
 
 .characters li.page-item.active > a {
-    background-color:#aa6cb9 !important;
-    border-color:#aa6cb9 !important;
+    background-color: var(--character-color) !important;
+    border-color: var(--character-color) !important;
     color: white !important;
 }
 
 .characters li.page-item.disabled > a {
-    color: rgb(166, 167, 168) !important;
+    color: var(--light-gray) !important;
 }
 
 .characters .page-link {
-    color: #9340a8 !important;
+    color:  var(--character-link-color) !important;
 }
 
 .characters table {

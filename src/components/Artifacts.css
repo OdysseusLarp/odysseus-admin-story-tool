@@ -7,21 +7,21 @@
 }
 
 .artifacts #pageDropDown {
-    background-color:#e49c4a;
+    background-color: var(--artifact-color);
 }
 
 .artifacts li.page-item.active > a {
-    background-color:#e49c4a !important;
-    border-color:#e49c4a !important;
+    background-color: var(--artifact-color) !important;
+    border-color: var(--artifact-color) !important;
     color: white !important;
 }
 
 .artifacts li.page-item.disabled > a {
-    color: rgb(166, 167, 168) !important;
+    color:  var(--light-gray) !important;
 }
 
 .artifacts .page-link {
-    color: #d48b38 !important;
+    color:  var(--artifact-link-color) !important;
 }
 
 .artifacts table {

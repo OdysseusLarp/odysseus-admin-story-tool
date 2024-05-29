@@ -4,7 +4,7 @@
 }
 
 h1.plot {
-    color: #4584e9;
+    color: var(--plot-color);
 }
 
 .plot .caption{
@@ -17,12 +17,12 @@ h1.plot {
 
 .plot .mini-header {
     font-weight: 600;
-    color: #4584e9;
+    color: var(--plot-color);
     font-size: 20px;
 }
 
 .plot a {
-    color: #4584e9 !important;
+    color: var(--plot-link-color) !important;
 }
 
 .plot .new {
@@ -36,5 +36,5 @@ h1.plot {
 }
 
 .plot .text-to-columns {
-    column-count: 2;
+    column-count: 3;
 }

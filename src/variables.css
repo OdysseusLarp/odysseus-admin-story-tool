@@ -1,0 +1,122 @@
+:root {
+  --character-color: #aa6cb9;
+  --fleet-color: #31bac9;
+  --artifact-color: #e49c4a;
+  --plot-color: #4584e9;
+  --event-color: #a52626;
+  --message-color: #4fa129;
+
+  --character-link-color: #9340a8;
+  --fleet-link-color: #30a8b6;
+  --artifact-link-color: #d48b38;
+  --plot-link-color: #4584e9;
+  --event-link-color: #a52626;
+  --message-link-color: #4fa129;
+
+  --event-dark-color: #da6666;
+
+  --character-dark-link-color: #d68ee8;
+  --event-dark-link-color: #da6666;
+  --fleet-dark-link-color: #31bac9;
+  --artifact-dark-link-color: #d48b38;
+  --plot-dark-link-color: #4584e9;
+  --message-dark-link-color: #4fa129;
+
+  --title-color: #696969;
+  --gray-border-color: #696969;
+  --light-gray: rgb(166, 167, 168);
+  --lighter-gray: rgb(223, 223, 224);
+}
+
+[data-bs-theme="dark"] {
+  --bs-primary: #{$primary};
+  --bs-primary-bg-subtle: #{$primary};
+  --bs-primary-bg-subtle-dark: #{$primary};
+
+  .floating-button-container > div > button {
+    background-color: #212529;
+  }
+
+  .float-char-btn {
+    color:var(--lighter-gray);
+  }
+
+  li.page-item.disabled > a {
+    background-color: #2c3034 !important;
+    color: var(--light-gray) !important;
+    border-color: var(--bs-border-color);
+  }
+
+  .character a {
+    color: var(--character-dark-link-color);
+  }
+
+  .characters a {
+    color: var(--character-dark-link-color) !important;
+  }
+
+  span.characters a {
+    color: var(--character-dark-link-color) !important;
+  }
+
+  .fleet a {
+    color: var(--fleet-dark-link-color) !important;
+  }
+
+  span.fleet a {
+    color: var(--fleet-dark-link-color) !important;
+  }
+
+  .artifacts a {
+    color: var(--artifact-dark-link-color) !important;
+  }
+
+  span.artifacts a {
+    color: var(--artifact-dark-link-color) !important;
+  }
+
+  .plots a {
+    color: var(--plot-dark-link-color) !important;
+  }
+
+  span.plots a {
+    color: var(--plot-dark-link-color) !important;
+  }
+
+  .events a {
+    color: var(--event-dark-link-color) !important;
+  }
+
+  span.events a {
+    color: var(--event-dark-link-color) !important;
+  }
+
+  .messages a {
+    color: var(--message-dark-link-color) !important;
+  }
+
+  span.messages a {
+    color: var(--message-dark-link-color) !important;
+  }
+
+  .characters .page-link {
+    color: var(--character-dark-link-color) !important;
+  }
+
+  .title-tab.Events {
+    color: var(--event-dark-color);
+  }
+
+  .nav-link.active#tabs-tab-Events {
+    color: var(--event-dark-color) !important;
+  }
+
+  h1.event {
+    color: var(--event-dark-color);
+  }
+
+  .event .mini-header {
+    color: var(--event-dark-color);
+}
+
+}

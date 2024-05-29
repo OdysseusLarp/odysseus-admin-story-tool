@@ -4,7 +4,7 @@
 }
 
 h1.message {
-    color: #4fa129;
+    color: var(--message-color);
 }
 
 .message .caption{
@@ -17,12 +17,8 @@ h1.message {
 
 .message .mini-header {
     font-weight: 600;
-    color: #4fa129;
+    color: var(--message-color);
     font-size: 20px;
-}
-
-.message a {
-    color: #4fa129 !important;
 }
 
 .message span.description {
@@ -32,20 +28,20 @@ h1.message {
 }
 
 .message .float-char-btn {
-    border-color: #696969 !important;
+    border-color: var(--gray-border-color);
 }
 
 .message .float-char-btn > svg {
-    color:#4fa129 !important;
+    color: var(--message-color);
 }
 
 .message .float-char-btn:hover {
-    background-color:#dcdbdb !important;
-    border-color: #696969 !important;
+    background-color:#dcdbdb;
+    border-color: var(--gray-border-color);
 }
 
 .message .float-char-btn:focus {
-    box-shadow: 0 0 0 .2rem #696969 !important;
+    box-shadow: 0 0 0 .2rem var(--gray-border-color);
 }
 
 .btn-group {

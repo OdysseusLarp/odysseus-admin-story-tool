@@ -4,7 +4,7 @@
 }
 
 h1.event {
-    color: #a52626;
+    color: var(--event-color);
 }
 
 .event .caption{
@@ -17,12 +17,12 @@ h1.event {
 
 .event .mini-header {
     font-weight: 600;
-    color: #a52626;
+    color: var(--event-color);
     font-size: 20px;
 }
 
 .event a {
-    color: #a52626 !important;
+    color: var(--event-link-color) !important;
 }
 
 .event span.description {

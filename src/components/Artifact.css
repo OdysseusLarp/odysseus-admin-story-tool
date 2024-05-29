@@ -4,7 +4,7 @@
 }
 
 h1.artifact {
-    color: #d48b38;
+    color: var(--artifact-color);
 }
 
 .artifact .caption{
@@ -18,7 +18,7 @@ h1.artifact {
 
 .artifact .mini-header {
     font-weight: 600;
-    color: #d48b38;
+    color: var(--artifact-color);
     font-size: 20px;
 }
 

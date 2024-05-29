@@ -7,21 +7,21 @@
 }
 
 .fleet #pageDropDown {
-    background-color:#31bac9;
+    background-color: var(--fleet-color);
 }
 
 .fleet li.page-item.active > a {
-    background-color:#31bac9 !important;
-    border-color:#31bac9 !important;
+    background-color: var(--fleet-color) !important;
+    border-color: var(--fleet-color) !important;
     color: white !important;
 }
 
 .fleet li.page-item.disabled > a {
-    color: rgb(166, 167, 168) !important;
+    color: var(--light-gray) !important;
 }
 
 .fleet .page-link {
-    color: #329ba7 !important;
+    color: var(--fleet-link-color) !important;
 }
 
 .fleet table {

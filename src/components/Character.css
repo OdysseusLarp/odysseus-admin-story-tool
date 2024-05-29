@@ -4,7 +4,7 @@
 }
 
 h1.character {
-    color: #aa6cb9;
+    color: var(--character-color);
 }
 
 .character .caption{
@@ -17,20 +17,16 @@ h1.character {
 
 .character .mini-header {
     font-weight: 600;
-    color: #aa6cb9;
+    color: var(--character-color);
     font-size: 20px;
 }
 
 .character a {
-    color: #9340a8 !important;
+    color: var(--character-link-color);
 }
 
 .character .new {
     color: #da3e00;
-}
-
-.character .data-found {
-    color: #f26bf7;
 }
 
 .character span.description {
