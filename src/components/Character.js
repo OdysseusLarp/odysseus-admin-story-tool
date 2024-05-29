@@ -47,7 +47,6 @@ export default function Character(props) {
     const personal_history_list = personal_history.map(phistory => <li key={phistory}>{phistory}</li>);
     const character_summary = character.summary ? character.summary.split('\n') : [];
 
-
     const getShipById = (ship_id) => {
       const shipName = (ship_id ? fleet.find(ship => ship.id === ship_id)?.name : "");
       return shipName;

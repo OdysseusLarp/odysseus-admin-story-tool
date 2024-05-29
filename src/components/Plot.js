@@ -109,14 +109,14 @@ export default function Plot(props) {
                 <Col sm={4}><span className='caption'>Plot Importance: </span> {plot.importance}</Col>
               </Row>
               <Row className='row-mini-header'>
-                <Col sm={4}><span className='mini-header'>Characters Involved</span>
+                <Col sm={6}><span className='mini-header'>Characters Involved</span>
                   <div className="text-to-columns">{plot.persons.length<1 ? <ul><li>No linked characters</li></ul> : <ul> {relatedCharacters.map(p => <li key={p.id}>
                       <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.full_name}</Link></span>
                       <span> - {p.is_character ? "Character" : "NPC"}</span></li>)}
                       </ul>
                     }</div>
                   </Col>
-                <Col sm={4}><span className='mini-header'>Character Groups Involved</span>
+                <Col sm={6}><span className='mini-header'>Character Groups Involved</span>
                   {characterGroups.length <1 ? <ul><li>No linked character groups</li></ul> : 
                   <ul>{characterGroups.map(g => <li key={g}><Row><Col sm>{g}</Col></Row></li>)}</ul>}
                 </Col>

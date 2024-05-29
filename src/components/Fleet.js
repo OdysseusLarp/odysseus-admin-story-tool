@@ -59,7 +59,7 @@ export default function Fleet() {
       text: 'Class',
       sort: true,
       headerStyle: () => {
-        return { width: '20%', textAlign: 'left' };
+        return { width: '17%', textAlign: 'left' };
       },
       filter: selectFilter({
         options: classSelectOptions
@@ -69,7 +69,7 @@ export default function Fleet() {
       text: 'Status',
       sort: true,
       headerStyle: () => {
-        return { width: '13%', textAlign: 'left' };
+        return { width: '17%', textAlign: 'left' };
       },
       filter: selectFilter({
         options: statusSelectOptions
