@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select'
@@ -25,18 +25,49 @@ const DEFAULT_MESSAGE_STATE = {
 
 const CreateEditMessageModal = (props) => {
   const { showModal, handleClose, onEditDone, messageToEdit } = props;
-  const [message, setMessage] = React.useState(messageToEdit ? messageToEdit : DEFAULT_MESSAGE_STATE);
+  const [message, setMessage] = React.useState(DEFAULT_MESSAGE_STATE);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [selectedSender, setSelectedSender] = React.useState(messageToEdit && messageToEdit.sender !== null ? { value: messageToEdit.sender.id, label: messageToEdit.sender.name } : null);
-  const [selectedReceivers, setSelectedReceivers] = React.useState(messageToEdit && messageToEdit.receivers.length > 0 ? messageToEdit.receivers.map(receiver => { return { value: receiver.id, label: receiver.name } }) : []);
-  const [selectedPlots, setSelectedPlots] = React.useState(messageToEdit && messageToEdit.plots.length > 0 ? messageToEdit.plots.map(plot => { return { value: plot.id, label: plot.name } }) : []);
-  const [selectedEvents, setSelectedEvents] = React.useState(messageToEdit && messageToEdit.events.length > 0 ? messageToEdit.events.map(event => { return { value: event.id, label: event.name } }) : []);
+  const [selectedSender, setSelectedSender] = React.useState(null);
+  const [selectedReceivers, setSelectedReceivers] = React.useState([]);
+  const [selectedPlots, setSelectedPlots] = React.useState([]);
+  const [selectedEvents, setSelectedEvents] = React.useState([]);
   const navigate = useNavigate();
 
   const swrCharacters = useSWR("/person?show_hidden=true&is_character=true", apiGetRequest);
   const swrNpcs = useSWR("/person?show_hidden=true&is_character=false", apiGetRequest);
   const swrPlots = useSWR("/story/plots", apiGetRequest);
   const swrEvents = useSWR("/story/events", apiGetRequest);
+
+  React.useEffect(() => {
+    if (!messageToEdit) {
+      return;
+    }
+    setMessage(messageToEdit);
+    if (messageToEdit.sender_person_id) {
+      setSelectedSender({ value: messageToEdit.sender_person_id, label: messageToEdit.sender_person_name });
+    }
+    if (messageToEdit.receivers) {
+      setSelectedReceivers(
+        messageToEdit.receivers.map((receiver) => {
+          return { value: receiver.id, label: receiver.name };
+        })
+      );
+    }
+    if (messageToEdit.plots) {
+      setSelectedPlots(
+        messageToEdit.plots.map((plot) => {
+          return { value: plot.id, label: plot.name };
+        })
+      );
+    }
+    if (messageToEdit.events) {
+      setSelectedEvents(
+        messageToEdit.events.map((event) => {
+          return { value: event.id, label: event.name };
+        })
+      );
+    }
+  }, [messageToEdit]);
 
   const isLoading = swrCharacters.isLoading || swrNpcs.isLoading || swrPlots.isLoading || swrEvents.isLoading;
   const isError = swrCharacters.error || swrNpcs.error || swrPlots.error || swrEvents.error;
@@ -116,13 +147,10 @@ const CreateEditMessageModal = (props) => {
 
   const nameIsFilled = 'name' in message === true && message.name.trim() !== "";
   const messageIsFilled = 'message' in message === true && message.message.trim() !== "";
-  console.log("showModal", showModal);
-  if (!showModal) {
-    return null
-  }
   return (
     <Modal
       onClose={handleClose}
+      onHide={handleClose}
       show={showModal}
       size="lg"
     >

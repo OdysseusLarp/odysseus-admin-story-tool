@@ -34,7 +34,6 @@ export default function Messages(props) {
     const afterJumpEmpty = (value) => value ? value : 'Not defined';
     const booleanToString = (value) => value ? 'Yes' : 'No';
     const gm_notes = message.gm_notes ? message.gm_notes.split('\n').flat() : [];
-    console.log("showMessageEdit", showMessageEdit);
     return (
       <div>
         <div className='message'>
