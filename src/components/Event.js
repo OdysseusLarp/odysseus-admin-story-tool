@@ -48,11 +48,12 @@ export default function Event(props) {
       <div className='event'>
         <Container fluid className='event'>
           <Row>
-            <Col sm><span className='mini-header'>Basic Info</span></Col>
+            <Col sm={4}><span className='mini-header'>Basic Info</span></Col>
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>GM Actions: </span>{event.gm_actions}</Col>
-            <Col sm={6}><span className='caption'>Event size: </span>{event.size}</Col>
+            <Col sm={4}><span className='caption'>Event size: </span>{event.size}</Col>
+            <Col sm={4}><span className='caption'>ID: </span>{event.id}</Col>
           </Row>
           <Row>
             <Col sm={4}><span className='caption'>Happens after jump: </span>{event.after_jump ? event.after_jump : "?"}</Col>
@@ -86,8 +87,8 @@ export default function Event(props) {
             </Row>
           }
           <Row>
-            <Col sm={6}><span className='mini-header'>Characters Involved</span>
-              <div className="text-to-columns">{event.persons.length < 1 ? <ul><li>No linked characters</li></ul> : <span><ul> {event.persons.map(p => <li key={p.id}>
+            <Col sm={event.persons.length < 4 ? 4 : 6}><span className='mini-header'>Characters Involved</span>
+              <div className={event.persons.length < 4 ? "text-to-no-columns" : "text-to-columns"}>{event.persons.length < 1 ? <ul><li>No linked characters</li></ul> : <span><ul> {event.persons.map(p => <li key={p.id}>
                 <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.name}</Link></span>
                 <span> - {is_npc(p)}</span></li>)}
               </ul></span>}</div>
@@ -96,7 +97,7 @@ export default function Event(props) {
               {character_groups.length <1 ? <ul><li>No involved character groups</li></ul> : <ul>{character_groups.map(n => <li key={n}>{n}</li>)}</ul>}
            </Col>
           </Row>
-          <Row className='row-mini-header'>
+          <Row>
             <Col sm="4"><span className='mini-header'>Plots</span>
               <span>{event.plots.length < 1 ? <ul><li>No linked plots</li></ul> : <ul> {event.plots.map(p => <li key={p.id}>
                 <span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></span></li>)}

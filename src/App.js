@@ -16,7 +16,7 @@ import React from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { LuMailPlus, LuCalendarPlus } from "react-icons/lu";
 import { TbMessagePlus } from "react-icons/tb";
-import CreateNewMessageModal from "./components/modals/CreateNewMessageModal";
+import CreateEditMessageModal from "./components/modals/CreateEditMessageModal";
 import { Toaster } from 'react-hot-toast';
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
@@ -71,8 +71,8 @@ function App() {
           <Button size="md" className="float-char-btn" title="Create New Message" variant="outline-secondary" onClick={() => setShowMessageNew(true)}><LuMailPlus className="message-button" size="24px"/><span>New message</span></Button>
         </ButtonGroup>
       </h1>
-      <CreateNewMessageModal
-        showMessageNew={showMessageNew}
+      <CreateEditMessageModal
+        showModal={showMessageNew}
         handleClose={() => setShowMessageNew(false)}
       />
       <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">

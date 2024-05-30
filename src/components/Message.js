@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { apiUrl } from "../api";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { BiMailSend, BiPencil } from "react-icons/bi";
-import EditMessageModal from "./modals/EditMessageModal";
+import CreateEditMessageModal from "./modals/CreateEditMessageModal";
 import './Message.css';
 
 const getMessage = async (id) => {
@@ -34,7 +34,7 @@ export default function Messages(props) {
     const afterJumpEmpty = (value) => value ? value : 'Not defined';
     const booleanToString = (value) => value ? 'Yes' : 'No';
     const gm_notes = message.gm_notes ? message.gm_notes.split('\n').flat() : [];
-
+    console.log("showMessageEdit", showMessageEdit);
     return (
       <div>
         <div className='message'>
@@ -43,7 +43,8 @@ export default function Messages(props) {
               <Col sm><span className='mini-header'>Basic Info</span></Col>
             </Row>
             <Row>
-              <Col sm={6}><span className='caption'>Message type: </span> {message.type}</Col>
+              <Col sm={5}><span className='caption'>Message type: </span> {message.type}</Col>
+              <Col sm={5}><span className='caption'>ID: </span> {message.id}</Col>
             </Row>
             <Row>
               <Col sm={6}><span className='caption'>Happens after jump: </span> {afterJumpEmpty(message.after_jump)}</Col>
@@ -95,17 +96,14 @@ export default function Messages(props) {
             </Row>
           </Container>
         </div>
-
-        <EditMessageModal
-          showMessageEdit={showMessageEdit}
+        <CreateEditMessageModal
+          messageToEdit={message}
+          showModal={showMessageEdit}
           handleClose={() => setShowMessageEdit(false)}
-          handleSave={() => {
-            setShowMessageEdit(false);
+          onEditDone={() => {
             getMessage(params.id).then((s) => setMessage(s))
           }}
-          message={message}
         />
-
       </div>
     )
   }
