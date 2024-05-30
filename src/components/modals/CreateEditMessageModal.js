@@ -145,8 +145,20 @@ const CreateEditMessageModal = (props) => {
     }
   };
 
+  const selectThemeColors = (theme) => {
+    return {
+    ...theme,
+    borderRadius: 0,
+    colors: {
+      ...theme.colors,
+      primary25: '#E0E0E6',
+      primary: 'rgb(58, 76, 77)',
+    }
+  }}
+
   const nameIsFilled = 'name' in message === true && message.name.trim() !== "";
   const messageIsFilled = 'message' in message === true && message.message.trim() !== "";
+
   return (
     <Modal
       onClose={handleClose}
@@ -186,6 +198,8 @@ const CreateEditMessageModal = (props) => {
               isSearchable={true}
               isDisabled={['Letter', 'Text NPC', 'News'].includes(message.type) ? false : true}
               options={characterOptions}
+              className="select-input"
+              theme={(theme) => { return selectThemeColors(theme) }}
             />
             <Form.Label>Receiver(s):</Form.Label>
             <Select
@@ -196,6 +210,8 @@ const CreateEditMessageModal = (props) => {
               isDisabled={['EVA', 'Letter', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral'].includes(message.type) ? false : true}
               isSearchable={true}
               options={characterOptions}
+              className="select-input"
+              theme={(theme) => { return selectThemeColors(theme) }}
             />
             <Form.Label>Message type:</Form.Label>
             <Select
@@ -204,6 +220,8 @@ const CreateEditMessageModal = (props) => {
               isClearable={false}
               isSearchable={true}
               options={messageTypeOptions}
+              className="select-input"
+              theme={(theme) => { return selectThemeColors(theme) }}
               onChange={(event) => {
                 switch (event.value) {
                   case 'Text NPC':
@@ -273,6 +291,8 @@ const CreateEditMessageModal = (props) => {
               isSearchable={true}
               options={plotOptions}
               styles={ {zIndex: 0} }
+              className="select-input"
+              theme={(theme) => { return selectThemeColors(theme) }}
             />
             <Form.Label>Events:</Form.Label>
             <Select
@@ -283,6 +303,8 @@ const CreateEditMessageModal = (props) => {
               isSearchable={true}
               options={eventOptions}
               styles={ {zIndex: 0} }
+              className="select-input"
+              theme={(theme) => { return selectThemeColors(theme) }}
             />
           </Form.Group>
           <Form.Group
