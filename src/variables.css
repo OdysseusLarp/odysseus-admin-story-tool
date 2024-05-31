@@ -119,32 +119,4 @@
   .event .mini-header {
     color: var(--event-dark-color);
   }
-
-  .css-1nmdiq5-menu,
-  .css-lkh0o5-menu,
-  .css-1fdsijx-ValueContainer,
-  .css-3w2yfm-ValueContainer,
-  .css-1hb7zxy-IndicatorsContainer *,
-  .css-13cymwt-control,
-  .css-t3ipsp-control,
-  .css-1im77uy-control {
-    background-color: var(--background-color);
-  }
-
-  .select-input * {
-    color: white !important;
-  }
-
-  .css-1n1v8a8-option {
-    background-color: rgb(82, 82, 94);
-  }
-
-  .css-1u9des2-indicatorSeparator {
-    background-color: white;
-  }
-
-  .css-1p3m7a8-multiValue,
-  .css-13qatl9-multiValue {
-    background-color: rgb(58, 76, 77);
-  }
 }

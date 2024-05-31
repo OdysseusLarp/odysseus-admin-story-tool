@@ -2,12 +2,14 @@ import React from "react";
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select'
-import { Button, InputGroup } from "react-bootstrap";
+import { Button, InputGroup, Placeholder } from "react-bootstrap";
 import { apiGetRequest } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { errorToast, successToast } from "../../utils/toaster";
 import { upsertMessage } from "../../api/messages";
 import useSWR from "swr";
+import { GiWhiteBook } from "react-icons/gi";
+import { ValueContainer } from "react-select/animated";
 
 const DEFAULT_MESSAGE_STATE = {
   name: '',
@@ -145,16 +147,102 @@ const CreateEditMessageModal = (props) => {
     }
   };
 
-  const selectThemeColors = (theme) => {
-    return {
-    ...theme,
-    borderRadius: 0,
-    colors: {
-      ...theme.colors,
-      primary25: '#E0E0E6',
-      primary: 'rgb(58, 76, 77)',
-    }
-  }}
+  const customStylesDark = {
+    zIndex: 0,
+    control: (baseStyles, state) => ({
+      ...baseStyles,
+      backgroundColor: '#212529',
+      color: '#ffffff',
+      borderColor: state.isFocused ? '#80bdff' : '#495057',
+      '&:hover': {
+        borderColor: 'rgb(82, 82, 94)',
+      },
+      boxShadow: state.isFocused ? '0 0 0 0.2rem rgba(0,123,255,.25)' : null,
+    }),
+    menu: (baseStyles) => ({
+      ...baseStyles,
+      backgroundColor: '#212529',
+      color: '#ffffff',
+      border: '1px solid #75747a',
+    }),
+    singleValue: (baseStyles) => ({
+      ...baseStyles,
+      color: '#ffffff',
+    }),
+    option: (baseStyles, state) => ({
+      ...baseStyles,
+      backgroundColor: state.isSelected ? '#52525e' : state.isFocused ? '#52525e' : '#212529',
+      color: state.isSelected || state.isFocused ? '#ffffff' : '#ffffff',
+      '&:active': {
+        backgroundColor: '#007bff',
+      },
+    }),
+    placeholder: (baseStyles) => ({
+      ...baseStyles,
+      color: '#6c757d',
+    }),
+    input: (baseStyles) => ({
+      ...baseStyles,
+      color: '#ffffff',
+    }),
+    multiValue: (baseStyles) => ({
+      ...baseStyles,
+      backgroundColor: '#52525e',
+    }),
+    multiValueLabel: (baseStyles) => ({
+      ...baseStyles,
+      color: 'white',
+    }),
+    multiValueRemove: (baseStyles) => ({
+      ...baseStyles,
+      color: 'white',
+      ':hover': {
+        backgroundColor: '#212529',
+        color: 'white',
+      },
+    }),
+  };
+
+  const customStylesLight = {
+    zIndex: 0,
+    control: (baseStyles, state) => ({
+      ...baseStyles,
+      borderColor: state.isFocused ? '#80bdff' : '#dee2e6',
+      '&:hover': {
+        borderColor: '#dee2e6',
+      },
+      boxShadow: state.isFocused ? '0 0 0 0.2rem rgba(0,123,255,.25)' : null,
+    }),
+    menu: (baseStyles) => ({
+      ...baseStyles,
+      border: '1px solid #75747a',
+    }),
+    option: (baseStyles, state) => ({
+      ...baseStyles,
+      backgroundColor: state.isSelected ? '#e0e0e6' : state.isFocused ? '#e0e0e6' : 'white',
+      color: 'black',
+    }),
+    placeholder: (baseStyles) => ({
+      ...baseStyles,
+      color: '#6c757d',
+    }),
+    multiValue: (baseStyles) => ({
+      ...baseStyles,
+      backgroundColor: '#e0e0e6',
+    }),
+    multiValueLabel: (baseStyles) => ({
+      ...baseStyles,
+      color: 'black',
+    }),
+    multiValueRemove: (baseStyles) => ({
+      ...baseStyles,
+      color: 'black',
+      ':hover': {
+        backgroundColor: '#a8a8ae',
+        color: 'black',
+      },
+    }),
+  };
 
   const nameIsFilled = 'name' in message === true && message.name.trim() !== "";
   const messageIsFilled = 'message' in message === true && message.message.trim() !== "";
@@ -199,7 +287,7 @@ const CreateEditMessageModal = (props) => {
               isDisabled={['Letter', 'Text NPC', 'News'].includes(message.type) ? false : true}
               options={characterOptions}
               className="select-input"
-              theme={(theme) => { return selectThemeColors(theme) }}
+              styles={document.querySelector('html').getAttribute("data-bs-theme") === "dark" ? customStylesDark : customStylesLight}
             />
             <Form.Label>Receiver(s):</Form.Label>
             <Select
@@ -211,7 +299,7 @@ const CreateEditMessageModal = (props) => {
               isSearchable={true}
               options={characterOptions}
               className="select-input"
-              theme={(theme) => { return selectThemeColors(theme) }}
+              styles={document.querySelector('html').getAttribute("data-bs-theme") === "dark" ? customStylesDark : customStylesLight}
             />
             <Form.Label>Message type:</Form.Label>
             <Select
@@ -221,7 +309,7 @@ const CreateEditMessageModal = (props) => {
               isSearchable={true}
               options={messageTypeOptions}
               className="select-input"
-              theme={(theme) => { return selectThemeColors(theme) }}
+              styles={document.querySelector('html').getAttribute("data-bs-theme") === "dark" ? customStylesDark : customStylesLight}
               onChange={(event) => {
                 switch (event.value) {
                   case 'Text NPC':
@@ -274,6 +362,7 @@ const CreateEditMessageModal = (props) => {
             <Form.Label>Sent:</Form.Label>
             <Form.Select
               value={message?.sent}
+              styles={ {zIndex: 0} }
               onChange={(event) => {
                 setMessage({ ...message, sent: event.target.value });
               }}>
@@ -290,9 +379,8 @@ const CreateEditMessageModal = (props) => {
               isClearable={true}
               isSearchable={true}
               options={plotOptions}
-              styles={ {zIndex: 0} }
+              styles={document.querySelector('html').getAttribute("data-bs-theme") === "dark" ? customStylesDark : customStylesLight}
               className="select-input"
-              theme={(theme) => { return selectThemeColors(theme) }}
             />
             <Form.Label>Events:</Form.Label>
             <Select
@@ -302,9 +390,8 @@ const CreateEditMessageModal = (props) => {
               isClearable={true}
               isSearchable={true}
               options={eventOptions}
-              styles={ {zIndex: 0} }
+              styles={document.querySelector('html').getAttribute("data-bs-theme") === "dark" ? customStylesDark : customStylesLight}
               className="select-input"
-              theme={(theme) => { return selectThemeColors(theme) }}
             />
           </Form.Group>
           <Form.Group
