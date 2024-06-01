@@ -165,3 +165,8 @@ span.messages a {
 .App .float-char-btn > :nth-child(2) {
   margin-left: 0.2rem;
 }
+
+.form-label {
+  margin-top: 8px;
+  margin-bottom: 4px !important;
+}
