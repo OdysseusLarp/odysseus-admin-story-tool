@@ -44,6 +44,8 @@ export default function Event(props) {
     const gm_note_npc = event.gm_note_npc ? event.gm_note_npc.split('\n') : [];
     const character_groups = event.character_groups ? event.character_groups.split(',').flat() : [];
 
+    console.log("event", event);
+
     return (
       <div className='event'>
         <Container fluid className='event'>

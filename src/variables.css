@@ -27,6 +27,7 @@
   --light-gray: rgb(166, 167, 168);
   --lighter-gray: rgb(223, 223, 224);
   --background-color: #212529;
+  --menu-option-color: #ffffff;
 }
 
 [data-bs-theme="dark"] {
@@ -118,5 +119,9 @@
 
   .event .mini-header {
     color: var(--event-dark-color);
+  }
+
+  * option {
+    color: var(--menu-option-color) !important;
   }
 }
