@@ -18,6 +18,7 @@ import { LuMailPlus, LuCalendarPlus } from "react-icons/lu";
 import { TbMessagePlus } from "react-icons/tb";
 import CreateEditMessageModal from "./components/modals/CreateEditMessageModal";
 import CreateEditEventModal from "./components/modals/CreateEditEventModal";
+import CreateEditPlotModal from "./components/modals/CreateEditPlotModal";
 import { Toaster } from 'react-hot-toast';
 
 import { useLocation, useNavigate, Routes, Route } from "react-router-dom";
@@ -30,6 +31,7 @@ function App() {
   const [key, setKey] = React.useState(null);
   const [showMessageNew, setShowMessageNew] = React.useState(false);
   const [showEventNew, setShowEventNew] = React.useState(false);
+  const [showPlotNew, setShowPlotNew] = React.useState(false);
   const [isDarkMode, setIsDarkMode] = React.useState(window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   const navigate = useNavigate();
@@ -68,7 +70,7 @@ function App() {
         <span className={`title-tab ${key}`}>{key}</span>
         <ButtonGroup>
           <Button size="md" className="float-char-btn" title="Toggle Dark Mode" variant="outline-secondary" onClick={() => setIsDarkMode(!isDarkMode)}>{isDarkMode ? "🌞 Light mode" : "🌚 Dark mode"}</Button>
-          <Button size="md" className="float-char-btn" title="Create New Plot" variant="outline-secondary" onClick={null}><TbMessagePlus className="plot-button" size="24px"/><span>New plot</span></Button>
+          <Button size="md" className="float-char-btn" title="Create New Plot" variant="outline-secondary" onClick={() => setShowPlotNew(true)}><TbMessagePlus className="plot-button" size="24px"/><span>New plot</span></Button>
           <Button size="md" className="float-char-btn" title="Create New Event" variant="outline-secondary" onClick={() => setShowEventNew(true)}><LuCalendarPlus className="event-button" size="24px"/><span>New event</span></Button>
           <Button size="md" className="float-char-btn" title="Create New Message" variant="outline-secondary" onClick={() => setShowMessageNew(true)}><LuMailPlus className="message-button" size="24px"/><span>New message</span></Button>
         </ButtonGroup>
@@ -80,6 +82,10 @@ function App() {
       <CreateEditEventModal
         showModal={showEventNew}
         handleClose={() => setShowEventNew(false)}
+      />
+      <CreateEditPlotModal
+        showModal={showPlotNew}
+        handleClose={() => setShowPlotNew(false)}
       />
       <Tabs id="tabs" activeKey={key} onSelect={onSelectTab} className="mb-3">
         <Tab eventKey="Characters" title="Characters" />

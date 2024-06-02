@@ -4,21 +4,23 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
 import useSWR from "swr";
+import { Button, ButtonGroup } from "react-bootstrap";
+import { BiPencil } from "react-icons/bi";
+import CreateEditPlotModal from "./modals/CreateEditPlotModal";
 
 import './Plot.css';
 
 export default function Plot(props) {
+  const [showPlotEdit, setShowPlotEdit] = React.useState(false);
   const params = useParams();
 
-  const { data: plot, error, isLoading } = useSWR(
+  const { data: plot, error, isLoading, mutate: mutatePlot } = useSWR(
     "/story/plots/" + params.id,
     apiGetRequest
   );
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Failed to load data</div>;
-
-  console.log(plot);
 
   const renderPlot = () => {
     const plot_notes = plot.gm_notes ? plot.gm_notes.split('\n') : [];
@@ -46,14 +48,14 @@ export default function Plot(props) {
                 <span className='caption'>Happens after jump: </span>
                 {plot.after_jump ? plot.after_jump : <span>No jump defined</span>}
               </Col>
-              <Col sm={4}>
-                <span className='caption'>Plot themes: </span>
-                {plot.themes.length < 1 ? <span>No themes defined</span> : plot.themes}
-              </Col>
+              <Col sm={4}><span className='caption'>Plot Importance: </span> {plot.importance}</Col>
             </Row>
             <Row>
               <Col sm={4}><span className='caption'>Locked plot: </span>{plot.locked ? "Yes" : "No"}</Col>
-              <Col sm={4}><span className='caption'>Plot Importance: </span> {plot.importance}</Col>
+              <Col sm={6}>
+                <span className='caption'>Plot themes: </span>
+                {plot.themes.length < 1 ? <span>No themes defined</span> : plot.themes}
+              </Col>
             </Row>
             <Row className='row-mini-header'>
               <Col sm={plot.persons.length < 4 ? 4 : 6}><span className='mini-header'>Characters Involved</span>
@@ -82,7 +84,7 @@ export default function Plot(props) {
             </Row>
             <Row>
               <Col sm><span className='mini-header'>Messages</span>
-                {plot.messages.length < 1 ? <ul><li>No messages</li></ul> : <ul> {plot.messages.map(m => <li key={m.id}>
+                {plot.messages.length < 1 ? <ul><li>No linked messages</li></ul> : <ul> {plot.messages.map(m => <li key={m.id}>
                   <span className='messages'><Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link> - Sent: {m.sent}</span></li>)}
                 </ul>}
               </Col>
@@ -93,7 +95,7 @@ export default function Plot(props) {
             <Row>
               <Col sm>
                 <span className="description">
-                  {description.length < 1 ? <p>No description</p> :
+                  {description.length < 1 ? <p>No description available</p> :
                     description.map(n => <p key={n}>{n}</p>)}
                 </span>
               </Col>
@@ -101,7 +103,7 @@ export default function Plot(props) {
             <Row>
               <Col sm><span className='mini-header'>GM Notes</span></Col>
             </Row>
-            <span className='description'>{plot_notes.length < 1 ? <ul><li>No notes</li></ul> : <ul>
+            <span className='description'>{plot_notes.length < 1 ? <ul><li>No notes available</li></ul> : <ul>
               {plot_notes.map(n => <li key={n}>{n}</li>)}
             </ul>}</span>
             <Row>
@@ -145,13 +147,28 @@ export default function Plot(props) {
             </Row>
           </Container>
         </div>
+        <CreateEditPlotModal
+          plotToEdit={plot}
+          showModal={showPlotEdit}
+          handleClose={() => setShowPlotEdit(false)}
+          onEditDone={mutatePlot}
+        />
       </div>
     )
   }
 
   return (
     <div>
-      <h1 className='plot' id="app-title">{plot?.name}</h1>
+      <div className='splitscreen'>
+        <div className='left'>
+          <h1 className='plot' id="app-title"> {plot?.name}</h1>
+        </div>
+        <div className='right plot'>
+          <ButtonGroup>
+            <Button className="float-char-btn" title="Edit Plot" variant="outline-secondary" onClick={() => setShowPlotEdit(true)}><BiPencil size="24px" /><span>Edit</span></Button>
+          </ButtonGroup>
+        </div>
+      </div>
       {renderPlot()}
     </div>
   )

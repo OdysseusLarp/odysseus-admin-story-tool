@@ -38,3 +38,20 @@ h1.plot {
 .plot .text-to-columns {
     column-count: 3;
 }
+
+.plot .float-char-btn {
+    border-color: var(--gray-border-color);
+}
+
+.plot .float-char-btn > svg {
+    color: var(--plot-color);
+}
+
+.plot .float-char-btn:hover {
+    background-color:#dcdbdb;
+    border-color: var(--gray-border-color);
+}
+
+.plot .float-char-btn:focus {
+    box-shadow: 0 0 0 .2rem var(--gray-border-color);
+}
