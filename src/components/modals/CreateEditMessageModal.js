@@ -172,7 +172,7 @@ const CreateEditMessageModal = (props) => {
       animation={false}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Create New Message</Modal.Title>
+        <Modal.Title>{messageToEdit ? "Edit" : "Create New"} Message</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>

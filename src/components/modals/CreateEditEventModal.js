@@ -99,8 +99,8 @@ const CreateEditEventModal = (props) => {
     }
   }, [eventToEdit]);
 
-  const isLoading = swrCharacters.isLoading || swrNpcs.isLoading || swrArtifacts.isLoading || swrPlots.isLoading || swrMessages.isLoading;
-  const isError = swrCharacters.error || swrNpcs.error || swrArtifacts.error || swrPlots.error || swrMessages.error;
+  const isLoading = swrCharacters.isLoading || swrNpcs.isLoading || swrArtifacts.isLoading || swrPlots.isLoading || swrMessages.isLoading || swrEvents.isLoading;
+  const isError = swrCharacters.error || swrNpcs.error || swrArtifacts.error || swrPlots.error || swrMessages.error || swrEvents.error;
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Failed to load data</div>;
@@ -113,7 +113,7 @@ const CreateEditEventModal = (props) => {
 
   // Generic function to create options for select dropdowns
   const createOptions = (data, valueProperty, labelProperty) => data.map(item => {
-    if (labelProperty === 'character_group') {
+    if (labelProperty === 'character_groups') {
       return {
         value: item,
         label: item
@@ -149,8 +149,11 @@ const CreateEditEventModal = (props) => {
   const artifactOptions = createOptions(artifacts, 'id', 'name');
   const plotOptions = createOptions(plots, 'id', 'name');
   const messageOptions = createOptions(messages, 'id', 'name');
-  const characterGroupList = [...new Set(events.map(e => e.character_groups ? e.character_groups.split(', ') : []).flat(Infinity).sort())];
-  const characterGroupOptions = createOptions(characterGroupList, 'character_group', 'character_group');
+
+  const characterGroupListEvents = [...new Set(events.map(e => e.character_groups ? e.character_groups.split(', ') : []).flat(Infinity).sort())];
+  const characterGroupListPlots = [...new Set(plots.map(e => e.character_groups ? e.character_groups.split(', ') : []).flat(Infinity).sort())];
+  const characterGroupList = [...new Set(characterGroupListEvents.concat(characterGroupListPlots))].sort();
+  const characterGroupOptions = createOptions(characterGroupList, 'character_groups', 'character_groups');
 
   const afterSubmit = (eventId) => {
     handleClose(false);
@@ -213,7 +216,7 @@ const CreateEditEventModal = (props) => {
       size="lg"
     >
       <Modal.Header closeButton>
-        <Modal.Title>Create New Event</Modal.Title>
+        <Modal.Title>{eventToEdit ? "Edit" : "Create New"} Event</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -330,7 +333,7 @@ const CreateEditEventModal = (props) => {
                 <option key={item} value={item}>{item}</option>
               )}
             </Form.Select>
-            <Form.Label>Message send time locked:</Form.Label>
+            <Form.Label>Event time locked:</Form.Label>
             <Form.Select
               value={event?.locked}
               onChange={(evt) => {
@@ -458,7 +461,7 @@ const CreateEditEventModal = (props) => {
           Close
         </Button>
         <Button variant="primary" onClick={handleSubmit} type="button">
-          {eventToEdit ? "Save message" : "Create message"}
+          {eventToEdit ? "Save event" : "Create event"}
         </Button>
       </Modal.Footer>
     </Modal>

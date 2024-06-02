@@ -91,7 +91,7 @@ export default function Event(props) {
                 </ul></span>}</div>
               </Col>
               <Col sm={6}><span className='mini-header'>Character Groups Involved</span>
-                {character_groups.length < 1 ? <ul><li>No involved character groups</li></ul> : <ul>{character_groups.map(n => <li key={n}>{n}</li>)}</ul>}
+                {character_groups.length < 1 ? <ul><li>No character groups</li></ul> : <ul>{character_groups.map(n => <li key={n}>{n}</li>)}</ul>}
               </Col>
             </Row>
             <Row>
@@ -109,7 +109,7 @@ export default function Event(props) {
             </Row>
             <Row>
               <Col sm><span className='mini-header'>Messages</span>
-                <span>{event.messages.length < 1 ? <ul><li>No messages</li></ul> : <ul> {event.messages.map(m => <li key={m.id}>
+                <span>{event.messages.length < 1 ? <ul><li>No linked messages</li></ul> : <ul> {event.messages.map(m => <li key={m.id}>
                   <span className='messages'><Link onClick={() => props.changeTab('Messages')} to={`/messages/${m.id}`}>{m.name}</Link></span> - Sent: {m.sent}</li>)}
                 </ul>
                 }</span>
@@ -127,7 +127,7 @@ export default function Event(props) {
             <Row>
               <Col sm><span className='mini-header'>GM Notes</span></Col>
             </Row>
-            <span className='description'>{gm_notes.length < 1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
+            <span className='description'>{gm_notes.length < 1 ? <ul><li>No notes available</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
             <Row>
               <Col sm><span className='mini-header'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
             </Row>

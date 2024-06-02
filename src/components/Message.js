@@ -99,7 +99,7 @@ export default function Messages(props) {
             <Row>
               <Col sm><span className='mini-header'>GM Notes</span></Col>
             </Row>
-            <span className="description">{gm_notes.length < 1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(e => <li key={e}>{e}</li>)}</ul>}</span>
+            <span className="description">{gm_notes.length < 1 ? <ul><li>No notes available</li></ul> : <ul>{gm_notes.map(e => <li key={e}>{e}</li>)}</ul>}</span>
             <Row>
               <Col sm>&nbsp;</Col>
             </Row>
