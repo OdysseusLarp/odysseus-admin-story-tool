@@ -35,3 +35,20 @@ h1.event {
     column-count: 3;
     margin-bottom: 16px;
 }
+
+.event .float-char-btn {
+    border-color: var(--gray-border-color);
+}
+
+.event .float-char-btn > svg {
+    color: var(--event-color);
+}
+
+.event .float-char-btn:hover {
+    background-color:#dcdbdb;
+    border-color: var(--gray-border-color);
+}
+
+.event .float-char-btn:focus {
+    box-shadow: 0 0 0 .2rem var(--gray-border-color);
+}

@@ -46,12 +46,18 @@ const CreateEditMessageModal = (props) => {
     }
     setMessage(messageToEdit);
     if (messageToEdit.sender) {
-      setSelectedSender({ value: messageToEdit.sender.id, label: messageToEdit.sender.name });
+      setSelectedSender({
+        value: messageToEdit.sender.id,
+        label: messageToEdit.sender.name.concat(' - ', messageToEdit.sender.is_character ? 'Character' : 'NPC')
+      });
     }
     if (messageToEdit.receivers) {
       setSelectedReceivers(
         messageToEdit.receivers.map((receiver) => {
-          return { value: receiver.id, label: receiver.name };
+          return { 
+            value: receiver.id, 
+            label: receiver.name.concat(' - ', receiver.is_character ? 'Character' : 'NPC')
+          };
         })
       );
     }
@@ -82,10 +88,18 @@ const CreateEditMessageModal = (props) => {
   const events = swrEvents.data;
 
   // Generic function to create options for select dropdowns
-  const createOptions = (data, valueProperty, labelProperty) => data.map(item => ({
-    value: item[valueProperty],
-    label: item[labelProperty]
-  }));
+  const createOptions = (data, valueProperty, labelProperty) => data.map(item => {
+    if (labelProperty === 'full_name') {
+      return {
+        value: item[valueProperty],
+        label: item[labelProperty].concat(' - ', item['is_character'] ? 'Character' : 'NPC')
+      }
+    }
+    return {
+      value: item[valueProperty],
+      label: item[labelProperty]
+    }
+  }).sort((a, b) => a.label.localeCompare(b.label));
 
   const characterOptions = createOptions(characters, 'id', 'full_name');
   const plotOptions = createOptions(plots, 'id', 'name');

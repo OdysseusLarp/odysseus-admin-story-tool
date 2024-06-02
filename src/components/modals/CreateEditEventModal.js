@@ -13,7 +13,7 @@ import { customStylesDark, customStylesLight } from "../../utils/helpers";
 const DEFAULT_EVENT_STATE = {
   after_jump: null,
   artifacts: [],
-  character_groups: [],
+  character_groups: '',
   description: '',
   dmx_event_num: '',
   gm_actions: 'No need',
@@ -27,13 +27,13 @@ const DEFAULT_EVENT_STATE = {
   npc_location: '',
   persons: [],
   plots: [],
-  size: 'Large',
+  size: 'Small',
   status: 'Not Done',
   type: 'Character',
 };
 
 const CreateEditEventModal = (props) => {
-  const { showModal, handleClose, onEditDone, messageToEdit: eventToEdit } = props;
+  const { showModal, handleClose, onEditDone, eventToEdit } = props;
   const [event, setEvent] = React.useState(DEFAULT_EVENT_STATE);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [selectedArtifacts, setSelectedArtifacts] = React.useState([]);
@@ -51,13 +51,22 @@ const CreateEditEventModal = (props) => {
   const swrMessages = useSWR("/story/messages", apiGetRequest);
 
   React.useEffect(() => {
+    console.log("eventToEdit", eventToEdit);
     if (!eventToEdit) {
       return;
     }
+    setEvent({
+      ...eventToEdit,
+      description: eventToEdit.description ? eventToEdit.description : '',
+      gm_notes: eventToEdit.gm_notes ? eventToEdit.gm_notes : '',
+      gm_note_npc: eventToEdit.gm_note_npc ? eventToEdit.gm_note_npc : '',
+      npc_location: eventToEdit.npc_location ? eventToEdit.npc_location : '',
+      dmx_event_num: eventToEdit.dmx_event_num ? eventToEdit.dmx_event_num : '',
+    });
     if (eventToEdit.persons) {
       setSelectedPersons(
         eventToEdit.persons.map((person) => {
-          return { value: person.id, label: person.name };
+          return { value: person.id, label: person.name.concat(' - ', person.is_character ? 'Character' : 'NPC') };
         })
       );
     }
@@ -117,11 +126,17 @@ const CreateEditEventModal = (props) => {
         label: item[labelProperty].concat(' - ', item['catalog_id'])
       }
     }
+    if (labelProperty === 'full_name') {
+      return {
+        value: item[valueProperty],
+        label: item[labelProperty].concat(' - ', item['is_character'] ? 'Character' : 'NPC')
+      }
+    }
     return {
       value: item[valueProperty],
       label: item[labelProperty]
     }
-  });
+  }).sort((a, b) => a.label.localeCompare(b.label));
 
   const createFormSelectOptions = (data, valueProperty) => {
     const dataArray = [...new Set(data.map(item => item[valueProperty]))].sort().filter(item => item !== null);

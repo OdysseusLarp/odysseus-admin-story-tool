@@ -8,6 +8,7 @@ import useSWR from "swr";
 import { apiGetRequest } from "../api";
 import TableLoading from "./TableLoading";
 import CreateEditMessageModal from "./modals/CreateEditMessageModal";
+
 import './Message.css';
 
 
@@ -56,13 +57,27 @@ export default function Messages(props) {
               <Col sm><span className='mini-header'>Sender</span></Col>
             </Row>
             <Row>
-              <Col sm>{message.sender === null ? <ul><li>No sender</li></ul> : <ul>{message.sender?.id && <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> - Card ID: {message.sender?.card_id} </span></li>}</ul>}</Col>
+              <Col sm>{message.sender === null
+                ? <ul><li>No sender</li></ul>
+                : <ul>{message.sender?.id &&
+                    <li><span className='characters'>
+                      <Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> - {message.sender?.is_character ? 'Character' : 'NPC'} - Card ID: {message.sender?.card_id}
+                    </span></li>}
+                  </ul>}
+              </Col>
             </Row>
             <Row>
               <Col sm><span className='mini-header'>Receiver(s)</span></Col>
             </Row>
             <Row>
-              <Col sm>{message.receivers.length < 1 ? <ul><li>No receivers</li></ul> : <span><ul>{message.receivers?.map(receiver => <li key={receiver?.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> - Card ID: {receiver?.card_id}</span></li>)}</ul></span>}</Col>
+              <Col sm>{message.receivers.length < 1 
+                ? <ul><li>No receivers</li></ul> 
+                : <span><ul>{message.receivers?.map(receiver => 
+                    <li key={receiver?.id}><span className='characters'>
+                      <Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> - {receiver?.is_character ? 'Character' : 'NPC'} - Card ID: {receiver?.card_id}
+                    </span></li>)}
+                  </ul></span>}
+              </Col>
             </Row>
             <Row>
               <Col sm={5}><span className='mini-header'>Plots</span>

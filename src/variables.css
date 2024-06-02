@@ -124,4 +124,8 @@
   * option {
     color: var(--menu-option-color) !important;
   }
+
+  .event .float-char-btn > svg {
+    color: var(--event-dark-color);
+  }
 }
