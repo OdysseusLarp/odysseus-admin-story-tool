@@ -40,12 +40,13 @@ const CreateEditMessageModal = (props) => {
   const swrEvents = useSWR("/story/events", apiGetRequest);
 
   React.useEffect(() => {
+    console.log(messageToEdit);
     if (!messageToEdit) {
       return;
     }
     setMessage(messageToEdit);
-    if (messageToEdit.sender_person_id) {
-      setSelectedSender({ value: messageToEdit.sender_person_id, label: messageToEdit.sender_person_name });
+    if (messageToEdit.sender) {
+      setSelectedSender({ value: messageToEdit.sender.id, label: messageToEdit.sender.name });
     }
     if (messageToEdit.receivers) {
       setSelectedReceivers(
@@ -155,6 +156,7 @@ const CreateEditMessageModal = (props) => {
       onHide={handleClose}
       show={showModal}
       size="lg"
+      animation={false}
     >
       <Modal.Header closeButton>
         <Modal.Title>Create New Message</Modal.Title>

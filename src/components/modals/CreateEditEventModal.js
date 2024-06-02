@@ -196,6 +196,7 @@ const CreateEditEventModal = (props) => {
       onClose={handleClose}
       onHide={handleClose}
       show={showModal}
+      animation={false}
       size="lg"
     >
       <Modal.Header closeButton>
