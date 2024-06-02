@@ -40,7 +40,6 @@ const CreateEditMessageModal = (props) => {
   const swrEvents = useSWR("/story/events", apiGetRequest);
 
   React.useEffect(() => {
-    console.log(messageToEdit);
     if (!messageToEdit) {
       return;
     }

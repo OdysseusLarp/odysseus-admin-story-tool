@@ -51,7 +51,6 @@ const CreateEditEventModal = (props) => {
   const swrMessages = useSWR("/story/messages", apiGetRequest);
 
   React.useEffect(() => {
-    console.log("eventToEdit", eventToEdit);
     if (!eventToEdit) {
       return;
     }
@@ -171,12 +170,11 @@ const CreateEditEventModal = (props) => {
   };
 
   const handleSubmit = async () => {
-    console.log("event", event);
-
     if (isSubmitting) {
       return;
     }
     setIsSubmitting(true);
+
     const data = {
       ...event,
       persons: selectedPersons?.map(persons => persons.value) ?? [],
@@ -188,7 +186,7 @@ const CreateEditEventModal = (props) => {
       plots: selectedPlots?.map(plot => plot.value) ?? [],
       messages: selectedMessages?.map(message => message.value) ?? [],
     };
-    console.log("data", data);
+
     const response = await upsertEvent(data);
 
     if (response.ok) {
@@ -431,7 +429,6 @@ const CreateEditEventModal = (props) => {
                 value={event?.npc_count}
                 disabled={event?.npc_location === null}
                 onChange={(evt) => {
-                  console.log("event", evt);
                   setEvent({ ...event, npc_count: evt.target.value });
                 }}
                 placeholder="Enter an integer"

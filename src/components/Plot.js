@@ -130,7 +130,7 @@ export default function Plot(props) {
               <Col sm><p className="new">Save the notes between games!</p></Col>
             </Row>
             <Row>
-              <Col sm><span className='mini-header'>Copied from characters (optional)</span></Col>
+              <Col sm><span className='mini-header'>Copied from characters</span></Col>
             </Row>
             <Row>
               <Col sm>
