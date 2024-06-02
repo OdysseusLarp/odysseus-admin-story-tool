@@ -2,31 +2,26 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { BiMailSend, BiPencil } from "react-icons/bi";
+import useSWR from "swr";
+import { apiGetRequest } from "../api";
+import TableLoading from "./TableLoading";
 import CreateEditMessageModal from "./modals/CreateEditMessageModal";
 import './Message.css';
 
-const getMessage = async (id) => {
-  const response = await fetch(apiUrl(`/story/messages/${id}`));
-  const message = await response.json();
-  return message;
-}
 
 export default function Messages(props) {
-  const [message, setMessage] = React.useState(null);
   const [showMessageEdit, setShowMessageEdit] = React.useState(false);
   const params = useParams();
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getMessage(params.id).then((s) => setMessage(s));
-  }, [params.id, setMessage]);
+  const { data: message, error, isLoading, mutate: mutateMessage } = useSWR(
+    "/story/messages/" + params.id,
+    apiGetRequest
+  );
 
-  React.useEffect(() => {
-    props.changeTab('Messages');
-  }, [props]);
+  if (isLoading) return <TableLoading />;
+  if (error) return <div>Failed to load data</div>;
 
   const renderMessage = () => {
     if (!message) return null;
@@ -99,9 +94,7 @@ export default function Messages(props) {
           messageToEdit={message}
           showModal={showMessageEdit}
           handleClose={() => setShowMessageEdit(false)}
-          onEditDone={() => {
-            getMessage(params.id).then((s) => setMessage(s))
-          }}
+          onEditDone={mutateMessage}
         />
       </div>
     )

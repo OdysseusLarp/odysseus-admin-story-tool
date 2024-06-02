@@ -2,17 +2,12 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
-
+import useSWR from "swr";
+import { apiGetRequest } from "../api";
+import TableLoading from "./TableLoading";
 import './Event.css';
 
-const getEvent = async (id) => {
-  const response = await fetch(apiUrl(`/story/events/${id}`));
-  const event = await response.json();
-  return event;
-}
-
-const is_npc = (character) => {
+const getIsCharacterText = (character) => {
   if (!character)
     return null
   if (character.is_character === true)
@@ -24,27 +19,21 @@ const is_npc = (character) => {
 }
 
 export default function Event(props) {
-  const [event, setEvent] = React.useState(null);
-
   const params = useParams();
 
+  const { data: event, error, isLoading } = useSWR(
+    "/story/events/" + params.id,
+    apiGetRequest
+  );
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getEvent(params.id).then((s) => setEvent(s));
-  }, [params.id, setEvent]);
-
-  React.useEffect(() => {
-    props.changeTab('Events');
-  }, [props]);
+  if (isLoading) return <TableLoading />;
+  if (error) return <div>Failed to load data</div>;
 
   const renderEvent = () => {
     if (!event) return null;
     const gm_notes = event.gm_notes ? event.gm_notes.split('\n') : [];
     const gm_note_npc = event.gm_note_npc ? event.gm_note_npc.split('\n') : [];
     const character_groups = event.character_groups ? event.character_groups.split(',').flat() : [];
-
-    console.log("event", event);
 
     return (
       <div className='event'>
@@ -92,7 +81,7 @@ export default function Event(props) {
             <Col sm={event.persons.length < 4 ? 4 : 6}><span className='mini-header'>Characters Involved</span>
               <div className={event.persons.length < 4 ? "text-to-no-columns" : "text-to-columns"}>{event.persons.length < 1 ? <ul><li>No linked characters</li></ul> : <span><ul> {event.persons.map(p => <li key={p.id}>
                 <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${p.id}`}>{p.name}</Link></span>
-                <span> - {is_npc(p)}</span></li>)}
+                <span> - {getIsCharacterText(p)}</span></li>)}
               </ul></span>}</div>
             </Col>
             <Col sm={6}><span className='mini-header'>Character Groups Involved</span>
@@ -162,20 +151,13 @@ export default function Event(props) {
             <Col sm>&nbsp;</Col>
           </Row>
         </Container>
-
-
       </div>
     )
   }
 
   return (
     <div>
-      <Row>
-        <Col sm><h1 className='event'>{event?.name}</h1>
-
-        </Col>
-
-      </Row>
+      <h1 className='event'>{event?.name}</h1>
       {renderEvent()}
     </div>
   );

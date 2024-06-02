@@ -2,56 +2,43 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import TableLoading from "./TableLoading";
+import useSWR from "swr";
 
 import './Artifact.css';
 
-const getArtifact = async (id) => {
-  const response = await fetch(apiUrl(`/science/artifact/${id}`));
-  const artifact = await response.json();
-  return artifact;
-}
-
-const getArtifactDetails = async (id) => {
-  const response = await fetch(apiUrl(`/story/artifact/${id}`));
-  const artifactDetails = await response.json();
-  return artifactDetails;
-}
-
-const getDiscoveredById = async (name) => {
-  const response = await fetch(apiUrl(`/person/search/${name}`));
-  const discoveredBy = await response.json();
-  const discoveredById = discoveredBy.find(person => person.full_name === name)?.id;
-  return discoveredById;
-}
-
 export default function Artifact(props) {
-  const [artifact, setArtifact] = React.useState(null);
-  const [artifactDetails, setArtifactDetails] = React.useState(null);
-  const [discoveredById, setDiscoveredById] = React.useState(null);
   const params = useParams();
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getArtifact(params.id).then((s) => setArtifact(s));
-  }, [params.id, setArtifact]);
+  const swrArtifact = useSWR(
+    "/science/artifact/" + params.id,
+    apiGetRequest,
+  );
 
-  React.useEffect(() => {
-    if (!artifact?.discovered_by) return;
-    getDiscoveredById(artifact.discovered_by).then((s) => setDiscoveredById(s));
-  }, [artifact?.discovered_by, setDiscoveredById]);
+  const swrStoryArtifact = useSWR(
+    "/story/artifact/" + params.id,
+    apiGetRequest,
+  );
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getArtifactDetails(params.id).then((s) => setArtifactDetails(s));
-  }, [params.id]);
+  const swrPerson = useSWR(() => 
+    "/person/search/" + swrArtifact.data.discovered_by,
+    apiGetRequest,
+  );
 
-  React.useEffect(() => {
-    props.changeTab('Artifacts');
-  }, [props]);
+  const isLoading = swrArtifact.isLoading || swrStoryArtifact.isLoading || swrPerson.isLoading;
+  const error = swrArtifact.error || swrStoryArtifact.error || swrPerson.error;
+
+  if (isLoading) return <TableLoading />;
+  if (error) return <div>Failed to load data</div>;
+
+  const artifact = swrArtifact.data;
+  const artifactDetails = swrStoryArtifact.data;
+  const discoveredById = swrPerson.data.id;
 
   const renderArtifact = () => {
     if (!artifact || !artifactDetails) return null;
+    
 
     const artifact_entries = artifact.entries.map((e) => e.entry.split('\n')).flat();
     const artifact_notes = artifact.gm_notes ? artifact.gm_notes.split('\n') : [];
@@ -68,7 +55,7 @@ export default function Artifact(props) {
             <Col sm={4}><span className='caption'>ID: </span>{artifact.id}</Col>
           </Row>
           <Row>
-            <Col sm={4}><span className='caption'>Origin: </span>{artifact.type}</Col>
+            <Col sm={4}><span className='caption'>Origin: </span>{artifact.type ?? '-'}</Col>
             <Col sm={4}><span className='caption'>Catalog ID: </span>{artifact.catalog_id}</Col>
           </Row>
           <Row>
@@ -78,21 +65,21 @@ export default function Artifact(props) {
             <Col sm><span className='mini-header'>Discovery</span></Col>
           </Row>
           <Row>
-            <Col sm><span className='caption'>Discovered At: </span>{artifact.discovered_at}</Col>
+            <Col sm><span className='caption'>Discovered At: </span>{artifact.discovered_at ?? '-'}</Col>
           </Row>
           <Row>
-            <Col sm><span className='caption'>Discovered By: </span><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${discoveredById}`}>{artifact.discovered_by}</Link></span></Col>
+            <Col sm><span className='caption'>Discovered By: </span>{artifact.discovered_by ? <span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${discoveredById}`}>{artifact.discovered_by}</Link></span> : '-'}</Col>
           </Row>
           <Row>
-            <Col sm><span className='caption'>Discovered From: </span>{artifact.discovered_from}</Col>
+            <Col sm><span className='caption'>Discovered From: </span>{artifact.discovered_from ?? '-'}</Col>
           </Row>
           <Row className='row-mini-header'>
             <Col sm><span className='mini-header'>Artifact Description</span></Col>
           </Row>
           <Row>
-            <Col sm><span className='description'>{artifact.text.split('![]')[0]}</span></Col>
+            <Col sm><span className='description'>{artifact.text ? artifact.text.split('![]')[0].trim() : 'No description available'}</span></Col>
           </Row>
-          <Row>
+          <Row className='row-mini-header'>
             <Col sm={4}><span className='mini-header'>Plots</span>
               {artifactDetails.plots.length < 1 ? <ul><li>No linked plots</li></ul> : <ul> {artifactDetails.plots.map(p => <li key={p.id}>
                 <span className='plots'><Link onClick={() => props.changeTab('Plots')} to={`/plots/${p.id}`}>{p.name}</Link></span></li>)}

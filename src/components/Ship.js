@@ -2,79 +2,47 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
+import { apiGetRequest } from "../api";
+import TableLoading from "./TableLoading";
+import useSWR from "swr";
 
 import './Ship.css';
 
-const getShip = async (id) => {
-  const response = await fetch(apiUrl(`/fleet/${id}`));
-  const ship = await response.json();
-  return ship;
-}
-
-const getArtifacts = async (id) => {
-  const response = await fetch(apiUrl(`/science/artifact`));
-  const artifact = await response.json();
-  return artifact;
-}
-
-const getCaptain = async (id) => {
-  let title = encodeURI('Star Captain')
-  if (id === 'aurora') {
-    title = encodeURI('Grand Admiral of the EOC starfleet')
-  }
-  const response = await fetch(apiUrl(`/person?show_hidden=true&ship_id=${id}&title=${title}`));
-  let captain = await response.json();
-  captain = captain.persons;
-  // On Odysseus there are two Star Captains. We want Zeya Cook id 20112.
-  if (id === 'odysseus') {
-    captain = captain.filter(cap => cap.id === "20112");
-  }
-  return captain[0];
-}
-
-const getPassangers = async (id) => {
-  const response = await fetch(apiUrl(`/person?show_hidden=true&is_character=false&ship_id=${id}`));
-  const passangers = await response.json();
-  return passangers;
-}
-
 export default function Ship(props) {
-  const [ship, setShip] = React.useState(null);
-  const [captain, setCaptain] = React.useState(null);
-  const [artifacts, setArtifacts] = React.useState(null);
-  const [passangers, setPassangers] = React.useState(null);
   const params = useParams();
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getShip(params.id).then((s) => setShip(s));
-  }, [params.id, setShip]);
+  const swrShip = useSWR(
+    "/fleet/" + params.id,
+    apiGetRequest,
+  );
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getArtifacts().then((s) => setArtifacts(s));
-  }, [params.id, setArtifacts]);
+  const swrArtifact = useSWR(
+    "/science/artifact/",
+    apiGetRequest,
+  );
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getCaptain(params.id).then((s) => setCaptain(s));
-  }, [params.id, setCaptain]);
+  const swrCaptain = useSWR(
+    `/person?show_hidden=true&ship_id=${params.id}&title=${params.id === 'aurora' ? encodeURI('Grand Admiral of the EOC starfleet') : encodeURI('Star Captain')}`,
+    apiGetRequest,
+  );
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getPassangers(params.id).then((s) => setPassangers(s));
-  }, [params.id, setPassangers]);
+  const swrPassangers = useSWR(() =>
+    `/person?show_hidden=true&is_character=false&ship_id=${params.id}`,
+    apiGetRequest,
+  );
 
-  React.useEffect(() => {
-    props.changeTab('Fleet');
-  }, [props]);
+  const isLoading = swrArtifact.isLoading || swrShip.isLoading || swrCaptain.isLoading || swrPassangers.isLoading;
+  const error = swrArtifact.error || swrShip.error || swrCaptain.error || swrPassangers.error;
+
+  if (isLoading) return <TableLoading />;
+  if (error) return <div>Failed to load data</div>;
+
+  const ship = swrShip.data;
+  const artifacts = swrArtifact.data;
+  const captain = params.id === 'odysseus' ? swrCaptain.data.persons.filter(cap => cap.id === "20112")[0] : swrCaptain.data.persons[0];
+  const passangers = swrPassangers.data;
 
   const renderShip = () => {
-    if (!ship) return null;
-    if (!artifacts) return null;
-    if (!captain) return null;
-    if (!passangers) return null;
     return (
       <div className='ship'>
         <Container fluid className='ship'>

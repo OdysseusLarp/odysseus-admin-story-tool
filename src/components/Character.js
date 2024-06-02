@@ -29,6 +29,7 @@ export default function Character(props) {
 
   const isLoading = swrCharacter.isLoading || swrCharacterStory.isLoading || swrFleet.isLoading;
   const error = swrCharacter.error || swrCharacterStory.error || swrFleet.error;
+
   if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
 
