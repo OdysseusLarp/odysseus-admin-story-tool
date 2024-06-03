@@ -98,6 +98,10 @@ export const customStylesLight = {
     ...baseStyles,
     color: '#6c757d',
   }),
+  indicatorSeparator:  (baseStyles, state) => ({
+    ...baseStyles,
+    backgroundColor: state.isDisabled ? '#f2f2f2' : 'white',
+  }),
   multiValue: (baseStyles) => ({
     ...baseStyles,
     backgroundColor: '#e0e0e6',

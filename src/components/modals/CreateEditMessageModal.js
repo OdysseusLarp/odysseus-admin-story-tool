@@ -201,7 +201,7 @@ const CreateEditMessageModal = (props) => {
               onChange={setSelectedSender}
               isClearable={true}
               isSearchable={true}
-              isDisabled={['Letter', 'Text NPC', 'News'].includes(message.type) ? false : true}
+              isDisabled={!['Letter', 'Text NPC', 'News'].includes(message.type) || message?.sent === 'Yes'}
               options={characterOptions}
               styles={document.querySelector('html').getAttribute("data-bs-theme") === "dark" ? customStylesDark : customStylesLight}
             />
@@ -211,7 +211,7 @@ const CreateEditMessageModal = (props) => {
               onChange={setSelectedReceivers}
               isMulti
               isClearable={true}
-              isDisabled={['EVA', 'Letter', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral'].includes(message.type) ? false : true}
+              isDisabled={!['EVA', 'Letter', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral'].includes(message.type) || message?.sent === 'Yes'}
               isSearchable={true}
               options={characterOptions}
               styles={document.querySelector('html').getAttribute("data-bs-theme") === "dark" ? customStylesDark : customStylesLight}
@@ -222,6 +222,7 @@ const CreateEditMessageModal = (props) => {
               required={true}
               isClearable={false}
               isSearchable={true}
+              isDisabled={message?.sent === 'Yes'}
               options={messageTypeOptions}
               styles={document.querySelector('html').getAttribute("data-bs-theme") === "dark" ? customStylesDark : customStylesLight}
               onChange={(event) => {
@@ -315,6 +316,7 @@ const CreateEditMessageModal = (props) => {
               <Form.Control
                 as="textarea"
                 rows={10}
+                disabled={message?.sent === 'Yes'}
                 value={message?.message}
                 isValid={messageIsFilled}
                 isInvalid={!messageIsFilled}

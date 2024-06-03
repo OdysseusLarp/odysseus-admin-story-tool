@@ -8,12 +8,14 @@ import useSWR from "swr";
 import { apiGetRequest } from "../api";
 import TableLoading from "./TableLoading";
 import CreateEditMessageModal from "./modals/CreateEditMessageModal";
+import SendMessageModal from "./modals/SendMessageModal";
 
 import './Message.css';
 
 
 export default function Messages(props) {
   const [showMessageEdit, setShowMessageEdit] = React.useState(false);
+  const [showMessageSend, setShowMessageSend] = React.useState(false);
   const params = useParams();
 
   const { data: message, error, isLoading, mutate: mutateMessage } = useSWR(
@@ -111,6 +113,12 @@ export default function Messages(props) {
           handleClose={() => setShowMessageEdit(false)}
           onEditDone={mutateMessage}
         />
+        <SendMessageModal
+          messageToSend={message}
+          showModal={showMessageSend}
+          handleClose={() => setShowMessageSend(false)}
+          onSendDone={mutateMessage}
+        />
       </div>
     )
   }
@@ -123,8 +131,8 @@ export default function Messages(props) {
         </div>
         <div className='right message'>
           <ButtonGroup>
-            <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)} disabled={message?.sent === 'Yes'}><BiPencil size="24px"/><span>Edit</span></Button>
-            <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={null} disabled={message?.sent === 'Yes'}><BiMailSend size="24px"/><span>Send</span></Button>
+            <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)}><BiPencil size="24px"/><span>Edit</span></Button>
+            <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={() => setShowMessageSend(true)} disabled={message?.sent === 'Yes' || message?.sent === 'No Need' || !['EVA', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral', 'Gray Radio'].includes(message.type)}><BiMailSend size="24px"/><span>Send</span></Button>
           </ButtonGroup>
         </div>
       </div>
