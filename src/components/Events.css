@@ -7,21 +7,21 @@
 }
 
 .events #pageDropDown {
-    background-color:#a52626;
+    background-color: var(--event-color);
 }
 
 .events li.page-item.active > a {
-    background-color:#a52626 !important;
-    border-color:#a52626 !important;
+    background-color: var(--event-color) !important;
+    border-color: var(--event-color) !important;
     color: white !important;
 }
 
 .events li.page-item.disabled > a {
-    color: rgb(166, 167, 168) !important;
+    color: var(--light-gray) !important;
 }
 
 .events .page-link {
-    color: #a52626 !important;
+    color: var(--event-link-color) !important;
 }
 
 .events table {

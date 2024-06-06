@@ -4,7 +4,7 @@
 }
 
 h1.ship {
-    color: #32b2c0;
+    color: var(--fleet-color);
 }
 
 .ship .caption {
@@ -13,16 +13,8 @@ h1.ship {
 
 .ship .mini-header {
     font-weight: 600;
-    color: #32b2c0;
+    color: var(--fleet-color);
     font-size: 20px;
-}
-
-.ship .new {
-    color: #da3e00;
-}
-
-.ship .data-found {
-    color: #f26bf7;
 }
 
 .ship span.description {

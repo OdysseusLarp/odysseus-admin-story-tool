@@ -1,0 +1,20 @@
+.text-danger {
+  font-size: .875em;
+  color: var(--bs-form-invalid-color);
+}
+
+.is-invalid * {
+  border-color: var(--bs-form-invalid-color) !important;
+}
+
+[data-bs-theme="dark"] {
+
+  .text-danger {
+    color: var(--bs-form-invalid-color) !important;
+  }
+
+  .is-invalid * {
+    border-color: var(--bs-form-invalid-color) !important;
+  }
+
+}

@@ -8,7 +8,7 @@
   margin-top: 20px;
   margin-bottom: 20px;
   margin-left: 18px;
-  color: #696969;
+  color: var(--title-color);
 }
 
 .nav-link.active {
@@ -16,59 +16,107 @@
 }
 
 .nav-link.active#tabs-tab-Characters {
-  color: #aa6cb9 !important;
+  color: var(--character-color) !important;
 }
 
 .nav-link.active#tabs-tab-Fleet {
-  color: #32b2c0 !important;
+  color: var(--fleet-color) !important;
 }
 
 .nav-link.active#tabs-tab-Artifacts {
-  color: #d48b38 !important;
+  color: var(--artifact-color) !important;
 }
 
 .nav-link.active#tabs-tab-Plots {
-  color: #4584e9 !important;
+  color: var(--plot-color) !important;
 }
 
 .nav-link.active#tabs-tab-Events {
-  color: #a52626 !important;
+  color: var(--event-color) !important;
 }
 
 .nav-link.active#tabs-tab-Messages {
-  color: #4fa129 !important;
+  color: var(--message-color) !important;
 }
 
 .nav-link {
-  color: rgb(166, 167, 168) !important;
-  font-size: 18px;
+  color: var(--light-gray) !important;
+  font-size: 20px !important;
 }
 
 .title-tab {
   font-weight: 600;
 }
 .title-tab.Characters {
-  color: #aa6cb9;
+  color: var(--character-color);
 }
 
 .title-tab.Fleet {
-  color: #32b2c0;
+  color: var(--fleet-color);
 }
 
 .title-tab.Artifacts {
-  color: #d48b38;
+  color: var(--artifact-color);
 }
 
 .title-tab.Plots {
-  color: #4584e9;
+  color: var(--plot-color);
 }
 
 .title-tab.Events {
-  color: #a52626;
+  color: var(--event-color);
 }
 
 .title-tab.Messages {
-  color: #4fa129;
+  color: var(--message-color);
+}
+
+.characters a {
+  color: var(--character-link-color) !important;
+}
+
+span.characters a {
+  color: var(--character-link-color) !important;
+}
+
+.fleet a {
+  color: var(--fleet-link-color) !important;
+}
+
+span.fleet a {
+  color: var(--fleet-link-color) !important;
+}
+
+.artifacts a {
+  color: var(--artifact-link-color) !important;
+}
+
+span.artifacts a {
+  color: var(--artifact-link-color) !important;
+}
+
+.plots a {
+  color: var(--plot-link-color) !important;
+}
+
+span.plots a {
+  color: var(--plot-link-color) !important;
+}
+
+.events a {
+  color: var(--event-link-color) !important;
+}
+
+span.events a {
+  color: var(--event-link-color) !important;
+}
+
+.messages a {
+  color: var(--message-link-color) !important;
+}
+
+span.messages a {
+  color: var(--message-link-color) !important;
 }
 
 .floating-button-container {
@@ -81,60 +129,8 @@
   background-color: #fff;
 }
 
-[data-bs-theme='dark'] .floating-button-container > div > button {
-  background-color: #212529;
-}
-
 .floating-button-container > *:not(:last-child) {
   margin-right: 10px;
-}
-
-.characters a {
-  color: #9340a8 !important;
-}
-
-.fleet a {
-  color: #329ba7 !important;
-}
-
-.artifacts a {
-  color: #d48b38 !important;
-}
-
-.plots a {
-  color: #4584e9 !important;
-}
-
-.events a {
-  color: #a52626 !important;
-}
-
-.messages a {
-  color: #4fa129 !important;
-}
-
-span.characters a {
-  color: #9340a8 !important;
-}
-
-span.fleet a {
-  color: #329ba7 !important;
-}
-
-span.artifacts a {
-  color: #d48b38 !important;
-}
-
-span.plots a {
-  color: #4584e9 !important;
-}
-
-span.events a {
-  color: #a52626 !important;
-}
-
-span.messages a {
-  color: #4fa129 !important;
 }
 
 .App .btn-group {
@@ -142,23 +138,23 @@ span.messages a {
 }
 
 .App .float-char-btn .plot-button {
-  color:#4584e9 !important;
-  border-color: #696969 !important;
+  color: var(--plot-color) !important;
+  border-color: var(--gray-border-color) !important;
 }
 
 .App .float-char-btn .event-button {
-  color:#a52626 !important;
-  border-color: #696969 !important;
+  color: var(--event-color) !important;
+  border-color: var(--gray-border-color) !important;
 }
 
 .App .float-char-btn .message-button {
-  color:#4fa129 !important;
-  border-color: #696969 !important;
+  color: var(--message-color) !important;
+  border-color: var(--gray-border-color) !important;
 }
 
 .App .float-char-btn:hover {
   background-color:#dcdbdb !important;
-  border-color: #696969 !important;
+  border-color: var(--gray-border-color) !important;
   color: #505050 !important;
 }
 
@@ -168,4 +164,9 @@ span.messages a {
 
 .App .float-char-btn > :nth-child(2) {
   margin-left: 0.2rem;
+}
+
+.form-label {
+  margin-top: 8px;
+  margin-bottom: 4px !important;
 }

@@ -7,21 +7,21 @@
 }
 
 .messages #pageDropDown {
-    background-color:#4fa129;
+    background-color: var(--message-color);
 }
 
 .messages li.page-item.active > a {
-    background-color:#4fa129 !important;
-    border-color:#4fa129 !important;
+    background-color: var(--message-color) !important;
+    border-color: var(--message-color) !important;
     color: white !important;
 }
 
 .messages li.page-item.disabled > a {
-    color: rgb(166, 167, 168) !important;
+    color: var(--light-gray) !important;
 }
 
 .messages .page-link {
-    color: #4fa129 !important;
+    color: var(--message-link-color) !important;
 }
 
 .messages table {

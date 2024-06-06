@@ -7,21 +7,21 @@
 }
 
 .plots #pageDropDown {
-    background-color:#4584e9;
+    background-color: var(--plot-color);
 }
 
 .plots li.page-item.active > a {
-    background-color:#4584e9 !important;
-    border-color:#4584e9 !important;
+    background-color: var(--plot-color) !important;
+    border-color: var(--plot-color) !important;
     color: white !important;
 }
 
 .plots li.page-item.disabled > a {
-    color: rgb(166, 167, 168) !important;
+    color: var(--light-gray) !important;
 }
 
 .plots .page-link {
-    color: #4584e9 !important;
+    color: var(--plot-color) !important;
 }
 
 .plots table {

@@ -4,7 +4,7 @@
 }
 
 h1.event {
-    color: #a52626;
+    color: var(--event-color);
 }
 
 .event .caption{
@@ -17,12 +17,12 @@ h1.event {
 
 .event .mini-header {
     font-weight: 600;
-    color: #a52626;
+    color: var(--event-color);
     font-size: 20px;
 }
 
 .event a {
-    color: #a52626 !important;
+    color: var(--event-link-color) !important;
 }
 
 .event span.description {
@@ -33,4 +33,22 @@ h1.event {
 
 .event .text-to-columns {
     column-count: 3;
+    margin-bottom: 16px;
+}
+
+.event .float-char-btn {
+    border-color: var(--gray-border-color);
+}
+
+.event .float-char-btn > svg {
+    color: var(--event-color);
+}
+
+.event .float-char-btn:hover {
+    background-color:#dcdbdb;
+    border-color: var(--gray-border-color);
+}
+
+.event .float-char-btn:focus {
+    box-shadow: 0 0 0 .2rem var(--gray-border-color);
 }

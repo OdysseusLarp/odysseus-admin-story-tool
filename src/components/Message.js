@@ -2,31 +2,29 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { apiUrl } from "../api";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { BiMailSend, BiPencil } from "react-icons/bi";
-import EditMessageModal from "./modals/EditMessageModal";
+import useSWR from "swr";
+import { apiGetRequest } from "../api";
+import TableLoading from "./TableLoading";
+import CreateEditMessageModal from "./modals/CreateEditMessageModal";
+import SendMessageModal from "./modals/SendMessageModal";
+
 import './Message.css';
 
-const getMessage = async (id) => {
-  const response = await fetch(apiUrl(`/story/messages/${id}`));
-  const message = await response.json();
-  return message;
-}
 
 export default function Messages(props) {
-  const [message, setMessage] = React.useState(null);
   const [showMessageEdit, setShowMessageEdit] = React.useState(false);
+  const [showMessageSend, setShowMessageSend] = React.useState(false);
   const params = useParams();
 
-  React.useEffect(() => {
-    if (!params.id) return;
-    getMessage(params.id).then((s) => setMessage(s));
-  }, [params.id, setMessage]);
+  const { data: message, error, isLoading, mutate: mutateMessage } = useSWR(
+    "/story/messages/" + params.id,
+    apiGetRequest
+  );
 
-  React.useEffect(() => {
-    props.changeTab('Messages');
-  }, [props]);
+  if (isLoading) return <TableLoading />;
+  if (error) return <div>Failed to load data</div>;
 
   const renderMessage = () => {
     if (!message) return null;
@@ -34,7 +32,6 @@ export default function Messages(props) {
     const afterJumpEmpty = (value) => value ? value : 'Not defined';
     const booleanToString = (value) => value ? 'Yes' : 'No';
     const gm_notes = message.gm_notes ? message.gm_notes.split('\n').flat() : [];
-
     return (
       <div>
         <div className='message'>
@@ -43,7 +40,8 @@ export default function Messages(props) {
               <Col sm><span className='mini-header'>Basic Info</span></Col>
             </Row>
             <Row>
-              <Col sm={6}><span className='caption'>Message type: </span> {message.type}</Col>
+              <Col sm={5}><span className='caption'>Message type: </span> {message.type}</Col>
+              <Col sm={5}><span className='caption'>ID: </span> {message.id}</Col>
             </Row>
             <Row>
               <Col sm={6}><span className='caption'>Happens after jump: </span> {afterJumpEmpty(message.after_jump)}</Col>
@@ -61,13 +59,27 @@ export default function Messages(props) {
               <Col sm><span className='mini-header'>Sender</span></Col>
             </Row>
             <Row>
-              <Col sm>{message.sender === null ? <ul><li>No sender</li></ul> : <ul>{message.sender?.id && <li><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> - Card ID: {message.sender?.card_id} </span></li>}</ul>}</Col>
+              <Col sm>{message.sender === null
+                ? <ul><li>No sender</li></ul>
+                : <ul>{message.sender?.id &&
+                    <li><span className='characters'>
+                      <Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> - {message.sender?.is_character ? 'Character' : 'NPC'} - Card ID: {message.sender?.card_id}
+                    </span></li>}
+                  </ul>}
+              </Col>
             </Row>
             <Row>
               <Col sm><span className='mini-header'>Receiver(s)</span></Col>
             </Row>
             <Row>
-              <Col sm>{message.receivers.length < 1 ? <ul><li>No receivers</li></ul> : <span><ul>{message.receivers?.map(receiver => <li key={receiver?.id}><span className='characters'><Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> - Card ID: {receiver?.card_id}</span></li>)}</ul></span>}</Col>
+              <Col sm>{message.receivers.length < 1 
+                ? <ul><li>No receivers</li></ul> 
+                : <span><ul>{message.receivers?.map(receiver => 
+                    <li key={receiver?.id}><span className='characters'>
+                      <Link onClick={() => props.changeTab('Characters')} to={`/characters/${receiver?.id}`}>{receiver?.name}</Link> - {receiver?.is_character ? 'Character' : 'NPC'} - Card ID: {receiver?.card_id}
+                    </span></li>)}
+                  </ul></span>}
+              </Col>
             </Row>
             <Row>
               <Col sm={5}><span className='mini-header'>Plots</span>
@@ -89,23 +101,24 @@ export default function Messages(props) {
             <Row>
               <Col sm><span className='mini-header'>GM Notes</span></Col>
             </Row>
-            <span className="description">{gm_notes.length < 1 ? <ul><li>No notes</li></ul> : <ul>{gm_notes.map(e => <li key={e}>{e}</li>)}</ul>}</span>
+            <span className="description">{gm_notes.length < 1 ? <ul><li>No notes available</li></ul> : <ul>{gm_notes.map(e => <li key={e}>{e}</li>)}</ul>}</span>
             <Row>
               <Col sm>&nbsp;</Col>
             </Row>
           </Container>
         </div>
-
-        <EditMessageModal
-          showMessageEdit={showMessageEdit}
+        <CreateEditMessageModal
+          messageToEdit={message}
+          showModal={showMessageEdit}
           handleClose={() => setShowMessageEdit(false)}
-          handleSave={() => {
-            setShowMessageEdit(false);
-            getMessage(params.id).then((s) => setMessage(s))
-          }}
-          message={message}
+          onEditDone={mutateMessage}
         />
-
+        <SendMessageModal
+          messageToSend={message}
+          showModal={showMessageSend}
+          handleClose={() => setShowMessageSend(false)}
+          onSendDone={mutateMessage}
+        />
       </div>
     )
   }
@@ -118,8 +131,8 @@ export default function Messages(props) {
         </div>
         <div className='right message'>
           <ButtonGroup>
-            <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)} disabled={message?.sent === 'Yes'}><BiPencil size="24px"/><span>Edit</span></Button>
-            <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={null} disabled={message?.sent === 'Yes'}><BiMailSend size="24px"/><span>Send</span></Button>
+            <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)}><BiPencil size="24px"/><span>Edit</span></Button>
+            <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={() => setShowMessageSend(true)} disabled={message?.sent === 'Yes' || message?.sent === 'No Need' || !['EVA', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral', 'Gray Radio'].includes(message.type)}><BiMailSend size="24px"/><span>Send</span></Button>
           </ButtonGroup>
         </div>
       </div>

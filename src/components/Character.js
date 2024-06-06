@@ -29,6 +29,7 @@ export default function Character(props) {
 
   const isLoading = swrCharacter.isLoading || swrCharacterStory.isLoading || swrFleet.isLoading;
   const error = swrCharacter.error || swrCharacterStory.error || swrFleet.error;
+
   if (isLoading) return <TableLoading />;
   if (error) return <div>Failed to load data</div>;
 
@@ -46,7 +47,6 @@ export default function Character(props) {
     const personal_history = character.entries.filter((e) => e.type === "PERSONAL").map((e) => e.entry.split('\n\n')).flat();
     const personal_history_list = personal_history.map(phistory => <li key={phistory}>{phistory}</li>);
     const character_summary = character.summary ? character.summary.split('\n') : [];
-
 
     const getShipById = (ship_id) => {
       const shipName = (ship_id ? fleet.find(ship => ship.id === ship_id)?.name : "");
