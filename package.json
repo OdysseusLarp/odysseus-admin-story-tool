@@ -34,6 +34,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:live": "REACT_APP_ODYSSEUS_API_URL=https://live.odysseuslarp.dev react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
