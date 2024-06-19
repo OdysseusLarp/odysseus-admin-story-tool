@@ -32,6 +32,7 @@ export default function Messages(props) {
     const afterJumpEmpty = (value) => value ? value : 'Not defined';
     const booleanToString = (value) => value ? 'Yes' : 'No';
     const gm_notes = message.gm_notes ? message.gm_notes.split('\n').flat() : [];
+    console.log("gohiö", ['Deceased', 'Killed in action'].includes(message.sender?.status))
     return (
       <div>
         <div className='message'>
@@ -63,7 +64,8 @@ export default function Messages(props) {
                 ? <ul><li>No sender</li></ul>
                 : <ul>{message.sender?.id &&
                     <li><span className='characters'>
-                      <Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> - {message.sender?.is_character ? 'Character' : 'NPC'} - Card ID: {message.sender?.card_id}
+                      <Link onClick={() => props.changeTab('Characters')} to={`/characters/${message.sender?.id}`}>{message.sender?.name}</Link> - {message.sender?.is_character ? 'Character' : 'NPC'} - 
+                      Card ID: {message.sender?.card_id}{!['Deceased', 'Killed in action'].includes(message.sender?.status) ? '' : <span className="warning"> - {message.sender?.status.toUpperCase()}</span>}
                     </span></li>}
                   </ul>}
               </Col>
@@ -132,7 +134,15 @@ export default function Messages(props) {
         <div className='right message'>
           <ButtonGroup>
             <Button className="float-char-btn" title="Edit Message" variant="outline-secondary" onClick={() => setShowMessageEdit(true)}><BiPencil size="24px"/><span>Edit</span></Button>
-            <Button className="float-char-btn" title="Send Message" variant="outline-secondary" onClick={() => setShowMessageSend(true)} disabled={message?.sent === 'Yes' || message?.sent === 'No Need' || !['EVA', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral', 'Gray Radio'].includes(message.type)}><BiMailSend size="24px"/><span>Send</span></Button>
+            <Button 
+              className="float-char-btn" 
+              title="Send Message" 
+              variant="outline-secondary" 
+              onClick={() => setShowMessageSend(true)} 
+              disabled={message?.sent === 'Yes' || message?.sent === 'No Need' || ['Deceased', 'Killed in action'].includes(message?.sender?.status) || !['EVA', 'Text NPC', 'Fleet Comms', 'Fleet Secretary', 'Fleet Admiral', 'Gray Radio'].includes(message.type)}><BiMailSend 
+              size="24px"/>
+                <span>Send</span>
+            </Button>
           </ButtonGroup>
         </div>
       </div>
