@@ -6,6 +6,9 @@ import FloatingButtons from "./FloatingButtons";
 import { apiGetRequest } from "../api";
 import TableLoading from "./TableLoading";
 import useSWR from "swr";
+import { Button } from "react-bootstrap";
+import { BiPencil } from "react-icons/bi";
+import EditCharacterModal from "./modals/EditCharacterModal";
 
 import './Character.css';
 
@@ -21,6 +24,7 @@ const getIsCharacterText = (character) => {
 }
 
 export default function Character(props) {
+  const [showCharacterEdit, setShowCharacterEdit] = React.useState(false);
   const params = useParams();
 
   const swrCharacter = useSWR( "/person/" + params.id, apiGetRequest);
@@ -59,6 +63,7 @@ export default function Character(props) {
     const gm_notes_list = character.gm_notes ? character.gm_notes.split('\n') : [];
 
     return (
+      <div>
       <div className='character'>
         <Container fluid className='character'>
           <Row>
@@ -154,7 +159,11 @@ export default function Character(props) {
           <span className="description">{character_summary.length < 1 ? <p>No summary</p> : <ul>{character_summary.map(n => <li key={n}><Row><Col sm>{n}</Col></Row></li>)}
           </ul>}</span>
           <Row>
-            <Col sm><span className='mini-header'>GM Notes</span></Col>
+            <Col sm>
+              <span className='mini-header'>GM Notes
+                <Button className="float-char-btn edit-btn" title="Edit GM Note" variant="outline-secondary" size="sm" onClick={() => setShowCharacterEdit(true)} ><BiPencil size="18px" /></Button>
+              </span>
+            </Col>
           </Row>
           <Row>
             <Col sm>
@@ -163,31 +172,6 @@ export default function Character(props) {
             </Col>
           </Row>
           <Row>
-            <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
-          </Row>
-          <ul><li><Row>
-            <Col sm><span>Timestamp: Note 6</span></Col>
-          </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 5</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 4</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 3</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 2</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 1</span></Col>
-            </Row></li>
-          </ul>
-          <Row>
-            <Col sm><span className='new'>Save the notes between games!</span></Col>
-          </Row>
-          <Row className='row-mini-header'>
             <Col sm><span className='mini-header' id='family'>Family</span></Col>
           </Row>
           <Row>
@@ -277,6 +261,13 @@ export default function Character(props) {
             <Col sm>&nbsp;</Col>
           </Row>
         </Container>
+      </div>
+      <EditCharacterModal
+        characterToEdit={character}
+        showModal={showCharacterEdit}
+        handleClose={() => setShowCharacterEdit(false)}
+        onEditDone={swrCharacter.mutate}
+      />
       </div>
     )
   }
