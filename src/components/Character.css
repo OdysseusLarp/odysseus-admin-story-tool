@@ -34,3 +34,7 @@ h1.character {
     max-width: 150ch;
     display: inline-block;
 }
+
+span.caret {
+    display: none;
+}
