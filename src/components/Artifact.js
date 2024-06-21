@@ -5,10 +5,14 @@ import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
 import TableLoading from "./TableLoading";
 import useSWR from "swr";
+import { Button } from "react-bootstrap";
+import { BiPencil } from "react-icons/bi";
+import EditArtifactModal from "./modals/EditArtifactModal";
 
 import './Artifact.css';
 
 export default function Artifact(props) {
+  const [showArtifactEdit, setShowArtifactEdit] = React.useState(false);
   const params = useParams();
 
   const swrArtifact = useSWR(
@@ -45,6 +49,7 @@ export default function Artifact(props) {
     const test_result_none = "No significant findings were discovered."
 
     return (
+      <div>
       <div className='artifact'>
         <Container fluid className='artifact'>
           <Row className='row-mini-header'>
@@ -110,35 +115,14 @@ export default function Artifact(props) {
             <Col sm><p><span className='caption'>X-ray fluorecense: </span><span className="description">{artifact.test_xrf ? artifact.test_xrf : test_result_none}</span></p></Col>
           </Row>
           <Row>
-            <Col sm><span className='mini-header'>GM Notes</span></Col>
+            <Col sm>
+              <span className='mini-header'>GM Notes
+                <Button className="float-char-btn edit-btn" title="Edit GM Note" variant="outline-secondary" size="sm" onClick={() => setShowArtifactEdit(true)} ><BiPencil size="18px" /></Button>
+              </span>
+            </Col>
           </Row>
           <span className='description'> {artifact_notes.length < 1 ? <ul><li>No notes</li></ul> :
             <ul>{artifact_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
-          <Row>
-            <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
-          </Row>
-          <ul><li><Row>
-            <Col sm><span>Timestamp: Note 6</span></Col>
-          </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 5</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 4</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 3</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 2</span></Col>
-            </Row></li>
-            <li><Row>
-              <Col sm><span>Timestamp: Note 1</span></Col>
-            </Row></li>
-          </ul>
-          <Row>
-            <Col sm><p className='new'>Save the notes between games!</p></Col>
-          </Row>
           <Row>
             <Col sm><span className='mini-header'>Artifact Entries</span></Col>
           </Row>
@@ -147,6 +131,13 @@ export default function Artifact(props) {
           </ul>}
         </Container>
       </div>
+      <EditArtifactModal
+      characterToEdit={artifact}
+      showModal={showArtifactEdit}
+      handleClose={() => setShowArtifactEdit(false)}
+      onEditDone={swrArtifact.mutate}
+    />
+    </div>
     )
   }
 
