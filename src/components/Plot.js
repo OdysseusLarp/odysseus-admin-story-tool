@@ -107,31 +107,6 @@ export default function Plot(props) {
               {plot_notes.map(n => <li key={n}>{n}</li>)}
             </ul>}</span>
             <Row>
-              <Col sm><span className='mini-header new'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
-            </Row>
-            <ul><li><Row>
-              <Col sm><span>Timestamp: Note 6</span></Col>
-            </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 5</span></Col>
-              </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 4</span></Col>
-              </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 3</span></Col>
-              </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 2</span></Col>
-              </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 1</span></Col>
-              </Row></li>
-            </ul>
-            <Row>
-              <Col sm><p className="new">Save the notes between games!</p></Col>
-            </Row>
-            <Row>
               <Col sm><span className='mini-header'>Copied from characters</span></Col>
             </Row>
             <Row>

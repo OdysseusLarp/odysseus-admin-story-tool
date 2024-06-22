@@ -65,3 +65,7 @@ h1.message {
 .splitscreen .right {
     flex: 0.2;
 }
+
+.warning {
+    color: var(--bs-danger);
+}

@@ -34,3 +34,26 @@ h1.character {
     max-width: 150ch;
     display: inline-block;
 }
+
+span.caret {
+    display: none;
+}
+
+.character .edit-btn {
+    border-color: var(--gray-border-color);
+    padding: 4px 6px 4px 6px;
+    margin-left: 15px;
+}
+
+.character .float-char-btn > svg {
+    color: var(--character-color);
+}
+
+.character .float-char-btn:hover {
+    background-color:#dcdbdb;
+    border-color: var(--gray-border-color);
+}
+
+.character .float-char-btn:focus {
+    box-shadow: 0 0 0 .2rem var(--gray-border-color);
+}

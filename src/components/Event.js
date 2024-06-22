@@ -129,31 +129,6 @@ export default function Event(props) {
             </Row>
             <span className='description'>{gm_notes.length < 1 ? <ul><li>No notes available</li></ul> : <ul>{gm_notes.map(n => <li key={n}>{n}</li>)}</ul>}</span>
             <Row>
-              <Col sm><span className='mini-header'>GM Notes During the Runs [ADD NOTE BUTTON] [HIDE PREVIOUS RUNS CHECKBOX]</span></Col>
-            </Row>
-            <ul><li><Row>
-              <Col sm><span>Timestamp: Note 6</span></Col>
-            </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 5</span></Col>
-              </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 4</span></Col>
-              </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 3</span></Col>
-              </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 2</span></Col>
-              </Row></li>
-              <li><Row>
-                <Col sm><span>Timestamp: Note 1</span></Col>
-              </Row></li>
-            </ul>
-            <Row>
-              <Col sm><span>Save the notes between games!</span></Col>
-            </Row>
-            <Row>
               <Col sm>&nbsp;</Col>
             </Row>
           </Container>
