@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { errorToast, successToast } from "../../utils/toaster";
-import { updateArtifact } from "../../api/artifact";
+import { updateArtifactGmNotes } from "../../api/artifact";
 
 const DEFAULT_ARTIFACT_STATE = {
   gm_notes: '',
@@ -41,17 +41,11 @@ const EditArtifactModal = (props) => {
     }
     setIsSubmitting(true);
 
-    const data = {
-      ...artifact,
-    };
-
-    delete data.entries;
-
-    const response = await updateArtifact(data);
+    const response = await updateArtifactGmNotes(artifact.id, artifact.gm_notes);
  
     if (response.ok) {
       const data = await response.json();
-      successToast('Artifact updated');
+      successToast('Artifact GM notes updated!');
       afterSubmit(data.id);
     } else {
       console.error(`Got HTTP ${response.status} response:`, await response.text());

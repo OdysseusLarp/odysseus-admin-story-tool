@@ -1,17 +1,17 @@
 import { apiUrl } from "../api";
 
-export async function updateArtifact(artifact) {
+export async function updateArtifactGmNotes(artifactId, gmNote) {
   const requestBody = {
-    ...artifact,
-    gm_notes: artifact.gm_notes?.trim() ?? null,
-    } ?? []
+    id: artifactId,
+    gm_notes: gmNote?.trim() ?? null,
+  };
 
   const response = await fetch(apiUrl("/science/artifact"), {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestBody)
+    body: JSON.stringify(requestBody),
   });
 
   return response;

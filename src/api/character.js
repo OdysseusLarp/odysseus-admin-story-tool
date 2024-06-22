@@ -1,17 +1,16 @@
 import { apiUrl } from "../api";
 
-export async function updateCharacter(character) {
+export async function updateCharacterGmNotes(personId, gmNotes) {
   const requestBody = {
-    ...character,
-    gm_notes: character.gm_notes?.trim() ?? null,
-    } ?? []
+    gm_notes: gmNotes?.trim() ?? null,
+  };
 
-  const response = await fetch(apiUrl("/person/" + character.id), {
-    method: 'PUT',
+  const response = await fetch(apiUrl("/person/" + personId), {
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestBody)
+    body: JSON.stringify(requestBody),
   });
 
   return response;

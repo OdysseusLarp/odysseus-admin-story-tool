@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { errorToast, successToast } from "../../utils/toaster";
-import { updateCharacter } from "../../api/character";
+import { updateCharacterGmNotes } from "../../api/character";
 
 const DEFAULT_CHARACTER_STATE = {
   gm_notes: '',
@@ -41,20 +41,11 @@ const EditCharacterModal = (props) => {
     }
     setIsSubmitting(true);
 
-    const data = {
-      ...character,
-    };
-
-    delete data.entries;
-    delete data.groups;
-    delete data.family;
-    delete data.ship;
-
-    const response = await updateCharacter(data);
+    const response = await updateCharacterGmNotes(character.id, character.gm_notes);
 
     if (response.ok) {
       const data = await response.json();
-      successToast('Character updated');
+      successToast('Character GM notes updated!');
       afterSubmit(data.id);
     } else {
       console.error(`Got HTTP ${response.status} response:`, await response.text());
