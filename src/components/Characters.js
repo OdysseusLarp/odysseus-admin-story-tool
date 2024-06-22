@@ -5,15 +5,54 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min';
 import { apiGetRequest } from "../api";
 import { toSelectOptions } from "../utils/helpers";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
 import TableLoading from "./TableLoading";
 import useSWR from "swr";
 
 import './Characters.css';
 
 export default function Characters(props) {
-  const [page, setPage] = React.useState(1);
-  const [sizePerPage, setSizePerPage] = React.useState(15);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { hash } = useLocation();
+
+  const setHash = (newHash) => {
+    window.location.hash = newHash;
+  }
+
+  let decodedHash = {};
+  if (hash) {
+    try {
+      decodedHash = JSON.parse(window.atob(hash.slice(1)));
+    } catch (e) {
+      console.error("Failed to decode hash", e);
+    }
+  }
+
+  const page = parseInt(searchParams.get('page'), 10) || 1;
+  const sizePerPage = parseInt(searchParams.get('pageSize'), 10) || 15;
+
+  const setPageAndSize = (newPage, newSizePerPage) => {
+    setSearchParams({ page: String(newPage), pageSize: String(newSizePerPage) })
+  }
+
+  const afterFilter = (filteredResults, appliedFilters) => {
+    const formattedFilters = {};
+    Object.entries(appliedFilters).forEach(([key, value]) => {
+      formattedFilters[key] = value.filterVal;
+    });
+
+    if (Object.keys(formattedFilters).length === 0) {
+      setHash('');
+      return;
+    }
+
+    const filtersHash = window.btoa(JSON.stringify(formattedFilters));
+    setHash(filtersHash);
+  };
+
+  const getDefaultFilterValue = (key) => {
+    return decodedHash[key];
+  };
 
   const swrCharacters = useSWR(
     "/person?show_hidden=true&is_character=true",
@@ -37,7 +76,7 @@ export default function Characters(props) {
   const selectShift = toSelectOptions(characters, 'shift');
   const selectStatus = toSelectOptions(characters, 'status');
   const selectShip = toSelectOptions(characters.map((c) => c.ship), 'name');
-  const selectOptions = {
+  const selectIsCharacter = {
     true: 'Character',
     false: 'NPC'
   };
@@ -64,7 +103,7 @@ export default function Characters(props) {
     dataField: 'full_name',
     text: 'Full Name',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('full_name') }),
     formatter: (cell, row) => {
       return <Link to={`/characters/${row.id}`}>{cell}</Link>
     },
@@ -73,7 +112,7 @@ export default function Characters(props) {
     dataField: 'card_id',
     text: 'Card ID',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('card_id') }),
     headerStyle: () => {
       return { width: '100px' }
     },
@@ -82,9 +121,10 @@ export default function Characters(props) {
     dataField: 'is_character',
     text: 'Character/NPC',
     sort: true,
-    formatter: cell => selectOptions[cell],
+    formatter: cell => selectIsCharacter[cell],
     filter: selectFilter({
-      options: selectOptions
+      options: selectIsCharacter,
+      defaultValue: getDefaultFilterValue('is_character'),
     }),
     headerStyle: () => {
       return { width: '10%' }
@@ -94,7 +134,7 @@ export default function Characters(props) {
     dataField: 'character_group',
     text: 'Character Group',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('character_group') }),
     sortCaret: (order) => { return sortCaret(order) }
   }, {
     dataField: 'shift',
@@ -102,14 +142,15 @@ export default function Characters(props) {
     sort: true,
     hidden: true,
     filter: selectFilter({
-      options: selectShift
+      options: selectShift,
+      defaultValue: getDefaultFilterValue('shift')
     }),
     sortCaret: (order) => { return sortCaret(order) }
   }, {
     dataField: 'title',
     text: 'Title',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('title') }),
     sortCaret: (order) => { return sortCaret(order) }
   }, {
     dataField: 'status',
@@ -117,7 +158,8 @@ export default function Characters(props) {
     sort: true,
     hidden: true,
     filter: selectFilter({
-      options: selectStatus
+      options: selectStatus,
+      defaultValue: getDefaultFilterValue('status'),
     }),
     sortCaret: (order) => { return sortCaret(order) }
   }, {
@@ -125,7 +167,8 @@ export default function Characters(props) {
     text: 'Dynasty',
     sort: true,
     filter: selectFilter({
-      options: selectDynasty
+      options: selectDynasty,
+      defaultValue: getDefaultFilterValue('dynasty'),
     }),
     sortCaret: (order) => { return sortCaret(order) }
   }, {
@@ -134,7 +177,8 @@ export default function Characters(props) {
     sort: true,
     hidden: true,
     filter: selectFilter({
-      options: selectParty
+      options: selectParty,
+      defaultValue: getDefaultFilterValue('political_party'),
     }),
     sortCaret: (order) => { return sortCaret(order) }
   }, {
@@ -143,7 +187,8 @@ export default function Characters(props) {
     sort: true,
     hidden: true,
     filter: selectFilter({
-      options: selectReligion
+      options: selectReligion,
+      defaultValue: getDefaultFilterValue('religion'),
     }),
     sortCaret: (order) => { return sortCaret(order) }
   }, {
@@ -152,7 +197,8 @@ export default function Characters(props) {
     sort: true,
     hidden: true,
     filter: selectFilter({
-      options: selectPlanet
+      options: selectPlanet,
+      defaultValue: getDefaultFilterValue('home_planet'),
     }),
     sortCaret: (order) => { return sortCaret(order) }
   }, {
@@ -167,7 +213,8 @@ export default function Characters(props) {
         </span>
     },
     filter: selectFilter({
-      options: selectShip
+      options: selectShip,
+      defaultValue: getDefaultFilterValue('ship.name'),
     }),
     headerStyle: () => {
       return { width: '10%' }
@@ -199,12 +246,10 @@ export default function Characters(props) {
     paginationTotalRenderer: customTotal,
     disablePageTitle: true,
     onPageChange: (page, sizePerPage) => {
-      setPage(page);
-      setSizePerPage(sizePerPage);
+      setPageAndSize(page, sizePerPage);
     },
     onSizePerPageChange: (sizePerPage, page) => {
-      setPage(page);
-      setSizePerPage(sizePerPage);
+      setPageAndSize(page, sizePerPage);
     },
     sizePerPageList: [{
       text: '10', value: 10
@@ -246,7 +291,7 @@ export default function Characters(props) {
               bordered={false}
               data={characters}
               columns={columns}
-              filter={filterFactory()}
+              filter={filterFactory({ afterFilter })}
               pagination={paginationFactory(options)}
               {...props.baseProps}
             />
