@@ -9,10 +9,10 @@ import TableLoading from "./TableLoading";
 import useSWR from "swr";
 
 import './Artifacts.css';
+import useTableState from "../hooks/TableState";
 
 export default function Artifacts() {
-  const [page, setPage] = React.useState(1);
-  const [sizePerPage, setSizePerPage] = React.useState(15);
+  const { page, sizePerPage, setPageAndSize, afterFilter, getDefaultFilterValue } = useTableState();
 
   const { data: artifacts, error, isLoading } = useSWR(
     "/science/artifact",
@@ -44,7 +44,7 @@ export default function Artifacts() {
     dataField: 'catalog_id',
     text: 'Catalog ID',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('catalog_id') }),
     formatter: (cell, row) => {
       return <Link to={`/artifacts/${row.id}`}>{cell}</Link>
     }
@@ -52,7 +52,7 @@ export default function Artifacts() {
     dataField: 'name',
     text: 'Name',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('name') }),
     headerStyle: () => {
       return { width: '17%', textAlign: 'left' }
     },
@@ -61,30 +61,32 @@ export default function Artifacts() {
     text: 'Origin',
     sort: true,
     filter: selectFilter({
-      options: originSelectOptions
+      options: originSelectOptions,
+      defaultValue: getDefaultFilterValue('type')
     }),
   }, {
     dataField: 'discovered_at',
     text: 'Discovered At',
     sort: true,
-    filter: textFilter()
+    filter: textFilter({ defaultValue: getDefaultFilterValue('discovered_at') }),
   }, {
     dataField: 'discovered_by',
     text: 'Discovered By',
     sort: true,
-    filter: textFilter()
+    filter: textFilter({ defaultValue: getDefaultFilterValue('discovered_by') }),
   }, {
     dataField: 'discovered_from',
     text: 'Discovered From',
     sort: true,
-    filter: textFilter()
+    filter: textFilter({ defaultValue: getDefaultFilterValue('discovered_from') }),
   }, {
     dataField: 'is_visible',
     text: 'Visible',
     sort: true,
     formatter: cell => selectOptions[cell],
     filter: selectFilter({
-      options: selectOptions
+      options: selectOptions,
+      defaultValue: getDefaultFilterValue('is_visible')
     })
   }];
 
@@ -111,12 +113,10 @@ export default function Artifacts() {
     showTotal: true,
     paginationTotalRenderer: customTotal,
     onPageChange: (page, sizePerPage) => {
-      setPage(page);
-      setSizePerPage(sizePerPage);
+      setPageAndSize(page, sizePerPage);
     },
     onSizePerPageChange: (sizePerPage, page) => {
-      setPage(page);
-      setSizePerPage(sizePerPage);
+      setPageAndSize(page, sizePerPage);
     },
     disablePageTitle: true,
     sizePerPageList: [{
@@ -144,7 +144,7 @@ export default function Artifacts() {
         bordered={false}
         data={artifacts}
         columns={columns}
-        filter={filterFactory()}
+        filter={filterFactory({ afterFilter })}
         pagination={paginationFactory(options)}
       />
     </div>

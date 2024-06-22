@@ -6,13 +6,13 @@ import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
 import { toSelectOptions } from "../utils/helpers";
 import TableLoading from "./TableLoading";
+import useTableState from "../hooks/TableState";
 import useSWR from "swr";
 
 import './Events.css';
 
 export default function Events(props) {
-  const [page, setPage] = React.useState(1);
-  const [sizePerPage, setSizePerPage] = React.useState(15);
+  const { page, sizePerPage, setPageAndSize, afterFilter, getDefaultFilterValue } = useTableState();
 
   const { data: events, error, isLoading } = useSWR(
     "/story/events",
@@ -46,7 +46,7 @@ export default function Events(props) {
     dataField: 'name',
     text: 'Name',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('name') }),
     formatter: (cell, row) => {
       return <Link to={`/events/${row.id}`}>{cell}</Link>
     }
@@ -54,7 +54,7 @@ export default function Events(props) {
     dataField: 'after_jump',
     text: 'After Jump',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('after_jump') }),
     headerStyle: () => {
       return { width: '7%', textAlign: 'left' };
     },
@@ -71,6 +71,7 @@ export default function Events(props) {
     text: 'Characters involved',
     sort: true,
     filter: textFilter({
+      defaultValue: getDefaultFilterValue('persons'),
       onFilter: (filterValue, cell) => {
         if (!filterValue) return cell;
         const filtered = cell.filter((row) => {
@@ -99,7 +100,7 @@ export default function Events(props) {
     dataField: 'character_groups',
     text: 'Character Group',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('character_groups') }),
     formatter: (cell, row, i) => {
       if (cell === null) { return null }
       return cell.split(", ").sort().map(character_group => <div key={character_group.concat(i)}>{character_group}</div>)
@@ -109,47 +110,53 @@ export default function Events(props) {
     text: 'Type',
     sort: true,
     filter: selectFilter({
-      options: selectType
+      options: selectType,
+      defaultValue: getDefaultFilterValue('type')
     })
   }, {
     dataField: 'size',
     text: 'Size',
     sort: true,
     filter: selectFilter({
-      options: selectSize
+      options: selectSize,
+      defaultValue: getDefaultFilterValue('size')
     })
   }, {
     dataField: 'importance',
     text: 'Importance',
     sort: true,
     filter: selectFilter({
-      options: selectImportance
+      options: selectImportance,
+      defaultValue: getDefaultFilterValue('importance')
     })
   }, {
     dataField: 'status',
     text: 'Status',
     sort: true,
     filter: selectFilter({
-      options: selectStatus
+      options: selectStatus,
+      defaultValue: getDefaultFilterValue('status')
     })
   }, {
     dataField: 'gm_actions',
     text: 'GM Actions',
     sort: true,
     filter: selectFilter({
-      options: selectGmActions
+      options: selectGmActions,
+      defaultValue: getDefaultFilterValue('gm_actions')
     })
   }, {
     dataField: 'npc_count',
     text: 'NPC Count',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('npc_count') }),
   }, {
     dataField: 'npc_location',
     text: 'NPC Location',
     sort: true,
     filter: selectFilter({
-      options: selectNPCLocation
+      options: selectNPCLocation,
+      defaultValue: getDefaultFilterValue('npc_location')
     })
   }];
 
@@ -201,12 +208,10 @@ export default function Events(props) {
     showTotal: true,
     paginationTotalRenderer: customTotal,
     onPageChange: (page, sizePerPage) => {
-      setPage(page);
-      setSizePerPage(sizePerPage);
+      setPageAndSize(page, sizePerPage);
     },
     onSizePerPageChange: (sizePerPage, page) => {
-      setPage(page);
-      setSizePerPage(sizePerPage);
+      setPageAndSize(page, sizePerPage);
     },
     disablePageTitle: true,
     sizePerPageList: [{
@@ -234,7 +239,7 @@ export default function Events(props) {
         bordered={false}
         data={events}
         columns={columns}
-        filter={filterFactory()}
+        filter={filterFactory({ afterFilter })}
         pagination={paginationFactory(options)}
         defaultSorted={defaultSorted}
         expandRow={expandRow}

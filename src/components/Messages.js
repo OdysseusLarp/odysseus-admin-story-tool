@@ -9,10 +9,10 @@ import TableLoading from "./TableLoading";
 import useSWR from "swr";
 
 import './Messages.css';
+import useTableState from "../hooks/TableState";
 
 export default function Messages(props) {
-  const [page, setPage] = React.useState(1);
-  const [sizePerPage, setSizePerPage] = React.useState(15);
+  const { page, sizePerPage, setPageAndSize, afterFilter, getDefaultFilterValue } = useTableState();
 
   const { data: messages, error, isLoading } = useSWR(
     "/story/messages",
@@ -40,14 +40,14 @@ export default function Messages(props) {
     dataField: 'name',
     text: 'Name',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('name') }),
     headerStyle: () => { return { width: '30%', textAlign: 'left' } },
     formatter: (cell, row) => { return <Link to={`/messages/${row.id}`}>{cell}</Link> }
   }, {
     dataField: 'after_jump',
     text: 'After Jump',
     sort: true,
-    filter: textFilter({ comparator: Comparator.EQ }),
+    filter: textFilter({ comparator: Comparator.EQ, defaultValue: getDefaultFilterValue('after_jump') }),
     headerStyle: () => { return { width: '7%', textAlign: 'left' } },
     sortFunc: (a, b, order, dataField, rowA, rowB) => {
       const aValue = a === "" ? 100 : a;
@@ -61,7 +61,7 @@ export default function Messages(props) {
     dataField: 'sender.name',
     text: 'Sender',
     sort: true,
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: getDefaultFilterValue('sender.name') }),
     formatter: (cell, row) => {
       return <span className='characters'>
         <Link to={`/characters/${row.sender_person_id}`} onClick={() => props.changeTab('Characters')}>{cell}</Link>
@@ -72,6 +72,7 @@ export default function Messages(props) {
     text: 'Receiver(s)',
     sort: true,
     filter: textFilter({
+      defaultValue: getDefaultFilterValue('receivers'),
       onFilter: (filterValue, cell) => {
         if (!filterValue) return cell;
         const filtered = cell.filter((row) => {
@@ -96,12 +97,12 @@ export default function Messages(props) {
     dataField: 'type',
     text: 'Type',
     sort: true,
-    filter: selectFilter({ options: typeSelectOptions }),
+    filter: selectFilter({ options: typeSelectOptions, defaultValue: getDefaultFilterValue('type') }),
   }, {
     dataField: 'sent',
     text: 'Sent',
     sort: true,
-    filter: selectFilter({ options: sentSelectOptions }),
+    filter: selectFilter({ options: sentSelectOptions, defaultValue: getDefaultFilterValue('sent') }),
   }];
 
   const customTotal = (from, to, size) => (
@@ -127,12 +128,10 @@ export default function Messages(props) {
     showTotal: true,
     paginationTotalRenderer: customTotal,
     onPageChange: (page, sizePerPage) => {
-      setPage(page);
-      setSizePerPage(sizePerPage);
+      setPageAndSize(page, sizePerPage);
     },
     onSizePerPageChange: (sizePerPage, page) => {
-      setPage(page);
-      setSizePerPage(sizePerPage);
+      setPageAndSize(page, sizePerPage);
     },
     disablePageTitle: true,
     sizePerPageList: [{
@@ -160,7 +159,7 @@ export default function Messages(props) {
         bordered={false}
         data={messages}
         columns={columns}
-        filter={filterFactory()}
+        filter={filterFactory({ afterFilter })}
         pagination={paginationFactory(options)}
         defaultSorted={defaultSorted}
       />

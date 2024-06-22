@@ -6,13 +6,13 @@ import { Link } from "react-router-dom";
 import { apiGetRequest } from "../api";
 import { toSelectOptions } from "../utils/helpers";
 import TableLoading from "./TableLoading";
+import useTableState from "../hooks/TableState";
 import useSWR from "swr";
 
 import './Plots.css';
 
 export default function Plots(props) {
-  const [page, setPage] = React.useState(1);
-  const [sizePerPage, setSizePerPage] = React.useState(15);
+  const { page, sizePerPage, setPageAndSize, afterFilter, getDefaultFilterValue } = useTableState();
 
   const { data: plots, error, isLoading } = useSWR(
     "/story/plots",
@@ -48,7 +48,7 @@ export default function Plots(props) {
       dataField: 'name',
       text: 'Name',
       sort: true,
-      filter: textFilter(),
+      filter: textFilter({ defaultValue: getDefaultFilterValue('name') }),
       formatter: (cell, row) => {
         return <Link to={`/plots/${row.id}`}>{cell}</Link>
       }
@@ -56,7 +56,7 @@ export default function Plots(props) {
       dataField: 'after_jump',
       text: 'After Jump',
       sort: true,
-      filter: textFilter(),
+      filter: textFilter({ defaultValue: getDefaultFilterValue('after_jump') }),
       headerStyle: () => {
         return { width: '7%', textAlign: 'left' };
       },
@@ -73,6 +73,7 @@ export default function Plots(props) {
       text: 'Characters involved',
       sort: true,
       filter: textFilter({
+        defaultValue: getDefaultFilterValue('persons'),
         onFilter: (filterValue, cell) => {
           if (!filterValue) return cell;
           const filtered = cell.filter((row) => {
@@ -102,7 +103,7 @@ export default function Plots(props) {
       dataField: 'character_groups',
       text: 'Character groups',
       sort: true,
-      filter: textFilter(),
+      filter: textFilter({ defaultValue: getDefaultFilterValue('character_groups') }),
       formatter: (cell, row, i) => {
         if (cell === null ) { return null }
         return cell.split(", ").sort().map(character_group => 
@@ -112,7 +113,7 @@ export default function Plots(props) {
       dataField: 'themes',
       text: 'Themes',
       sort: true,
-      filter: textFilter(),
+      filter: textFilter({ defaultValue: getDefaultFilterValue('themes') }),
       formatter: (cell, row) => {
         if (cell === null ) { return null }
         return cell.split(", ").sort().map(theme => <div key={theme}>{theme}</div>)
@@ -122,7 +123,8 @@ export default function Plots(props) {
       text: 'Size',
       sort: true,
       filter: selectFilter({
-        options: sizeSelectOptions
+        options: sizeSelectOptions,
+        defaultValue: getDefaultFilterValue('size')
       }),
       headerStyle: () => {
         return { width: '7%', textAlign: 'left' };
@@ -132,7 +134,8 @@ export default function Plots(props) {
       text: 'Importance',
       sort: true,
       filter: selectFilter({
-        options: importanceSelectOptions
+        options: importanceSelectOptions,
+        defaultValue: getDefaultFilterValue('importance')
       }),
       headerStyle: () => {
         return { width: '10%', textAlign: 'left' };
@@ -142,7 +145,8 @@ export default function Plots(props) {
       text: 'GM Actions',
       sort: true,
       filter: selectFilter({
-        options: gmActionSelectOptions
+        options: gmActionSelectOptions,
+        defaultValue: getDefaultFilterValue('gm_actions')
       }),
       headerStyle: () => {
         return { width: '10%', textAlign: 'left' };
@@ -153,7 +157,8 @@ export default function Plots(props) {
       sort: true,
       formatter: cell => selectOptions[cell],
       filter: selectFilter({
-        options: selectOptions
+        options: selectOptions,
+        defaultValue: getDefaultFilterValue('text_npc_first_message')
       }),
       headerStyle: () => {
         return { width: '10%', textAlign: 'left' };
@@ -206,13 +211,11 @@ export default function Plots(props) {
     lastPageTitle: 'Last page',
     showTotal: true,
     paginationTotalRenderer: customTotal,
-    onPageChange: (page, sizePerPage) => { 
-      setPage(page); 
-      setSizePerPage(sizePerPage);
+    onPageChange: (page, sizePerPage) => {
+      setPageAndSize(page, sizePerPage);
     },
-    onSizePerPageChange: (sizePerPage, page) => { 
-      setPage(page); 
-      setSizePerPage(sizePerPage);
+    onSizePerPageChange: (sizePerPage, page) => {
+      setPageAndSize(page, sizePerPage);
     },
     disablePageTitle: true,
     sizePerPageList: [{
@@ -240,7 +243,7 @@ export default function Plots(props) {
         bordered={ false }
         data={ plots }
         columns={ columns }
-        filter={ filterFactory() }
+        filter={ filterFactory({ afterFilter }) }
         pagination={ paginationFactory(options) }
         defaultSorted={defaultSorted}
         expandRow={ expandRow }

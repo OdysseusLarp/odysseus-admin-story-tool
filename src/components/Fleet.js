@@ -9,10 +9,10 @@ import { toSelectOptions } from '../utils/helpers';
 import useSWR from "swr";
 
 import './Fleet.css';
+import useTableState from '../hooks/TableState';
 
 export default function Fleet() {
-  const [page, setPage] = React.useState(1);
-  const [sizePerPage, setSizePerPage] = React.useState(15);
+  const { page, sizePerPage, setPageAndSize, afterFilter, getDefaultFilterValue } = useTableState();
 
   const { data: fleet, error, isLoading } = useSWR(
     "/fleet?show_hidden=true",
@@ -42,7 +42,7 @@ export default function Fleet() {
       dataField: 'name',
       text: 'Name',
       sort: true,
-      filter: textFilter(),
+      filter: textFilter({ defaultValue: getDefaultFilterValue('name') }),
       headerStyle: () => {
         return { width: '10%', textAlign: 'left' };
       },
@@ -53,7 +53,7 @@ export default function Fleet() {
       dataField: 'description',
       text: 'Description',
       sort: true,
-      filter: textFilter()
+      filter: textFilter({ defaultValue: getDefaultFilterValue('description') }),
     }, {
       dataField: 'class',
       text: 'Class',
@@ -62,7 +62,8 @@ export default function Fleet() {
         return { width: '17%', textAlign: 'left' };
       },
       filter: selectFilter({
-        options: classSelectOptions
+        options: classSelectOptions,
+        defaultValue: getDefaultFilterValue('class')
       }),
     }, {
       dataField: 'status',
@@ -72,7 +73,8 @@ export default function Fleet() {
         return { width: '17%', textAlign: 'left' };
       },
       filter: selectFilter({
-        options: statusSelectOptions
+        options: statusSelectOptions,
+        defaultValue: getDefaultFilterValue('status')
       }),
     }, {
       dataField: 'type',
@@ -82,7 +84,8 @@ export default function Fleet() {
         return { width: '10%', textAlign: 'left' };
       },
       filter: selectFilter({
-        options: typeSelectOptions
+        options: typeSelectOptions,
+        defaultValue: getDefaultFilterValue('type')
       }),
     }, {
       dataField: 'position.name',
@@ -91,7 +94,7 @@ export default function Fleet() {
       headerStyle: () => {
         return { width: '10%', textAlign: 'left' };
       },
-      filter: textFilter()
+      filter: textFilter({ defaultValue: getDefaultFilterValue('position.name') }),
     }, {
       dataField: 'person_count',
       text: 'Person Count',
@@ -124,13 +127,11 @@ export default function Fleet() {
     lastPageTitle: 'Last page',
     showTotal: true,
     paginationTotalRenderer: customTotal,
-    onPageChange: (page, sizePerPage) => { 
-      setPage(page); 
-      setSizePerPage(sizePerPage);
+    onPageChange: (page, sizePerPage) => {
+      setPageAndSize(page, sizePerPage);
     },
-    onSizePerPageChange: (sizePerPage, page) => { 
-      setPage(page); 
-      setSizePerPage(sizePerPage);
+    onSizePerPageChange: (sizePerPage, page) => {
+      setPageAndSize(page, sizePerPage);
     },
     disablePageTitle: true,
     sizePerPageList: [{
@@ -170,7 +171,7 @@ export default function Fleet() {
         bordered={ false }
         data={ fleet }
         columns={ columns }
-        filter={ filterFactory() }
+        filter={ filterFactory({ afterFilter }) }
         pagination={ paginationFactory(options) }
         rowStyle={ rowStyle }
       />

@@ -5,54 +5,15 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min';
 import { apiGetRequest } from "../api";
 import { toSelectOptions } from "../utils/helpers";
-import { Link, useSearchParams, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import TableLoading from "./TableLoading";
+import useTableState from "../hooks/TableState";
 import useSWR from "swr";
 
 import './Characters.css';
 
 export default function Characters(props) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { hash } = useLocation();
-
-  const setHash = (newHash) => {
-    window.location.hash = newHash;
-  }
-
-  let decodedHash = {};
-  if (hash) {
-    try {
-      decodedHash = JSON.parse(window.atob(hash.slice(1)));
-    } catch (e) {
-      console.error("Failed to decode hash", e);
-    }
-  }
-
-  const page = parseInt(searchParams.get('page'), 10) || 1;
-  const sizePerPage = parseInt(searchParams.get('pageSize'), 10) || 15;
-
-  const setPageAndSize = (newPage, newSizePerPage) => {
-    setSearchParams({ page: String(newPage), pageSize: String(newSizePerPage) })
-  }
-
-  const afterFilter = (filteredResults, appliedFilters) => {
-    const formattedFilters = {};
-    Object.entries(appliedFilters).forEach(([key, value]) => {
-      formattedFilters[key] = value.filterVal;
-    });
-
-    if (Object.keys(formattedFilters).length === 0) {
-      setHash('');
-      return;
-    }
-
-    const filtersHash = window.btoa(JSON.stringify(formattedFilters));
-    setHash(filtersHash);
-  };
-
-  const getDefaultFilterValue = (key) => {
-    return decodedHash[key];
-  };
+  const { page, sizePerPage, setPageAndSize, afterFilter, getDefaultFilterValue } = useTableState();
 
   const swrCharacters = useSWR(
     "/person?show_hidden=true&is_character=true",
